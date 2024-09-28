@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/gallery.dart';
-import 'package:open_media_server_app/player.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,11 +31,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _openPlayer() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const PlayerView()));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,11 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: const Gallery(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openPlayer,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

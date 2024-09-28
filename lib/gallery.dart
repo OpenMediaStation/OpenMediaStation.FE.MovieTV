@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/movie_item.dart';
+import 'package:open_media_server_app/player.dart';
 import 'package:open_media_server_app/services/movie_service.dart';
 import 'models/movie.dart';
 
@@ -48,7 +50,17 @@ class _GalleryState extends State<Gallery> {
               childAspectRatio: 0.7, // Adjust for desired aspect ratio
             ),
             itemBuilder: (context, index) {
-              return MovieItem(item: movies[index]);
+              return InkWell(
+                child: MovieItem(item: movies[index]),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayerView(url: "${Globals.BaseUrl}/stream/${movies[index].category}/${movies[index].id}" ),
+                    ),
+                  );
+                },
+              );
             },
           );
         },

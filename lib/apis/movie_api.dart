@@ -11,7 +11,7 @@ class MovieApi {
 
       if (response.statusCode == 200) {
         dynamic jsonResponse = json.decode(response.body);
-        return jsonResponse.map((json) => Movie.fromJson(json)).toList();
+        return Movie.fromJson(jsonResponse);
       } else {
         throw Exception('Failed to load movies');
       }

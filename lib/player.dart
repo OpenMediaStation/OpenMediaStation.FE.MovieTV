@@ -3,7 +3,9 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
 class PlayerView extends StatefulWidget {
-  const PlayerView({super.key});
+  const PlayerView({super.key, required this.url});
+
+  final String url;
 
   @override
   State<PlayerView> createState() => _PlayerState();
@@ -19,8 +21,11 @@ class _PlayerState extends State<PlayerView> {
   void initState() {
     super.initState();
     // Play a [Media] or [Playlist].
-    player.open(Media(
-        'http://localhost:32875/stream/Movie/e0c26f98-6e44-421e-98ef-e586b0d091a1'));
+    player.open(
+      Media(
+        widget.url,
+      ),
+    );
   }
 
   @override
