@@ -15,7 +15,7 @@ class GridItem extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
-              item.metadataModel?.movie?.poster  ?? "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg",
+              item.posterUrl ?? "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg",
               fit: BoxFit.cover,
               width: double.infinity,
             ),

@@ -4,7 +4,7 @@ import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
-import 'package:open_media_server_app/movie_item.dart';
+import 'package:open_media_server_app/gallery_item.dart';
 import 'package:open_media_server_app/player.dart';
 
 class Gallery extends StatefulWidget {
@@ -31,11 +31,11 @@ class _GalleryState extends State<Gallery> {
         future: futureItems,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No movies found.'));
+            return const Center(child: Text('No movies found.'));
           }
 
           List<GridItemModel> items = snapshot.data!;
@@ -73,11 +73,12 @@ class _GalleryState extends State<Gallery> {
     InventoryApi inventoryApi = InventoryApi();
     MetadataApi metadataApi = MetadataApi();
 
-    var items = await inventoryApi.listItems("Movie");
+    var movies = await inventoryApi.listItems("Movie");
+    var shows = await inventoryApi.listItems("Show");
 
     List<GridItemModel> gridItems = [];
 
-    for (var element in items) {
+    for (var element in movies) {
       var movie = await inventoryApi.getMovie(element.id);
 
       MetadataModel? metadata;
@@ -88,6 +89,25 @@ class _GalleryState extends State<Gallery> {
 
       var gridItem =
           GridItemModel(inventoryItem: movie, metadataModel: metadata);
+
+      gridItem.posterUrl = metadata?.movie?.poster;
+
+      gridItems.add(gridItem);
+    }
+
+    for (var element in shows) {
+      var show = await inventoryApi.getShow(element.id);
+
+      MetadataModel? metadata;
+
+      if (show.metadataId != null) {
+        metadata = await metadataApi.getMetadata(show.metadataId!, "Show");
+      }
+
+      var gridItem =
+          GridItemModel(inventoryItem: show, metadataModel: metadata);
+
+      gridItem.posterUrl = metadata?.show?.poster;
 
       gridItems.add(gridItem);
     }

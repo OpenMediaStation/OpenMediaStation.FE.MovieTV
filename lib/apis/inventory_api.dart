@@ -30,4 +30,17 @@ class InventoryApi {
       throw Exception('Failed to load movies');
     }
   }
+
+  Future<Movie> getShow(String id) async {
+    String apiUrl = "${Globals.BaseUrl}/api/inventory/show?";
+
+    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+
+    if (response.statusCode == 200) {
+      dynamic jsonResponse = json.decode(response.body);
+      return Movie.fromJson(jsonResponse);
+    } else {
+      throw Exception('Failed to load shows');
+    }
+  }
 }
