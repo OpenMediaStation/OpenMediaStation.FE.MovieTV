@@ -17,8 +17,6 @@ class _PlayerState extends State<PlayerView> {
 
   @override
   void initState() {
-    MediaKit.ensureInitialized();
-
     super.initState();
     player.open(
       Media(

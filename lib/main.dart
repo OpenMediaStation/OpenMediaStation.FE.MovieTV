@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:open_media_server_app/gallery.dart';
 
 void main() {
+  MediaKit.ensureInitialized();
   runApp(const MyApp());
 }
 
