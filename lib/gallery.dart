@@ -7,24 +7,20 @@ import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/gallery_item.dart';
 import 'package:open_media_server_app/player.dart';
 
-class Gallery extends StatefulWidget {
+class Gallery extends StatelessWidget {
   const Gallery({Key? key}) : super(key: key);
 
   @override
-  _GalleryState createState() => _GalleryState();
-}
-
-class _GalleryState extends State<Gallery> {
-  late Future<List<GridItemModel>> futureItems;
-
-  @override
-  void initState() {
-    super.initState();
-    futureItems = getGridItems();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    var futureItems = getGridItems();
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double desiredItemWidth = 150;
+    if (screenWidth > 1000) {
+      desiredItemWidth = 300;
+    }
+    int crossAxisCount = (screenWidth / desiredItemWidth).floor();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: FutureBuilder<List<GridItemModel>>(
@@ -42,8 +38,8 @@ class _GalleryState extends State<Gallery> {
 
           return GridView.builder(
             itemCount: items.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Number of columns
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
               childAspectRatio: 0.7, // Adjust for desired aspect ratio
