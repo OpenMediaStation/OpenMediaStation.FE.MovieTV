@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/models/movie.dart';
+import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 
-class MovieItem extends StatelessWidget {
-  final Movie item;
+class GridItem extends StatelessWidget {
+  final GridItemModel item;
 
-  const MovieItem({Key? key, required this.item}) : super(key: key);
+  const GridItem({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class MovieItem extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
-              item.metadata.poster  ?? "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg",
+              item.metadataModel?.movie?.poster  ?? "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg",
               fit: BoxFit.cover,
               width: double.infinity,
             ),
@@ -23,7 +23,7 @@ class MovieItem extends StatelessWidget {
         ),
         const SizedBox(height: 8.0),
         Text(
-          item.title,
+          item.inventoryItem?.title ?? "Unknown title",
           style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),

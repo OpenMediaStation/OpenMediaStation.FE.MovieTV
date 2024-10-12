@@ -1,8 +1,7 @@
 
-import 'package:open_media_server_app/models/rating.dart';
+import 'package:open_media_server_app/models/metadata/rating.dart';
 
-class Metadata {
-  final String? title;
+class MetadataEpisodeModel {
   final String? year;
   final String? rated;
   final String? released;
@@ -26,10 +25,8 @@ class Metadata {
   final String? boxOffice;
   final String? production;
   final String? website;
-  final String? response;
 
-  Metadata({
-    required this.title,
+  MetadataEpisodeModel({
     required this.year,
     required this.rated,
     required this.released,
@@ -53,10 +50,9 @@ class Metadata {
     required this.boxOffice,
     required this.production,
     required this.website,
-    required this.response,
   });
 
-  factory Metadata.fromJson(Map<String, dynamic> json) {
+  factory MetadataEpisodeModel.fromJson(Map<String, dynamic> json) {
     var ratingsList = json['ratings'] as List?;
     List<Rating>? ratings = ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
 
@@ -66,8 +62,7 @@ class Metadata {
       poster = null;
     }
 
-    return Metadata(
-      title: json['title'] as String?,
+    return MetadataEpisodeModel(
       year: json['year'] as String?,
       rated: json['rated'] as String?,
       released: json['released'] as String?,
@@ -91,13 +86,11 @@ class Metadata {
       boxOffice: json['boxOffice'] as String?,
       production: json['production'] as String?,
       website: json['website'] as String?,
-      response: json['response'] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'title': title,
       'year': year,
       'rated': rated,
       'released': released,
@@ -121,7 +114,6 @@ class Metadata {
       'boxOffice': boxOffice,
       'production': production,
       'website': website,
-      'response': response,
     };
   }
 }
