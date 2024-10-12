@@ -5,7 +5,9 @@ import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/gallery_item.dart';
+import 'package:open_media_server_app/views/movie_detail.dart';
 import 'package:open_media_server_app/player.dart';
+import 'package:open_media_server_app/views/show_detail.dart';
 
 class Gallery extends StatelessWidget {
   const Gallery({Key? key}) : super(key: key);
@@ -50,11 +52,20 @@ class Gallery extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => PlayerView(
-                          url:
-                              "${Globals.BaseUrl}/stream/${items[index].inventoryItem?.category}/${items[index].inventoryItem?.id}"),
-                    ),
+                    MaterialPageRoute(builder: (context) {
+                      if (items[index].inventoryItem!.category == "Movie") {
+                        return MovieDetailView(
+                          itemModel: items[index],
+                        );
+                      }
+                      if (items[index].inventoryItem!.category == "Show") {
+                        return ShowDetailView(
+                          itemModel: items[index],
+                        );
+                      }
+
+                      throw ArgumentError("Server models not correct");
+                    }),
                   );
                 },
               );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 
 class GridItem extends StatelessWidget {
@@ -15,7 +16,7 @@ class GridItem extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
-              item.posterUrl ?? "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg",
+              item.posterUrl ?? Globals.PictureNotFoundUrl,
               fit: BoxFit.cover,
               width: double.infinity,
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:open_media_server_app/gallery.dart';
+import 'package:open_media_server_app/globals.dart';
 
 void main() {
   MediaKit.ensureInitialized();
@@ -13,12 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'OpenMediaStation Movie and Shows',
+      title: Globals.Title,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: Globals.Title),
     );
   }
 }
