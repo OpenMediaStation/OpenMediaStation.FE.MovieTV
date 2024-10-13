@@ -3,6 +3,7 @@ import 'package:open_media_server_app/models/inventory/inventory_item_version.da
 
 class Season extends InventoryItem {
   final List<String>? episodeIds;
+  final int? seasonNr;
 
   Season({
     required super.id,
@@ -12,6 +13,7 @@ class Season extends InventoryItem {
     required super.folderPath,
     required super.versions,
     required this.episodeIds,
+    required this.seasonNr,
   });
 
   factory Season.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,7 @@ class Season extends InventoryItem {
       category: json['category'] as String,
       metadataId: json['metadataId'] as String?,
       folderPath: json['folderPath'] as String?,
+      seasonNr: json['seasonNr'] as int?,
       versions: (json['versions'] as List<dynamic>?)
           ?.map((version) =>
               InventoryItemVersion.fromJson(version as Map<String, dynamic>))

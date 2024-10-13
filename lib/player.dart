@@ -21,6 +21,9 @@ class _PlayerState extends State<PlayerView> {
     player.open(
       Media(
         widget.url,
+        extras: {
+          'sid': '-1'
+        },
       ),
     );
   }

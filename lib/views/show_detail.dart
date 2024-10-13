@@ -29,6 +29,7 @@ class ShowDetailView extends StatelessWidget {
           }
 
           List<GridItemModel> items = snapshot.data!;
+          items.sort((a, b) => a.listPosition!.compareTo(b.listPosition!));
 
           List<Widget> seasonButtons = [];
 
@@ -115,6 +116,7 @@ class ShowDetailView extends StatelessWidget {
 
       var gridItem = GridItemModel(inventoryItem: season, metadataModel: null);
       gridItem.childIds = season.episodeIds;
+      gridItem.listPosition = season.seasonNr;
 
       gridItems.add(gridItem);
     }

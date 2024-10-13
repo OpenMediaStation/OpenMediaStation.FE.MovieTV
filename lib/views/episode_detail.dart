@@ -41,7 +41,7 @@ class EpisodeDetailView extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                itemModel.metadataModel?.movie?.plot ?? "",
+                itemModel.metadataModel?.episode?.plot ?? "",
                 style: const TextStyle(fontSize: 16, height: 1.5),
               ),
               const SizedBox(height: 16),

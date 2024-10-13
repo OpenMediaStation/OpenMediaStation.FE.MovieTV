@@ -2,6 +2,9 @@ import 'package:open_media_server_app/models/inventory/inventory_item.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item_version.dart';
 
 class Episode extends InventoryItem {
+  final int? episodeNr;
+  final int? seasonNr;
+
   Episode({
     required super.id,
     required super.title,
@@ -9,6 +12,8 @@ class Episode extends InventoryItem {
     required super.metadataId,
     required super.folderPath,
     required super.versions,
+    required this.seasonNr,
+    required this.episodeNr,
   });
 
   factory Episode.fromJson(Map<String, dynamic> json) {
@@ -18,6 +23,8 @@ class Episode extends InventoryItem {
       category: json['category'] as String,
       metadataId: json['metadataId'] as String?,
       folderPath: json['folderPath'] as String?,
+      seasonNr: json['seasonNr'] as int?,
+      episodeNr: json['episodeNr'] as int?,
       versions: (json['versions'] as List<dynamic>?)
           ?.map((version) =>
               InventoryItemVersion.fromJson(version as Map<String, dynamic>))
