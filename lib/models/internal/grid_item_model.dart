@@ -5,6 +5,7 @@ class GridItemModel {
   final InventoryItem? inventoryItem;
   final MetadataModel? metadataModel;
   String? posterUrl;
+  List<String>? childIds;
 
   GridItemModel({
     required this.inventoryItem,

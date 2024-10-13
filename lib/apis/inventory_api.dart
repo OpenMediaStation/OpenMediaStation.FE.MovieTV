@@ -3,6 +3,7 @@ import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_media_server_app/models/inventory/movie.dart';
+import 'package:open_media_server_app/models/inventory/show.dart';
 
 class InventoryApi {
   Future<List<InventoryItem>> listItems(String category) async {
@@ -31,14 +32,14 @@ class InventoryApi {
     }
   }
 
-  Future<Movie> getShow(String id) async {
+  Future<Show> getShow(String id) async {
     String apiUrl = "${Globals.BaseUrl}/api/inventory/show?";
 
     var response = await http.get(Uri.parse("${apiUrl}id=$id"));
 
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
-      return Movie.fromJson(jsonResponse);
+      return Show.fromJson(jsonResponse);
     } else {
       throw Exception('Failed to load shows');
     }
