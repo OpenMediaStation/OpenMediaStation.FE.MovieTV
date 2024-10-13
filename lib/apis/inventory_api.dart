@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/models/inventory/episode.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_media_server_app/models/inventory/movie.dart';
+import 'package:open_media_server_app/models/inventory/season.dart';
 import 'package:open_media_server_app/models/inventory/show.dart';
 
 class InventoryApi {
@@ -41,7 +43,33 @@ class InventoryApi {
       dynamic jsonResponse = json.decode(response.body);
       return Show.fromJson(jsonResponse);
     } else {
-      throw Exception('Failed to load shows');
+      throw Exception('Failed to load show');
+    }
+  }
+
+  Future<Season> getSeason(String id) async {
+    String apiUrl = "${Globals.BaseUrl}/api/inventory/season?";
+
+    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+
+    if (response.statusCode == 200) {
+      dynamic jsonResponse = json.decode(response.body);
+      return Season.fromJson(jsonResponse);
+    } else {
+      throw Exception('Failed to load season');
+    }
+  }
+
+  Future<Episode> getEpisode(String id) async {
+    String apiUrl = "${Globals.BaseUrl}/api/inventory/episode?";
+
+    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+
+    if (response.statusCode == 200) {
+      dynamic jsonResponse = json.decode(response.body);
+      return Episode.fromJson(jsonResponse);
+    } else {
+      throw Exception('Failed to load episode');
     }
   }
 }

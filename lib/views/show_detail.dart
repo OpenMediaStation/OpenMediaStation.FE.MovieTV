@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/views/season_detail.dart';
@@ -18,54 +19,34 @@ class ShowDetailView extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(Globals.Title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Poster Image
-              Center(
-                child: Image.network(
-                  itemModel.posterUrl ?? Globals.PictureNotFoundUrl,
-                  height: 300,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(height: 16),
+      body: FutureBuilder<List<GridItemModel>>(
+        future: getChildren(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-              // Title of the Show
-              Text(
-                itemModel.inventoryItem?.title ?? "Title unknown",
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
+          List<GridItemModel> items = snapshot.data!;
 
-              // Show Description / Plot
-              Text(
-                itemModel.metadataModel?.show?.plot ?? "",
-                style: const TextStyle(fontSize: 16, height: 1.5),
-              ),
-              const SizedBox(height: 16),
+          List<Widget> seasonButtons = [];
 
-              // Button for Seasons
+          for (var element in items) {
+            seasonButtons.add(
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // Navigate to the Seasons page
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            SeasonDetailView(itemModel: itemModel),
+                            SeasonDetailView(itemModel: element),
                       ),
                     );
                   },
-                  icon: const Icon(Icons.tv), // Icon indicating a TV series
-                  label: const Text("Seasons"),
+                  icon: const Icon(Icons.tv),
+                  label: Text("${element.inventoryItem?.title}"),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 12),
@@ -73,10 +54,71 @@ class ShowDetailView extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Poster Image
+                  Center(
+                    child: Image.network(
+                      itemModel.posterUrl ?? Globals.PictureNotFoundUrl,
+                      height: 300,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Title of the Show
+                  Text(
+                    itemModel.inventoryItem?.title ?? "Title unknown",
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Show Description / Plot
+                  Text(
+                    itemModel.metadataModel?.show?.plot ?? "",
+                    style: const TextStyle(fontSize: 16, height: 1.5),
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
+                    children: seasonButtons,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  Future<List<GridItemModel>> getChildren() async {
+    InventoryApi inventoryApi = InventoryApi();
+
+    List<GridItemModel> gridItems = [];
+
+    if (itemModel.childIds == null) {
+      return [];
+    }
+
+    for (var element in itemModel.childIds!) {
+      var season = await inventoryApi.getSeason(element);
+
+      var gridItem = GridItemModel(inventoryItem: season, metadataModel: null);
+      gridItem.childIds = season.episodeIds;
+
+      gridItems.add(gridItem);
+    }
+
+    return gridItems;
   }
 }
