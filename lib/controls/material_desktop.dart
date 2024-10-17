@@ -515,37 +515,34 @@ class _MaterialDesktopVideoControlsState
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        focusColor: const Color(0x00000000),
-        hoverColor: const Color(0x00000000),
-        splashColor: const Color(0x00000000),
-        highlightColor: const Color(0x00000000),
-      ),
-      child: Material(
-        elevation: 0.0,
-        borderOnForeground: false,
-        animationDuration: Duration.zero,
-        color: const Color(0x00000000),
-        shadowColor: const Color(0x00000000),
-        surfaceTintColor: const Color(0x00000000),
-        child: KeyboardListener(
-          focusNode: _focusNode,
-          onKeyEvent: (event) {
-            onEnter();
+    return FocusScope(
+      onKeyEvent: (node, event) {
+        onEnter();
 
-            if (event is KeyUpEvent) {
-              if (event.logicalKey == LogicalKeyboardKey.select) {
-                controller(context).player.playOrPause();
-              }
-              if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-                FocusScope.of(context).previousFocus();
-              }
-              if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-                FocusScope.of(context).nextFocus();
-              }
-            }
-          },
+        if (event is KeyDownEvent) {
+          print('Key pressed: ${event.logicalKey.debugName}');
+
+          if (event.logicalKey == LogicalKeyboardKey.select) {
+            controller(context).player.playOrPause();
+          }
+        }
+
+        return KeyEventResult.ignored;
+      },
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          focusColor: const Color(0x00000000),
+          hoverColor: const Color(0x00000000),
+          splashColor: const Color(0x00000000),
+          highlightColor: const Color(0x00000000),
+        ),
+        child: Material(
+          elevation: 0.0,
+          borderOnForeground: false,
+          animationDuration: Duration.zero,
+          color: const Color(0x00000000),
+          shadowColor: const Color(0x00000000),
+          surfaceTintColor: const Color(0x00000000),
           child: Stack(
             children: [
               AnimatedOpacity(
