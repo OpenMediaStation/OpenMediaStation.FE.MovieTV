@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_server_app/globals.dart';
+import 'controls/material_desktop.dart' as local;
 
 class PlayerView extends StatefulWidget {
   const PlayerView({super.key, required this.url});
@@ -66,12 +68,111 @@ class _PlayerState extends State<PlayerView> {
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
       topButtonBar: topButtonBar,
       bottomButtonBar: bottomButtonBar,
+      visibleOnMount: true,
+    );
+
+    var tvThemeData = local.MaterialDesktopVideoControlsThemeData(
+      topButtonBar: topButtonBar,
+      bottomButtonBar: bottomButtonBar,
+      visibleOnMount: true,
+      keyboardShortcuts: {
+        const SingleActivator(LogicalKeyboardKey.mediaPlay): () =>
+            controller.player.play(),
+        const SingleActivator(LogicalKeyboardKey.mediaPause): () =>
+            controller.player.pause(),
+        const SingleActivator(LogicalKeyboardKey.mediaPlayPause): () =>
+            controller.player.playOrPause(),
+        const SingleActivator(LogicalKeyboardKey.mediaTrackNext): () =>
+            controller.player.next(),
+        const SingleActivator(LogicalKeyboardKey.mediaTrackPrevious): () =>
+            controller.player.previous(),
+        const SingleActivator(LogicalKeyboardKey.space): () =>
+            controller.player.playOrPause(),
+        const SingleActivator(LogicalKeyboardKey.keyJ): () {
+          final rate =
+              controller.player.state.position - const Duration(seconds: 10);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.keyI): () {
+          final rate =
+              controller.player.state.position + const Duration(seconds: 10);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
+          final rate =
+              controller.player.state.position - const Duration(seconds: 2);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowRight): () {
+          final rate =
+              controller.player.state.position + const Duration(seconds: 2);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowUp): () {
+          final volume = controller.player.state.volume + 5.0;
+          controller.player.setVolume(volume.clamp(0.0, 100.0));
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowDown): () {
+          final volume = controller.player.state.volume - 5.0;
+          controller.player.setVolume(volume.clamp(0.0, 100.0));
+        },
+        const SingleActivator(LogicalKeyboardKey.keyF): () =>
+            toggleFullscreen(context),
+        const SingleActivator(LogicalKeyboardKey.escape): () =>
+            exitFullscreen(context),
+      },
     );
 
     var desktopThemeData = MaterialDesktopVideoControlsThemeData(
       topButtonBar: topButtonBar,
       bottomButtonBar: bottomButtonBar,
       visibleOnMount: true,
+      keyboardShortcuts: {
+        const SingleActivator(LogicalKeyboardKey.mediaPlay): () =>
+            controller.player.play(),
+        const SingleActivator(LogicalKeyboardKey.mediaPause): () =>
+            controller.player.pause(),
+        const SingleActivator(LogicalKeyboardKey.mediaPlayPause): () =>
+            controller.player.playOrPause(),
+        const SingleActivator(LogicalKeyboardKey.mediaTrackNext): () =>
+            controller.player.next(),
+        const SingleActivator(LogicalKeyboardKey.mediaTrackPrevious): () =>
+            controller.player.previous(),
+        const SingleActivator(LogicalKeyboardKey.space): () =>
+            controller.player.playOrPause(),
+        const SingleActivator(LogicalKeyboardKey.keyJ): () {
+          final rate =
+              controller.player.state.position - const Duration(seconds: 10);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.keyI): () {
+          final rate =
+              controller.player.state.position + const Duration(seconds: 10);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
+          final rate =
+              controller.player.state.position - const Duration(seconds: 2);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowRight): () {
+          final rate =
+              controller.player.state.position + const Duration(seconds: 2);
+          controller.player.seek(rate);
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowUp): () {
+          final volume = controller.player.state.volume + 5.0;
+          controller.player.setVolume(volume.clamp(0.0, 100.0));
+        },
+        const SingleActivator(LogicalKeyboardKey.arrowDown): () {
+          final volume = controller.player.state.volume - 5.0;
+          controller.player.setVolume(volume.clamp(0.0, 100.0));
+        },
+        const SingleActivator(LogicalKeyboardKey.keyF): () =>
+            toggleFullscreen(context),
+        const SingleActivator(LogicalKeyboardKey.escape): () =>
+            exitFullscreen(context),
+      },
     );
 
     if (Globals.isMobile) {
@@ -83,6 +184,19 @@ class _PlayerState extends State<PlayerView> {
             controller: controller,
             controls: (state) {
               return MaterialVideoControls(state);
+            },
+          ),
+        ),
+      );
+    } else if (Globals.isTv) {
+      return local.MaterialDesktopVideoControlsTheme(
+        normal: tvThemeData,
+        fullscreen: tvThemeData,
+        child: Scaffold(
+          body: Video(
+            controller: controller,
+            controls: (state) {
+              return local.MaterialDesktopVideoControls(state);
             },
           ),
         ),
