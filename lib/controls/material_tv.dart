@@ -516,13 +516,14 @@ class _MaterialTvVideoControlsState
   @override
   Widget build(BuildContext context) {
     return FocusScope(
+      autofocus: true,
       onKeyEvent: (node, event) {
         onEnter();
 
         if (event is KeyDownEvent) {
           print('Key pressed: ${event.logicalKey.debugName}');
 
-          if (event.logicalKey == LogicalKeyboardKey.select) {
+          if (event.logicalKey == LogicalKeyboardKey.mediaPlayPause) {
             controller(context).player.playOrPause();
           }
         }

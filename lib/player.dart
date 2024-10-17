@@ -72,56 +72,14 @@ class _PlayerState extends State<PlayerView> {
     );
 
     var tvThemeData = MaterialTvVideoControlsThemeData(
-      topButtonBar: topButtonBar,
-      bottomButtonBar: bottomButtonBar,
-      visibleOnMount: true,
-      keyboardShortcuts: {
-        const SingleActivator(LogicalKeyboardKey.mediaPlay): () =>
-            controller.player.play(),
-        const SingleActivator(LogicalKeyboardKey.mediaPause): () =>
-            controller.player.pause(),
-        const SingleActivator(LogicalKeyboardKey.mediaPlayPause): () =>
-            controller.player.playOrPause(),
-        const SingleActivator(LogicalKeyboardKey.mediaTrackNext): () =>
-            controller.player.next(),
-        const SingleActivator(LogicalKeyboardKey.mediaTrackPrevious): () =>
-            controller.player.previous(),
-        const SingleActivator(LogicalKeyboardKey.space): () =>
-            controller.player.playOrPause(),
-        const SingleActivator(LogicalKeyboardKey.keyJ): () {
-          final rate =
-              controller.player.state.position - const Duration(seconds: 10);
-          controller.player.seek(rate);
-        },
-        const SingleActivator(LogicalKeyboardKey.keyI): () {
-          final rate =
-              controller.player.state.position + const Duration(seconds: 10);
-          controller.player.seek(rate);
-        },
-        const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
-          final rate =
-              controller.player.state.position - const Duration(seconds: 2);
-          controller.player.seek(rate);
-        },
-        const SingleActivator(LogicalKeyboardKey.arrowRight): () {
-          final rate =
-              controller.player.state.position + const Duration(seconds: 2);
-          controller.player.seek(rate);
-        },
-        const SingleActivator(LogicalKeyboardKey.arrowUp): () {
-          final volume = controller.player.state.volume + 5.0;
-          controller.player.setVolume(volume.clamp(0.0, 100.0));
-        },
-        const SingleActivator(LogicalKeyboardKey.arrowDown): () {
-          final volume = controller.player.state.volume - 5.0;
-          controller.player.setVolume(volume.clamp(0.0, 100.0));
-        },
-        const SingleActivator(LogicalKeyboardKey.keyF): () =>
-            toggleFullscreen(context),
-        const SingleActivator(LogicalKeyboardKey.escape): () =>
-            exitFullscreen(context),
-      },
-    );
+        topButtonBar: topButtonBar,
+        bottomButtonBar: bottomButtonBar,
+        visibleOnMount: true,
+        primaryButtonBar: [
+          const MaterialTvPlayOrPauseButton(
+            iconSize: 124,
+          ),
+        ]);
 
     var desktopThemeData = MaterialDesktopVideoControlsThemeData(
       topButtonBar: topButtonBar,
