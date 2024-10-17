@@ -19,34 +19,34 @@ import 'package:media_kit_video/media_kit_video_controls/src/controls/widgets/vi
 /// [Video] controls which use Material design.
 ///
 /// {@endtemplate}
-Widget MaterialDesktopVideoControls(VideoState state) {
+Widget MaterialTvVideoControls(VideoState state) {
   return const VideoControlsThemeDataInjector(
-    child: _MaterialDesktopVideoControls(),
+    child: _MaterialTvVideoControls(),
   );
 }
 
-/// [MaterialDesktopVideoControlsThemeData] available in this [context].
-MaterialDesktopVideoControlsThemeData _theme(BuildContext context) =>
+/// [MaterialTvVideoControlsThemeData] available in this [context].
+MaterialTvVideoControlsThemeData _theme(BuildContext context) =>
     FullscreenInheritedWidget.maybeOf(context) == null
-        ? MaterialDesktopVideoControlsTheme.maybeOf(context)?.normal ??
+        ? MaterialTvVideoControlsTheme.maybeOf(context)?.normal ??
             kDefaultMaterialDesktopVideoControlsThemeData
-        : MaterialDesktopVideoControlsTheme.maybeOf(context)?.fullscreen ??
+        : MaterialTvVideoControlsTheme.maybeOf(context)?.fullscreen ??
             kDefaultMaterialDesktopVideoControlsThemeDataFullscreen;
 
-/// Default [MaterialDesktopVideoControlsThemeData].
+/// Default [MaterialTvVideoControlsThemeData].
 const kDefaultMaterialDesktopVideoControlsThemeData =
-    MaterialDesktopVideoControlsThemeData();
+    MaterialTvVideoControlsThemeData();
 
-/// Default [MaterialDesktopVideoControlsThemeData] for fullscreen.
+/// Default [MaterialTvVideoControlsThemeData] for fullscreen.
 const kDefaultMaterialDesktopVideoControlsThemeDataFullscreen =
-    MaterialDesktopVideoControlsThemeData();
+    MaterialTvVideoControlsThemeData();
 
 /// {@template material_desktop_video_controls_theme_data}
 ///
-/// Theming related data for [MaterialDesktopVideoControls]. These values are used to theme the descendant [MaterialDesktopVideoControls].
+/// Theming related data for [MaterialTvVideoControls]. These values are used to theme the descendant [MaterialTvVideoControls].
 ///
 /// {@endtemplate}
-class MaterialDesktopVideoControlsThemeData {
+class MaterialTvVideoControlsThemeData {
   // BEHAVIOR
 
   /// Whether to display seek bar.
@@ -180,7 +180,7 @@ class MaterialDesktopVideoControlsThemeData {
   final bool shiftSubtitlesOnControlsVisibilityChange;
 
   /// {@macro material_desktop_video_controls_theme_data}
-  const MaterialDesktopVideoControlsThemeData({
+  const MaterialTvVideoControlsThemeData({
     this.displaySeekBar = true,
     this.automaticallyImplySkipNextButton = true,
     this.automaticallyImplySkipPreviousButton = true,
@@ -198,13 +198,13 @@ class MaterialDesktopVideoControlsThemeData {
     this.topButtonBar = const [],
     this.topButtonBarMargin = const EdgeInsets.symmetric(horizontal: 16.0),
     this.bottomButtonBar = const [
-      MaterialDesktopSkipPreviousButton(),
-      MaterialDesktopPlayOrPauseButton(),
-      MaterialDesktopSkipNextButton(),
-      MaterialDesktopVolumeButton(),
-      MaterialDesktopPositionIndicator(),
+      MaterialTvSkipPreviousButton(),
+      MaterialTvPlayOrPauseButton(),
+      MaterialTvSkipNextButton(),
+      MaterialTvVolumeButton(),
+      MaterialTvPositionIndicator(),
       Spacer(),
-      MaterialDesktopFullscreenButton(),
+      MaterialTvFullscreenButton(),
     ],
     this.bottomButtonBarMargin = const EdgeInsets.symmetric(horizontal: 16.0),
     this.buttonBarHeight = 56.0,
@@ -230,8 +230,8 @@ class MaterialDesktopVideoControlsThemeData {
     this.shiftSubtitlesOnControlsVisibilityChange = true,
   });
 
-  /// Creates a copy of this [MaterialDesktopVideoControlsThemeData] with the given fields replaced by the non-null parameter values.
-  MaterialDesktopVideoControlsThemeData copyWith({
+  /// Creates a copy of this [MaterialTvVideoControlsThemeData] with the given fields replaced by the non-null parameter values.
+  MaterialTvVideoControlsThemeData copyWith({
     bool? displaySeekBar,
     bool? automaticallyImplySkipNextButton,
     bool? automaticallyImplySkipPreviousButton,
@@ -270,7 +270,7 @@ class MaterialDesktopVideoControlsThemeData {
     Duration? volumeBarTransitionDuration,
     bool? shiftSubtitlesOnControlsVisibilityChange,
   }) {
-    return MaterialDesktopVideoControlsThemeData(
+    return MaterialTvVideoControlsThemeData(
       displaySeekBar: displaySeekBar ?? this.displaySeekBar,
       automaticallyImplySkipNextButton: automaticallyImplySkipNextButton ??
           this.automaticallyImplySkipNextButton,
@@ -329,26 +329,26 @@ class MaterialDesktopVideoControlsThemeData {
 
 /// {@template material_desktop_video_controls_theme}
 ///
-/// Inherited widget which provides [MaterialDesktopVideoControlsThemeData] to descendant widgets.
+/// Inherited widget which provides [MaterialTvVideoControlsThemeData] to descendant widgets.
 ///
 /// {@endtemplate}
-class MaterialDesktopVideoControlsTheme extends InheritedWidget {
-  final MaterialDesktopVideoControlsThemeData normal;
-  final MaterialDesktopVideoControlsThemeData fullscreen;
-  const MaterialDesktopVideoControlsTheme({
+class MaterialTvVideoControlsTheme extends InheritedWidget {
+  final MaterialTvVideoControlsThemeData normal;
+  final MaterialTvVideoControlsThemeData fullscreen;
+  const MaterialTvVideoControlsTheme({
     super.key,
     required this.normal,
     required this.fullscreen,
     required super.child,
   });
 
-  static MaterialDesktopVideoControlsTheme? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<
-        MaterialDesktopVideoControlsTheme>();
+  static MaterialTvVideoControlsTheme? maybeOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<MaterialTvVideoControlsTheme>();
   }
 
-  static MaterialDesktopVideoControlsTheme of(BuildContext context) {
-    final MaterialDesktopVideoControlsTheme? result = maybeOf(context);
+  static MaterialTvVideoControlsTheme of(BuildContext context) {
+    final MaterialTvVideoControlsTheme? result = maybeOf(context);
     assert(
       result != null,
       'No [MaterialDesktopVideoControlsTheme] found in [context]',
@@ -357,23 +357,23 @@ class MaterialDesktopVideoControlsTheme extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(MaterialDesktopVideoControlsTheme oldWidget) =>
+  bool updateShouldNotify(MaterialTvVideoControlsTheme oldWidget) =>
       identical(normal, oldWidget.normal) &&
       identical(fullscreen, oldWidget.fullscreen);
 }
 
 /// {@macro material_desktop_video_controls}
-class _MaterialDesktopVideoControls extends StatefulWidget {
-  const _MaterialDesktopVideoControls();
+class _MaterialTvVideoControls extends StatefulWidget {
+  const _MaterialTvVideoControls();
 
   @override
-  State<_MaterialDesktopVideoControls> createState() =>
-      _MaterialDesktopVideoControlsState();
+  State<_MaterialTvVideoControls> createState() =>
+      _MaterialTvVideoControlsState();
 }
 
 /// {@macro material_desktop_video_controls}
-class _MaterialDesktopVideoControlsState
-    extends State<_MaterialDesktopVideoControls> {
+class _MaterialTvVideoControlsState
+    extends State<_MaterialTvVideoControls> {
   late bool mount = _theme(context).visibleOnMount;
   late bool visible = _theme(context).visibleOnMount;
 
@@ -643,7 +643,7 @@ class _MaterialDesktopVideoControlsState
                                     _theme(context).bottomButtonBar.isNotEmpty
                                         ? const Offset(0.0, 16.0)
                                         : Offset.zero,
-                                child: MaterialDesktopSeekBar(
+                                child: MaterialTvSeekBar(
                                   onSeekStart: () {
                                     _timer?.cancel();
                                   },
@@ -744,21 +744,21 @@ class _MaterialDesktopVideoControlsState
 // SEEK BAR
 
 /// Material design seek bar.
-class MaterialDesktopSeekBar extends StatefulWidget {
+class MaterialTvSeekBar extends StatefulWidget {
   final VoidCallback? onSeekStart;
   final VoidCallback? onSeekEnd;
 
-  const MaterialDesktopSeekBar({
+  const MaterialTvSeekBar({
     Key? key,
     this.onSeekStart,
     this.onSeekEnd,
   }) : super(key: key);
 
   @override
-  MaterialDesktopSeekBarState createState() => MaterialDesktopSeekBarState();
+  MaterialTvSeekBarState createState() => MaterialTvSeekBarState();
 }
 
-class MaterialDesktopSeekBarState extends State<MaterialDesktopSeekBar> {
+class MaterialTvSeekBarState extends State<MaterialTvSeekBar> {
   bool hover = false;
   bool click = false;
   double slider = 0.0;
@@ -979,26 +979,26 @@ class MaterialDesktopSeekBarState extends State<MaterialDesktopSeekBar> {
 // BUTTON: PLAY/PAUSE
 
 /// A material design play/pause button.
-class MaterialDesktopPlayOrPauseButton extends StatefulWidget {
-  /// Overriden icon size for [MaterialDesktopSkipPreviousButton].
+class MaterialTvPlayOrPauseButton extends StatefulWidget {
+  /// Overriden icon size for [MaterialTvSkipPreviousButton].
   final double? iconSize;
 
-  /// Overriden icon color for [MaterialDesktopSkipPreviousButton].
+  /// Overriden icon color for [MaterialTvSkipPreviousButton].
   final Color? iconColor;
 
-  const MaterialDesktopPlayOrPauseButton({
+  const MaterialTvPlayOrPauseButton({
     super.key,
     this.iconSize,
     this.iconColor,
   });
 
   @override
-  MaterialDesktopPlayOrPauseButtonState createState() =>
-      MaterialDesktopPlayOrPauseButtonState();
+  MaterialTvPlayOrPauseButtonState createState() =>
+      MaterialTvPlayOrPauseButtonState();
 }
 
-class MaterialDesktopPlayOrPauseButtonState
-    extends State<MaterialDesktopPlayOrPauseButton>
+class MaterialTvPlayOrPauseButtonState
+    extends State<MaterialTvPlayOrPauseButton>
     with SingleTickerProviderStateMixin {
   late final animation = AnimationController(
     vsync: this,
@@ -1053,17 +1053,17 @@ class MaterialDesktopPlayOrPauseButtonState
 // BUTTON: SKIP NEXT
 
 /// MaterialDesktop design skip next button.
-class MaterialDesktopSkipNextButton extends StatelessWidget {
-  /// Icon for [MaterialDesktopSkipNextButton].
+class MaterialTvSkipNextButton extends StatelessWidget {
+  /// Icon for [MaterialTvSkipNextButton].
   final Widget? icon;
 
-  /// Overriden icon size for [MaterialDesktopSkipNextButton].
+  /// Overriden icon size for [MaterialTvSkipNextButton].
   final double? iconSize;
 
-  /// Overriden icon color for [MaterialDesktopSkipNextButton].
+  /// Overriden icon color for [MaterialTvSkipNextButton].
   final Color? iconColor;
 
-  const MaterialDesktopSkipNextButton({
+  const MaterialTvSkipNextButton({
     Key? key,
     this.icon,
     this.iconSize,
@@ -1089,17 +1089,17 @@ class MaterialDesktopSkipNextButton extends StatelessWidget {
 // BUTTON: SKIP PREVIOUS
 
 /// MaterialDesktop design skip previous button.
-class MaterialDesktopSkipPreviousButton extends StatelessWidget {
-  /// Icon for [MaterialDesktopSkipPreviousButton].
+class MaterialTvSkipPreviousButton extends StatelessWidget {
+  /// Icon for [MaterialTvSkipPreviousButton].
   final Widget? icon;
 
-  /// Overriden icon size for [MaterialDesktopSkipPreviousButton].
+  /// Overriden icon size for [MaterialTvSkipPreviousButton].
   final double? iconSize;
 
-  /// Overriden icon color for [MaterialDesktopSkipPreviousButton].
+  /// Overriden icon color for [MaterialTvSkipPreviousButton].
   final Color? iconColor;
 
-  const MaterialDesktopSkipPreviousButton({
+  const MaterialTvSkipPreviousButton({
     Key? key,
     this.icon,
     this.iconSize,
@@ -1125,17 +1125,17 @@ class MaterialDesktopSkipPreviousButton extends StatelessWidget {
 // BUTTON: FULL SCREEN
 
 /// MaterialDesktop design fullscreen button.
-class MaterialDesktopFullscreenButton extends StatelessWidget {
-  /// Icon for [MaterialDesktopFullscreenButton].
+class MaterialTvFullscreenButton extends StatelessWidget {
+  /// Icon for [MaterialTvFullscreenButton].
   final Widget? icon;
 
-  /// Overriden icon size for [MaterialDesktopFullscreenButton].
+  /// Overriden icon size for [MaterialTvFullscreenButton].
   final double? iconSize;
 
-  /// Overriden icon color for [MaterialDesktopFullscreenButton].
+  /// Overriden icon color for [MaterialTvFullscreenButton].
   final Color? iconColor;
 
-  const MaterialDesktopFullscreenButton({
+  const MaterialTvFullscreenButton({
     Key? key,
     this.icon,
     this.iconSize,
@@ -1159,20 +1159,20 @@ class MaterialDesktopFullscreenButton extends StatelessWidget {
 // BUTTON: CUSTOM
 
 /// MaterialDesktop design custom button.
-class MaterialDesktopCustomButton extends StatelessWidget {
-  /// Icon for [MaterialDesktopCustomButton].
+class MaterialTvCustomButton extends StatelessWidget {
+  /// Icon for [MaterialTvCustomButton].
   final Widget? icon;
 
-  /// Icon size for [MaterialDesktopCustomButton].
+  /// Icon size for [MaterialTvCustomButton].
   final double? iconSize;
 
-  /// Icon color for [MaterialDesktopCustomButton].
+  /// Icon color for [MaterialTvCustomButton].
   final Color? iconColor;
 
   /// The callback that is called when the button is tapped or otherwise activated.
   final VoidCallback onPressed;
 
-  const MaterialDesktopCustomButton({
+  const MaterialTvCustomButton({
     Key? key,
     this.icon,
     this.iconSize,
@@ -1194,7 +1194,7 @@ class MaterialDesktopCustomButton extends StatelessWidget {
 // BUTTON: VOLUME
 
 /// MaterialDesktop design volume button & slider.
-class MaterialDesktopVolumeButton extends StatefulWidget {
+class MaterialTvVolumeButton extends StatefulWidget {
   /// Icon size for the volume button.
   final double? iconSize;
 
@@ -1213,7 +1213,7 @@ class MaterialDesktopVolumeButton extends StatefulWidget {
   /// Width for the volume slider.
   final double? sliderWidth;
 
-  const MaterialDesktopVolumeButton({
+  const MaterialTvVolumeButton({
     super.key,
     this.iconSize,
     this.iconColor,
@@ -1224,12 +1224,12 @@ class MaterialDesktopVolumeButton extends StatefulWidget {
   });
 
   @override
-  MaterialDesktopVolumeButtonState createState() =>
-      MaterialDesktopVolumeButtonState();
+  MaterialTvVolumeButtonState createState() =>
+      MaterialTvVolumeButtonState();
 }
 
-class MaterialDesktopVolumeButtonState
-    extends State<MaterialDesktopVolumeButton>
+class MaterialTvVolumeButtonState
+    extends State<MaterialTvVolumeButton>
     with SingleTickerProviderStateMixin {
   late double volume = controller(context).player.state.volume;
 
@@ -1395,18 +1395,18 @@ class MaterialDesktopVolumeButtonState
 // POSITION INDICATOR
 
 /// MaterialDesktop design position indicator.
-class MaterialDesktopPositionIndicator extends StatefulWidget {
-  /// Overriden [TextStyle] for the [MaterialDesktopPositionIndicator].
+class MaterialTvPositionIndicator extends StatefulWidget {
+  /// Overriden [TextStyle] for the [MaterialTvPositionIndicator].
   final TextStyle? style;
-  const MaterialDesktopPositionIndicator({super.key, this.style});
+  const MaterialTvPositionIndicator({super.key, this.style});
 
   @override
-  MaterialDesktopPositionIndicatorState createState() =>
-      MaterialDesktopPositionIndicatorState();
+  MaterialTvPositionIndicatorState createState() =>
+      MaterialTvPositionIndicatorState();
 }
 
-class MaterialDesktopPositionIndicatorState
-    extends State<MaterialDesktopPositionIndicator> {
+class MaterialTvPositionIndicatorState
+    extends State<MaterialTvPositionIndicator> {
   late Duration position = controller(context).player.state.position;
   late Duration duration = controller(context).player.state.duration;
 

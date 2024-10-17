@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:open_media_server_app/controls/material_tv.dart';
 import 'package:open_media_server_app/globals.dart';
-import 'controls/material_desktop.dart' as local;
 
 class PlayerView extends StatefulWidget {
   const PlayerView({super.key, required this.url});
@@ -71,7 +71,7 @@ class _PlayerState extends State<PlayerView> {
       visibleOnMount: true,
     );
 
-    var tvThemeData = local.MaterialDesktopVideoControlsThemeData(
+    var tvThemeData = MaterialTvVideoControlsThemeData(
       topButtonBar: topButtonBar,
       bottomButtonBar: bottomButtonBar,
       visibleOnMount: true,
@@ -189,14 +189,14 @@ class _PlayerState extends State<PlayerView> {
         ),
       );
     } else if (Globals.isTv) {
-      return local.MaterialDesktopVideoControlsTheme(
+      return MaterialTvVideoControlsTheme(
         normal: tvThemeData,
         fullscreen: tvThemeData,
         child: Scaffold(
           body: Video(
             controller: controller,
             controls: (state) {
-              return local.MaterialDesktopVideoControls(state);
+              return MaterialTvVideoControls(state);
             },
           ),
         ),
