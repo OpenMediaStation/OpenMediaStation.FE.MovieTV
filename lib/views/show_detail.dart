@@ -31,27 +31,41 @@ class ShowDetailView extends StatelessWidget {
           List<GridItemModel> items = snapshot.data!;
           items.sort((a, b) => a.listPosition!.compareTo(b.listPosition!));
 
-          List<Widget> seasonButtons = [];
+          List<Widget> seasons = [];
 
           for (var element in items) {
-            seasonButtons.add(
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SeasonDetailView(itemModel: element),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.tv),
-                  label: Text("${element.inventoryItem?.title}"),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12),
-                    textStyle: const TextStyle(fontSize: 18),
+            seasons.add(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    splashColor: Colors.black26,
+                    child: Column(
+                      children: [
+                        Ink.image(
+                          height: 300,
+                          width: 300 * (9 / 14),
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            itemModel.posterUrl ?? Globals.PictureNotFoundUrl,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Text("${element.inventoryItem?.title}"),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SeasonDetailView(itemModel: element),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -90,8 +104,14 @@ class ShowDetailView extends StatelessWidget {
                     style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
                   const SizedBox(height: 16),
-                  Column(
-                    children: seasonButtons,
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: seasons,
+                      ),
+                    ),
                   ),
                 ],
               ),

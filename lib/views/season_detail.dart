@@ -37,9 +37,11 @@ class SeasonDetailView extends StatelessWidget {
 
           for (var element in items) {
             episodeButtons.add(
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () {
+              Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  splashColor: Colors.black26,
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -48,12 +50,47 @@ class SeasonDetailView extends StatelessWidget {
                       ),
                     );
                   },
-                  icon: const Icon(Icons.tv),
-                  label: Text("${element.metadataModel?.title}"),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12),
-                    textStyle: const TextStyle(fontSize: 18),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Ink.image(
+                              height: 125 * (9 / 14),
+                              width: 125,
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                element.posterUrl ?? Globals.PictureNotFoundUrl,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Text(
+                              element.metadataModel?.title != null
+                                  ? "${element.listPosition}. ${element.metadataModel?.title}"
+                                  : "No title",
+                              softWrap: true,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+                          child: Text(
+                            element.metadataModel?.episode?.plot ??
+                                "No description",
+                            softWrap: true,
+                            maxLines: 3,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -61,7 +98,7 @@ class SeasonDetailView extends StatelessWidget {
           }
 
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
