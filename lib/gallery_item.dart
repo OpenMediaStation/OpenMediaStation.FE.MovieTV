@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
@@ -15,8 +16,8 @@ class GridItem extends StatelessWidget {
         Expanded(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(
-              item.posterUrl ?? Globals.PictureNotFoundUrl,
+            child: CachedNetworkImage(
+              imageUrl: item.posterUrl ?? Globals.PictureNotFoundUrl,
               fit: BoxFit.cover,
               width: double.infinity,
             ),

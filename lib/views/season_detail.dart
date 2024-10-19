@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
@@ -61,7 +62,7 @@ class SeasonDetailView extends StatelessWidget {
                               height: 125 * (9 / 14),
                               width: 125,
                               fit: BoxFit.cover,
-                              image: NetworkImage(
+                              image: CachedNetworkImageProvider(
                                 element.backdropUrl ??
                                     Globals.PictureNotFoundUrl,
                               ),
@@ -115,8 +116,8 @@ class SeasonDetailView extends StatelessWidget {
                         Rect.fromLTRB(220, 220, rect.width, rect.height));
                   },
                   blendMode: BlendMode.dstIn,
-                  child: Image.network(
-                    itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                     height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,
