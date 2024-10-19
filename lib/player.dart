@@ -146,6 +146,8 @@ class _PlayerState extends State<PlayerView> {
       );
     }
 
+    var seekBarColor = const Color.fromARGB(255, 82, 26, 114);
+
     var mobileThemeData = MaterialVideoControlsThemeData(
       volumeGesture: true,
       brightnessGesture: true,
@@ -155,22 +157,29 @@ class _PlayerState extends State<PlayerView> {
       topButtonBar: topButtonBar,
       bottomButtonBar: bottomButtonBar,
       visibleOnMount: true,
+      seekBarThumbColor: seekBarColor,
+      seekBarPositionColor: seekBarColor,
     );
 
     var tvThemeData = MaterialTvVideoControlsThemeData(
-        topButtonBar: topButtonBar,
-        bottomButtonBar: bottomButtonBar,
-        visibleOnMount: true,
-        primaryButtonBar: [
-          const MaterialTvPlayOrPauseButton(
-            iconSize: 124,
-          ),
-        ]);
+      topButtonBar: topButtonBar,
+      bottomButtonBar: bottomButtonBar,
+      visibleOnMount: true,
+      seekBarThumbColor: seekBarColor,
+      seekBarPositionColor: seekBarColor,
+      primaryButtonBar: [
+        const MaterialTvPlayOrPauseButton(
+          iconSize: 124,
+        ),
+      ],
+    );
 
     var desktopThemeData = MaterialDesktopVideoControlsThemeData(
       topButtonBar: topButtonBar,
       bottomButtonBar: bottomButtonBar,
       visibleOnMount: true,
+      seekBarThumbColor: seekBarColor,
+      seekBarPositionColor: seekBarColor,
       keyboardShortcuts: {
         const SingleActivator(LogicalKeyboardKey.mediaPlay): () =>
             controller.player.play(),
