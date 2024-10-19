@@ -5,6 +5,7 @@ import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/season_detail.dart';
+import 'package:open_media_server_app/widgets/title.dart';
 
 class ShowDetailView extends StatelessWidget {
   const ShowDetailView({
@@ -111,14 +112,7 @@ class ShowDetailView extends StatelessWidget {
                     children: [
                       const SizedBox(height: 16),
 
-                      // Title of the Show
-                      Text(
-                        itemModel.inventoryItem?.title ?? "Title unknown",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      TitleElement(text: itemModel.inventoryItem?.title),
                       const SizedBox(height: 8),
 
                       // Show Description / Plot
@@ -166,7 +160,8 @@ class ShowDetailView extends StatelessWidget {
         metadata = await metadataApi.getMetadata(season.metadataId!, "Season");
       }
 
-      var gridItem = GridItemModel(inventoryItem: season, metadataModel: null);
+      var gridItem =
+          GridItemModel(inventoryItem: season, metadataModel: metadata);
       gridItem.childIds = season.episodeIds;
       gridItem.listPosition = season.seasonNr;
       gridItem.posterUrl = metadata?.season?.poster;

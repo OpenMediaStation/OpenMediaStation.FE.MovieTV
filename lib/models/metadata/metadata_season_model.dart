@@ -12,11 +12,16 @@ class MetadataSeasonModel {
   });
 
   factory MetadataSeasonModel.fromJson(Map<String, dynamic> json) {
+    var overview = json['overview'] as String?;
+    if (overview == "") {
+      overview = null;
+    }
+
     return MetadataSeasonModel(
       poster: json['poster'] as String?,
       airDate: json['airDate'] as String?,
       episodeCount: json['episodeCount'] as int?,
-      overview: json['overview'] as String?,
+      overview: overview,
     );
   }
 

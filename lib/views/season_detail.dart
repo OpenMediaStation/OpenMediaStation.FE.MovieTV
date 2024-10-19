@@ -5,6 +5,7 @@ import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/episode_detail.dart';
+import 'package:open_media_server_app/widgets/title.dart';
 
 class SeasonDetailView extends StatelessWidget {
   const SeasonDetailView({
@@ -61,7 +62,8 @@ class SeasonDetailView extends StatelessWidget {
                               width: 125,
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                element.backdropUrl ?? Globals.PictureNotFoundUrl,
+                                element.backdropUrl ??
+                                    Globals.PictureNotFoundUrl,
                               ),
                             ),
                             const SizedBox(
@@ -125,12 +127,12 @@ class SeasonDetailView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      TitleElement(text: itemModel.inventoryItem?.title),
                       Text(
-                        itemModel.inventoryItem?.title ?? "Title unknown",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        itemModel.metadataModel?.season?.overview ??
+                            "No description",
+                        maxLines: 3,
+                        softWrap: true,
                       ),
                       const SizedBox(height: 8),
                       Column(
@@ -169,8 +171,7 @@ class SeasonDetailView extends StatelessWidget {
 
       var gridItem =
           GridItemModel(inventoryItem: episode, metadataModel: metadata);
-      gridItem.backdropUrl = metadata?.episode
-          ?.backdrop;
+      gridItem.backdropUrl = metadata?.episode?.backdrop;
 
       gridItem.listPosition = episode.episodeNr;
 
