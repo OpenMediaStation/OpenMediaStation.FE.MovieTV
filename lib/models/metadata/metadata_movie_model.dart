@@ -1,4 +1,3 @@
-
 import 'package:open_media_server_app/models/metadata/rating.dart';
 
 class MetadataMovieModel {
@@ -15,6 +14,8 @@ class MetadataMovieModel {
   final String? country;
   final String? awards;
   final String? poster;
+  final String? logo;
+  final String? backdrop;
   final List<Rating>? ratings;
   final String? metascore;
   final String? imdbRating;
@@ -40,6 +41,8 @@ class MetadataMovieModel {
     required this.country,
     required this.awards,
     required this.poster,
+    required this.logo,
+    required this.backdrop,
     required this.ratings,
     required this.metascore,
     required this.imdbRating,
@@ -76,6 +79,8 @@ class MetadataMovieModel {
       country: json['country'] as String?,
       awards: json['awards'] as String?,
       poster: poster,
+      logo: json['logo'] as String?,
+      backdrop: json['backdrop'] as String?,
       ratings: ratings,
       metascore: json['metascore'] as String?,
       imdbRating: json['imdbRating'] as String?,
@@ -104,6 +109,8 @@ class MetadataMovieModel {
       'country': country,
       'awards': awards,
       'poster': poster,
+      'logo': logo,
+      'backdrop': backdrop,
       'ratings': ratings?.map((rating) => rating.toJson()).toList(),
       'metascore': metascore,
       'imdbRating': imdbRating,

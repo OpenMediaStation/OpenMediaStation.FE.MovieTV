@@ -5,6 +5,7 @@ class GridItemModel {
   final InventoryItem? inventoryItem;
   final MetadataModel? metadataModel;
   String? posterUrl;
+  String? backdropUrl;
   List<String>? childIds;
   int? listPosition;
 
