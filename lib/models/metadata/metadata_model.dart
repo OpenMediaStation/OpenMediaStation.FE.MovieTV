@@ -1,6 +1,7 @@
 import 'package:open_media_server_app/models/metadata/metadata_book_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_episode_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_movie_model.dart';
+import 'package:open_media_server_app/models/metadata/metadata_season_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_show_model.dart';
 
 class MetadataModel {
@@ -12,6 +13,7 @@ class MetadataModel {
 
   final MetadataMovieModel? movie;
   final MetadataShowModel? show;
+  final MetadataSeasonModel? season;
   final MetadataEpisodeModel? episode;
   final MetadataBookModel? book;
 
@@ -22,6 +24,7 @@ class MetadataModel {
     this.category,
     this.movie,
     this.show,
+    this.season,
     this.episode,
     this.book,
   });
@@ -38,6 +41,9 @@ class MetadataModel {
           : null,
       show: json['show'] != null
           ? MetadataShowModel.fromJson(json['show'] as Map<String, dynamic>)
+          : null,
+      season: json['season'] != null
+          ? MetadataSeasonModel.fromJson(json['season'] as Map<String, dynamic>)
           : null,
       episode: json['episode'] != null
           ? MetadataEpisodeModel.fromJson(json['episode'] as Map<String, dynamic>)
@@ -57,6 +63,7 @@ class MetadataModel {
       'category': category,
       'movie': movie?.toJson(),
       'show': show?.toJson(),
+      'season': season?.toJson(),
       'episode': episode?.toJson(),
       'book': book?.toJson(),
     };

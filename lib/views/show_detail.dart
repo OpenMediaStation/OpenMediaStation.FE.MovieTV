@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
+import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
+import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/season_detail.dart';
 
 class ShowDetailView extends StatelessWidget {
@@ -48,13 +50,19 @@ class ShowDetailView extends StatelessWidget {
                           width: 300 * (9 / 14),
                           fit: BoxFit.cover,
                           image: NetworkImage(
-                            itemModel.posterUrl ?? Globals.PictureNotFoundUrl,
+                            element.posterUrl ?? Globals.PictureNotFoundUrl,
                           ),
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                        Text("${element.inventoryItem?.title}"),
+                        Text(
+                          "${element.inventoryItem?.title}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ],
                     ),
                     onTap: () {
@@ -72,49 +80,66 @@ class ShowDetailView extends StatelessWidget {
             );
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Poster Image
-                  Center(
-                    child: Image.network(
-                      itemModel.posterUrl ?? Globals.PictureNotFoundUrl,
-                      height: 300,
-                      fit: BoxFit.cover,
-                    ),
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShaderMask(
+                  shaderCallback: (rect) {
+                    return const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black, // Softer black
+                        Colors.transparent,
+                      ],
+                    ).createShader(
+                        Rect.fromLTRB(220, 220, rect.width, rect.height));
+                  },
+                  blendMode: BlendMode.dstIn,
+                  child: Image.network(
+                    itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
-                  const SizedBox(height: 16),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
 
-                  // Title of the Show
-                  Text(
-                    itemModel.inventoryItem?.title ?? "Title unknown",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Show Description / Plot
-                  Text(
-                    itemModel.metadataModel?.show?.plot ?? "",
-                    style: const TextStyle(fontSize: 16, height: 1.5),
-                  ),
-                  const SizedBox(height: 16),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: seasons,
+                      // Title of the Show
+                      Text(
+                        itemModel.inventoryItem?.title ?? "Title unknown",
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 8),
+
+                      // Show Description / Plot
+                      Text(
+                        itemModel.metadataModel?.show?.plot ?? "",
+                        style: const TextStyle(fontSize: 16, height: 1.5),
+                      ),
+                      const SizedBox(height: 16),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: seasons,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
@@ -124,6 +149,7 @@ class ShowDetailView extends StatelessWidget {
 
   Future<List<GridItemModel>> getChildren() async {
     InventoryApi inventoryApi = InventoryApi();
+    MetadataApi metadataApi = MetadataApi();
 
     List<GridItemModel> gridItems = [];
 
@@ -134,9 +160,16 @@ class ShowDetailView extends StatelessWidget {
     for (var element in itemModel.childIds!) {
       var season = await inventoryApi.getSeason(element);
 
+      MetadataModel? metadata;
+
+      if (season.metadataId != null) {
+        metadata = await metadataApi.getMetadata(season.metadataId!, "Season");
+      }
+
       var gridItem = GridItemModel(inventoryItem: season, metadataModel: null);
       gridItem.childIds = season.episodeIds;
       gridItem.listPosition = season.seasonNr;
+      gridItem.posterUrl = metadata?.season?.poster;
 
       gridItems.add(gridItem);
     }

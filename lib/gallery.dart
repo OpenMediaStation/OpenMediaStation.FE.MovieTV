@@ -116,6 +116,7 @@ class Gallery extends StatelessWidget {
           GridItemModel(inventoryItem: show, metadataModel: metadata);
 
       gridItem.posterUrl = metadata?.show?.poster;
+      gridItem.backdropUrl = metadata?.show?.backdrop;
       gridItem.childIds = show.seasonIds;
 
       gridItems.add(gridItem);

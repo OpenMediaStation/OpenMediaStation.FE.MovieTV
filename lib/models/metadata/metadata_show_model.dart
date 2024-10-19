@@ -1,4 +1,3 @@
-
 import 'package:open_media_server_app/models/metadata/rating.dart';
 
 class MetadataShowModel {
@@ -15,6 +14,8 @@ class MetadataShowModel {
   final String? country;
   final String? awards;
   final String? poster;
+  final String? logo;
+  final String? backdrop;
   final List<Rating>? ratings;
   final String? metascore;
   final String? imdbRating;
@@ -40,6 +41,8 @@ class MetadataShowModel {
     required this.country,
     required this.awards,
     required this.poster,
+    required this.logo,
+    required this.backdrop,
     required this.ratings,
     required this.metascore,
     required this.imdbRating,
@@ -54,7 +57,8 @@ class MetadataShowModel {
 
   factory MetadataShowModel.fromJson(Map<String, dynamic> json) {
     var ratingsList = json['ratings'] as List?;
-    List<Rating>? ratings = ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
+    List<Rating>? ratings =
+        ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
 
     var poster = (json['poster'] as String?);
 
@@ -76,6 +80,8 @@ class MetadataShowModel {
       country: json['country'] as String?,
       awards: json['awards'] as String?,
       poster: poster,
+      logo: json['logo'] as String?,
+      backdrop: json['backdrop'] as String?,
       ratings: ratings,
       metascore: json['metascore'] as String?,
       imdbRating: json['imdbRating'] as String?,
@@ -104,6 +110,8 @@ class MetadataShowModel {
       'country': country,
       'awards': awards,
       'poster': poster,
+      'logo': logo,
+      'backdrop': backdrop,
       'ratings': ratings?.map((rating) => rating.toJson()).toList(),
       'metascore': metascore,
       'imdbRating': imdbRating,
