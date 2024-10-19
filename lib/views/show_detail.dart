@@ -19,6 +19,7 @@ class ShowDetailView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        surfaceTintColor: Colors.transparent,
       ),
       body: FutureBuilder<List<GridItemModel>>(
         future: getChildren(),
