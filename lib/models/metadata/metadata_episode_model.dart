@@ -1,4 +1,3 @@
-
 import 'package:open_media_server_app/models/metadata/rating.dart';
 
 class MetadataEpisodeModel {
@@ -14,7 +13,7 @@ class MetadataEpisodeModel {
   final String? language;
   final String? country;
   final String? awards;
-  final String? poster;
+  final String? backdrop;
   final List<Rating>? ratings;
   final String? metascore;
   final String? imdbRating;
@@ -39,7 +38,7 @@ class MetadataEpisodeModel {
     required this.language,
     required this.country,
     required this.awards,
-    required this.poster,
+    required this.backdrop,
     required this.ratings,
     required this.metascore,
     required this.imdbRating,
@@ -54,12 +53,13 @@ class MetadataEpisodeModel {
 
   factory MetadataEpisodeModel.fromJson(Map<String, dynamic> json) {
     var ratingsList = json['ratings'] as List?;
-    List<Rating>? ratings = ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
+    List<Rating>? ratings =
+        ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
 
-    var poster = (json['poster'] as String?);
+    var backdrop = (json['backdrop'] as String?);
 
-    if (poster == "N/A") {
-      poster = null;
+    if (backdrop == "N/A") {
+      backdrop = null;
     }
 
     return MetadataEpisodeModel(
@@ -75,7 +75,7 @@ class MetadataEpisodeModel {
       language: json['language'] as String?,
       country: json['country'] as String?,
       awards: json['awards'] as String?,
-      poster: poster,
+      backdrop: backdrop,
       ratings: ratings,
       metascore: json['metascore'] as String?,
       imdbRating: json['imdbRating'] as String?,
@@ -103,7 +103,7 @@ class MetadataEpisodeModel {
       'language': language,
       'country': country,
       'awards': awards,
-      'poster': poster,
+      'backdrop': backdrop,
       'ratings': ratings?.map((rating) => rating.toJson()).toList(),
       'metascore': metascore,
       'imdbRating': imdbRating,

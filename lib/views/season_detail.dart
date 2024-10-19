@@ -61,7 +61,7 @@ class SeasonDetailView extends StatelessWidget {
                               width: 125,
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                element.posterUrl ?? Globals.PictureNotFoundUrl,
+                                element.backdropUrl ?? Globals.PictureNotFoundUrl,
                               ),
                             ),
                             const SizedBox(
@@ -169,8 +169,8 @@ class SeasonDetailView extends StatelessWidget {
 
       var gridItem =
           GridItemModel(inventoryItem: episode, metadataModel: metadata);
-      gridItem.backdropUrl = metadata?.episode?.poster; // TODO backend change use backdrop instead of poster here
-      gridItem.posterUrl = metadata?.episode?.poster;
+      gridItem.backdropUrl = metadata?.episode
+          ?.backdrop;
 
       gridItem.listPosition = episode.episodeNr;
 
