@@ -78,8 +78,7 @@ class MovieDetailView extends StatelessWidget {
                         label: const Text("Play"),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 12,
+                            vertical: 8,
                           ),
                           textStyle: const TextStyle(
                             fontSize: 18,
