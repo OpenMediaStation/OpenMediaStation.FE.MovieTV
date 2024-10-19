@@ -35,115 +35,126 @@ class SeasonDetailView extends StatelessWidget {
           List<GridItemModel> items = snapshot.data!;
           items.sort((a, b) => a.listPosition!.compareTo(b.listPosition!));
 
-          List<Widget> episodeButtons = [];
-
-          for (var element in items) {
-            episodeButtons.add(
-              Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  splashColor: Colors.black26,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EpisodeDetailView(itemModel: element),
+          return ListView.builder(
+            itemCount: items.length + 1, // +1 for the season info header
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                // First item is the header (season title and description)
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShaderMask(
+                      shaderCallback: (rect) {
+                        return const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black, // Softer black
+                            Colors.transparent,
+                          ],
+                        ).createShader(
+                            Rect.fromLTRB(220, 220, rect.width, rect.height));
+                      },
+                      blendMode: BlendMode.dstIn,
+                      child: CachedNetworkImage(
+                        imageUrl: itemModel.backdropUrl ??
+                            Globals.PictureNotFoundUrl,
+                        height: 300,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: Column(
-                      children: [
-                        Row(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TitleElement(text: itemModel.inventoryItem?.title),
+                          Text(
+                            itemModel.metadataModel?.season?.overview ??
+                                "No description",
+                            maxLines: 3,
+                            softWrap: true,
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                // Episode list items
+                var element = items[index - 1]; // Adjust index for episode
+
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: InkWell(
+                      splashColor: Colors.black26,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EpisodeDetailView(itemModel: element),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                        child: Column(
                           children: [
-                            Ink.image(
-                              height: 125 * (9 / 14),
-                              width: 125,
-                              fit: BoxFit.cover,
-                              image: CachedNetworkImageProvider(
-                                element.backdropUrl ??
-                                    Globals.PictureNotFoundUrl,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            Text(
-                              element.metadataModel?.title != null
-                                  ? "${element.listPosition}. ${element.metadataModel?.title}"
-                                  : "No title",
-                              softWrap: true,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                            Row(
+                              children: [
+                                Ink.image(
+                                  height: 125 * (9 / 14),
+                                  width: 125,
+                                  fit: BoxFit.cover,
+                                  image: CachedNetworkImageProvider(
+                                    element.backdropUrl ??
+                                        Globals.PictureNotFoundUrl,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        element.metadataModel?.title != null
+                                            ? "${element.listPosition}. ${element.metadataModel?.title}"
+                                            : "No title",
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        element.metadataModel?.episode?.plot ??
+                                            "No description",
+                                        softWrap: true,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
-                          child: Text(
-                            element.metadataModel?.episode?.plot ??
-                                "No description",
-                            softWrap: true,
-                            maxLines: 3,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            );
-          }
-
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                ShaderMask(
-                  shaderCallback: (rect) {
-                    return const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black, // Softer black
-                        Colors.transparent,
-                      ],
-                    ).createShader(
-                        Rect.fromLTRB(220, 220, rect.width, rect.height));
-                  },
-                  blendMode: BlendMode.dstIn,
-                  child: CachedNetworkImage(
-                    imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
-                    height: 300,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TitleElement(text: itemModel.inventoryItem?.title),
-                      Text(
-                        itemModel.metadataModel?.season?.overview ??
-                            "No description",
-                        maxLines: 3,
-                        softWrap: true,
-                      ),
-                      const SizedBox(height: 8),
-                      Column(
-                        children: episodeButtons,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                );
+              }
+            },
           );
         },
       ),
