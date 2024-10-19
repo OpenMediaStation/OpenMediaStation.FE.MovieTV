@@ -170,6 +170,7 @@ class ShowDetailView extends StatelessWidget {
       gridItem.childIds = season.episodeIds;
       gridItem.listPosition = season.seasonNr;
       gridItem.posterUrl = metadata?.season?.poster;
+      gridItem.backdropUrl = itemModel.backdropUrl;
 
       gridItems.add(gridItem);
     }

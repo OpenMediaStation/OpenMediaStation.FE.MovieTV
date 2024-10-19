@@ -97,25 +97,49 @@ class SeasonDetailView extends StatelessWidget {
             );
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    itemModel.inventoryItem?.title ?? "Title unknown",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ShaderMask(
+                  shaderCallback: (rect) {
+                    return const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black, // Softer black
+                        Colors.transparent,
+                      ],
+                    ).createShader(
+                        Rect.fromLTRB(220, 220, rect.width, rect.height));
+                  },
+                  blendMode: BlendMode.dstIn,
+                  child: Image.network(
+                    itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
-                  const SizedBox(height: 8),
-                  Column(
-                    children: episodeButtons,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        itemModel.inventoryItem?.title ?? "Title unknown",
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: episodeButtons,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },
@@ -145,6 +169,7 @@ class SeasonDetailView extends StatelessWidget {
 
       var gridItem =
           GridItemModel(inventoryItem: episode, metadataModel: metadata);
+      gridItem.backdropUrl = metadata?.episode?.poster; // TODO backend change use backdrop instead of poster here
       gridItem.posterUrl = metadata?.episode?.poster;
 
       gridItem.listPosition = episode.episodeNr;
