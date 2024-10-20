@@ -372,8 +372,7 @@ class _MaterialTvVideoControls extends StatefulWidget {
 }
 
 /// {@macro material_desktop_video_controls}
-class _MaterialTvVideoControlsState
-    extends State<_MaterialTvVideoControls> {
+class _MaterialTvVideoControlsState extends State<_MaterialTvVideoControls> {
   late bool mount = _theme(context).visibleOnMount;
   late bool visible = _theme(context).visibleOnMount;
 
@@ -893,20 +892,51 @@ class MaterialTvSeekBarState extends State<MaterialTvSeekBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.none,
-      margin: _theme(context).seekBarMargin,
-      child: LayoutBuilder(
-        builder: (context, constraints) => MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onHover: (e) => onHover(e, constraints),
-          onEnter: (e) => onEnter(e, constraints),
-          onExit: (e) => onExit(e, constraints),
-          child: Listener(
-            onPointerMove: (e) => onPointerMove(e, constraints),
-            onPointerDown: (e) => onPointerDown(),
-            onPointerUp: (e) => onPointerUp(),
-            child: Container(
+    return FocusableActionDetector(
+      focusNode: FocusNode(), // Create a FocusNode to manage focus
+      autofocus: true, // Automatically focus when the widget appears
+      onFocusChange: (focused) {
+        // Handle focus changes
+        setState(() {
+          hover = focused; // Example: show hover effect when focused
+        });
+      },
+      child: Focus(
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent) {
+            if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+              double percent = 0.001;
+
+              double sliderPercent = (slider + percent).clamp(0.0, 1.0);
+
+              setState(() {
+                hover = true;
+                slider = sliderPercent;
+              });
+              controller(context).player.seek(duration * slider);
+
+              return KeyEventResult.handled;
+            } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+              double percent = 0.001;
+
+              double sliderPercent = (slider - percent).clamp(0.0, 1.0);
+
+              setState(() {
+                hover = true;
+                slider = sliderPercent;
+              });
+              controller(context).player.seek(duration * slider);
+
+              return KeyEventResult.handled;
+            }
+          }
+          return KeyEventResult.ignored;
+        },
+        child: Container(
+          clipBehavior: Clip.none,
+          margin: _theme(context).seekBarMargin,
+          child: LayoutBuilder(
+            builder: (context, constraints) => Container(
               color: const Color(0x00000000),
               width: constraints.maxWidth,
               height: _theme(context).seekBarContainerHeight,
@@ -1225,12 +1255,10 @@ class MaterialTvVolumeButton extends StatefulWidget {
   });
 
   @override
-  MaterialTvVolumeButtonState createState() =>
-      MaterialTvVolumeButtonState();
+  MaterialTvVolumeButtonState createState() => MaterialTvVolumeButtonState();
 }
 
-class MaterialTvVolumeButtonState
-    extends State<MaterialTvVolumeButton>
+class MaterialTvVolumeButtonState extends State<MaterialTvVolumeButton>
     with SingleTickerProviderStateMixin {
   late double volume = controller(context).player.state.volume;
 
