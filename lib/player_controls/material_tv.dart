@@ -913,9 +913,10 @@ class MaterialTvSeekBarState extends State<MaterialTvSeekBar> {
         onKeyEvent: (node, event) {
           if (event is KeyDownEvent) {
             if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-              double percent = 0.001;
+              double percent = 0.01;
 
-              double sliderPercent = (slider + percent).clamp(0.0, 1.0);
+              double sliderPercent =
+                  (positionPercent + percent).clamp(0.0, 1.0);
 
               setState(() {
                 hover = true;
@@ -925,9 +926,10 @@ class MaterialTvSeekBarState extends State<MaterialTvSeekBar> {
 
               return KeyEventResult.handled;
             } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-              double percent = 0.001;
+              double percent = 0.01;
 
-              double sliderPercent = (slider - percent).clamp(0.0, 1.0);
+              double sliderPercent =
+                  (positionPercent - percent).clamp(0.0, 1.0);
 
               setState(() {
                 hover = true;
