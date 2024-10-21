@@ -890,18 +890,26 @@ class MaterialTvSeekBarState extends State<MaterialTvSeekBar> {
     }
   }
 
+  FocusNode focusNode = FocusNode();
+  FocusNode focusNode2 = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return FocusableActionDetector(
-      focusNode: FocusNode(), // Create a FocusNode to manage focus
-      autofocus: true, // Automatically focus when the widget appears
+      focusNode: focusNode, // Create a FocusNode to manage focus
+      autofocus: false, // Automatically focus when the widget appears
       onFocusChange: (focused) {
         // Handle focus changes
         setState(() {
           hover = focused; // Example: show hover effect when focused
         });
+
+        if (focused) {
+          focusNode2.requestFocus();
+        }
       },
       child: Focus(
+        focusNode: focusNode2,
         onKeyEvent: (node, event) {
           if (event is KeyDownEvent) {
             if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
@@ -930,6 +938,7 @@ class MaterialTvSeekBarState extends State<MaterialTvSeekBar> {
               return KeyEventResult.handled;
             }
           }
+
           return KeyEventResult.ignored;
         },
         child: Container(
