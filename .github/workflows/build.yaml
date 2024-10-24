@@ -40,7 +40,7 @@ jobs:
       - name: Build Flutter Linux App
         run: flutter build linux
 
-      - run: ls -R
+      - run: chmod u+x build/linux/x64/release/bundle/open_media_server_app
 
       # Package the built Linux app into an AppImage
       - name: Create AppImage
@@ -94,3 +94,31 @@ jobs:
         with:
           name: my-flutter-app.apk
           path: '*.apk'
+
+  build-web:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Flutter SDK
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+
+      # Fetch Flutter dependencies
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - run: flutter build web
+        working-directory: ./
+        shell: bash
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: web
+          path: ./build/web/
