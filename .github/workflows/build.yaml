@@ -40,14 +40,19 @@ jobs:
       - name: Build Flutter Linux App
         run: flutter build linux
 
-      - run: chmod u+x build/linux/x64/release/bundle/open_media_server_app
+      - name: List build directory
+        run: |
+          ls -R build/linux/x64/release/bundle
+
+      # Ensure executable permissions
+      - name: Set executable permissions
+        run: chmod +x build/linux/x64/release/bundle/usr/bin/open_media_server_app
 
       # Package the built Linux app into an AppImage
       - name: Create AppImage
         run: |
-          APP_DIR=build/linux/x64/release/bundle
           ./linuxdeploy-x86_64.AppImage \
-            --appdir=$APP_DIR \
+            --appdir=build/linux/x64/release/bundle \
             --output appimage \
             --desktop-file=assets/desktop/myapp.desktop \
             --icon-file assets/images/myapp.png
@@ -58,6 +63,7 @@ jobs:
         with:
           name: my-flutter-app.AppImage
           path: '*.AppImage'
+
 
   build-apk:
     runs-on: ubuntu-latest
@@ -93,7 +99,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: my-flutter-app.apk
-          path: '*.apk'
+          path: "./build/app/outputs/apk/release/app-release.apk"
+
 
   build-web:
     runs-on: ubuntu-latest
