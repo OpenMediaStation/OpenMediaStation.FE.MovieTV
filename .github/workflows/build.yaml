@@ -56,7 +56,7 @@ jobs:
 
       # Package the built Linux app into an AppImage
       - name: Create AppImage
-        run: ARCH=x86_64 ./appimagetool-x86_64.AppImage --appdir=build/linux/x64/release/bundle AppImage.AppImage
+        run: ARCH=x86_64 ./appimagetool-x86_64.AppImage assets/AppImage HelloWorld.AppImage
 
       # Upload the AppImage as an artifact (optional)
       - name: Upload AppImage artifact
