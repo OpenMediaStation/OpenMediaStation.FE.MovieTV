@@ -48,7 +48,8 @@ jobs:
             --appdir=$APP_DIR \
             --output appimage \
             --desktop-file $APP_DIR/myapp.desktop \
-            --icon-file $APP_DIR/myapp.png
+            --icon-file $APP_DIR/myapp.png \
+            --no-fuse
 
       # Upload the AppImage as an artifact (optional)
       - name: Upload AppImage artifact
