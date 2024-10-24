@@ -58,3 +58,39 @@ jobs:
         with:
           name: my-flutter-app.AppImage
           path: '*.AppImage'
+
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '13'
+
+      # Install Flutter SDK
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+
+      # Fetch Flutter dependencies
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      # Run Flutter build for Linux
+      - name: Build Flutter Linux App
+        run: flutter build apk
+
+      - run: ls -R
+
+      # Upload the AppImage as an artifact
+      - name: Upload AppImage artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-flutter-app.apk
+          path: '*.apk'
