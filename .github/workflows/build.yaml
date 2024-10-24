@@ -21,7 +21,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.19.6'
 
       # Install AppImage dependencies
       - name: Install AppImage and Linux dependencies
