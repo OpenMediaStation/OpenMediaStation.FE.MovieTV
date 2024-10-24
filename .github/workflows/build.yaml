@@ -40,6 +40,8 @@ jobs:
       - name: Build Flutter Linux App
         run: flutter build linux
 
+      - run: ls -R
+
       # Package the built Linux app into an AppImage
       - name: Create AppImage
         run: |
