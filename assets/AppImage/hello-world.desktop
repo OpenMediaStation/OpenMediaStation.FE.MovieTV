@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Hello World
+Exec=open_media_server_app
+Icon=myapp
+Categories=Utility;

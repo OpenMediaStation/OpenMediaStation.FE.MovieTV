@@ -50,9 +50,13 @@ jobs:
       - name: Set executable permissions
         run: chmod +x build/linux/x64/release/bundle/open_media_server_app
 
+      - run: |
+          mkdir -p assets/AppImage/usr/bin/
+          cp -r build/linux/x64/release/bundle/ assets/AppImage/usr/bin/
+
       # Package the built Linux app into an AppImage
       - name: Create AppImage
-        run: ./appimagetool-x86_64.AppImage --appdir=build/linux/x64/release/bundle AppImage.AppImage
+        run: ARCH=x86_64 ./appimagetool-x86_64.AppImage --appdir=build/linux/x64/release/bundle AppImage.AppImage
 
       # Upload the AppImage as an artifact (optional)
       - name: Upload AppImage artifact
