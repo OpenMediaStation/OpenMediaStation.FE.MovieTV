@@ -47,8 +47,8 @@ jobs:
           ./linuxdeploy-x86_64.AppImage \
             --appdir=$APP_DIR \
             --output appimage \
-            --desktop-file $APP_DIR/myapp.desktop \
-            --icon-file $APP_DIR/myapp.png
+            --desktop-file=assets/desktop/myapp.desktop \
+            --icon-file assets/images/myapp.png
 
       # Upload the AppImage as an artifact (optional)
       - name: Upload AppImage artifact
