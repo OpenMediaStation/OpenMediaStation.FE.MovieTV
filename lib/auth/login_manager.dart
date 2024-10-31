@@ -43,7 +43,7 @@ class LoginManager {
     // }
   }
 
-  Future<String?> login(String clientId, String clientSecret, BuildContext context) async {
+  Future<String?> login(String clientId, BuildContext context) async {
     if (Globals.isTv) {
       DeviceCode deviceCode = DeviceCode();
       var token = await deviceCode.authenticateUser(Globals.ClientId, "offline_access", Globals.DeviceCodeUrl, context);
@@ -63,7 +63,6 @@ class LoginManager {
 
     AccessTokenResponse tknResponse = await client.getTokenWithAuthCodeFlow(
       clientId: clientId,
-      clientSecret: Uri.encodeQueryComponent(clientSecret),
       scopes: ["offline_access"],
       webAuthClient: baseWebAuth,
       state: state,

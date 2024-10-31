@@ -89,6 +89,6 @@ class HomePage extends StatelessWidget {
   Future authenticate(BuildContext context) async {
     LoginManager loginManager = LoginManager();
     var token =
-        await loginManager.login(Globals.ClientId, Globals.ClientSecret, context);
+        await loginManager.login(Globals.ClientId, context);
   }
 }

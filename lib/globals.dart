@@ -2,7 +2,6 @@ class Globals {
   static String BaseUrl = "http://localhost:8080";
 
   static String ClientId = "";
-  static String ClientSecret = "";
   static String AuthorizeUrl = "";
   static String TokenUrl = "";
   static String DeviceCodeUrl = "";
