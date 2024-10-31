@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/models/auth/auth_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class DeviceCode {
@@ -22,11 +22,11 @@ class DeviceCode {
     }
   }
 
-  Future<String?> authenticateUser(String clientId, String scope,
+  Future<String?> authenticateUser(AuthInfo authInfo, String scope,
       String deviceCodeUrl, BuildContext context) async {
     try {
       final deviceCodeResponse =
-          await getDeviceCode(clientId, scope, deviceCodeUrl);
+          await getDeviceCode(authInfo.clientId, scope, deviceCodeUrl);
       final userCode = deviceCodeResponse['user_code'];
       final verificationUri = deviceCodeResponse['verification_uri'];
 
@@ -74,7 +74,11 @@ class DeviceCode {
       final code = deviceCodeResponse['device_code'];
       final interval = deviceCodeResponse['interval'];
       var token = await pollForToken(
-          code, interval, Globals.ClientId, Globals.TokenUrl);
+        code,
+        interval,
+        authInfo.clientId,
+        authInfo.tokenUrl,
+      );
 
       return token;
     } catch (e) {

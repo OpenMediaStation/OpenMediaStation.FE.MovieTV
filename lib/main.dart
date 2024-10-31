@@ -2,6 +2,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:open_media_server_app/apis/auth_info_api.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
 import 'package:open_media_server_app/gallery.dart';
 import 'package:open_media_server_app/globals.dart';
@@ -87,8 +88,11 @@ class HomePage extends StatelessWidget {
   }
 
   Future authenticate(BuildContext context) async {
-    LoginManager loginManager = LoginManager();
-    var token =
-        await loginManager.login(Globals.ClientId, context);
+    AuthInfoApi authInfoApi = AuthInfoApi();
+    var info = await authInfoApi.getAuthInfo();
+
+    LoginManager loginManager = LoginManager(info);
+
+    var token = await loginManager.login(info, context);
   }
 }

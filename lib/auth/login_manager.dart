@@ -9,6 +9,7 @@ import 'package:oauth2_client/oauth2_client.dart';
 import 'package:open_media_server_app/auth/device_code.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/helpers/Preferences.dart';
+import 'package:open_media_server_app/models/auth/auth_info.dart';
 import 'package:random_string/random_string.dart';
 
 class LoginManager {
@@ -16,13 +17,13 @@ class LoginManager {
 
   BaseWebAuth? baseWebAuth;
 
-  LoginManager() {
+  LoginManager(AuthInfo authInfo) {
     if (Globals.isTv) {
       // Do nothing
     } else if (!Globals.isWeb) {
       client = OAuth2Client(
-        authorizeUrl: Globals.AuthorizeUrl,
-        tokenUrl: Globals.TokenUrl,
+        authorizeUrl: authInfo.authorizeUrl,
+        tokenUrl: authInfo.tokenUrl,
         redirectUri: "my.test.app:/oauth2redirect", // TODO
         customUriScheme: "my.test.app",
       );
@@ -43,10 +44,10 @@ class LoginManager {
     // }
   }
 
-  Future<String?> login(String clientId, BuildContext context) async {
+  Future<String?> login(AuthInfo authInfo, BuildContext context) async {
     if (Globals.isTv) {
       DeviceCode deviceCode = DeviceCode();
-      var token = await deviceCode.authenticateUser(Globals.ClientId, "offline_access", Globals.DeviceCodeUrl, context);
+      var token = await deviceCode.authenticateUser(authInfo, "offline_access", authInfo.deviceCodeUrl, context);
 
       Preferences.prefs?.setString("AccessToken", token!);
 
@@ -62,7 +63,7 @@ class LoginManager {
     }
 
     AccessTokenResponse tknResponse = await client.getTokenWithAuthCodeFlow(
-      clientId: clientId,
+      clientId: authInfo.clientId,
       scopes: ["offline_access"],
       webAuthClient: baseWebAuth,
       state: state,
