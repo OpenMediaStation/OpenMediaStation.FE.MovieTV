@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/inventory/episode.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
@@ -11,7 +12,10 @@ class InventoryApi {
   Future<List<InventoryItem>> listItems(String category) async {
     String apiUrl = "${Globals.BaseUrl}/api/inventory/items?";
 
-    var response = await http.get(Uri.parse("${apiUrl}category=$category"));
+    var headers = BaseApi.getHeaders();
+
+    var response = await http.get(Uri.parse("${apiUrl}category=$category"),
+        headers: headers);
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
@@ -24,7 +28,10 @@ class InventoryApi {
   Future<Movie> getMovie(String id) async {
     String apiUrl = "${Globals.BaseUrl}/api/inventory/movie?";
 
-    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+    var headers = BaseApi.getHeaders();
+
+    var response =
+        await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
 
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
@@ -37,7 +44,10 @@ class InventoryApi {
   Future<Show> getShow(String id) async {
     String apiUrl = "${Globals.BaseUrl}/api/inventory/show?";
 
-    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+    var headers = BaseApi.getHeaders();
+
+    var response =
+        await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
 
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
@@ -50,7 +60,10 @@ class InventoryApi {
   Future<Season> getSeason(String id) async {
     String apiUrl = "${Globals.BaseUrl}/api/inventory/season?";
 
-    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+    var headers = BaseApi.getHeaders();
+
+    var response =
+        await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
 
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
@@ -63,7 +76,10 @@ class InventoryApi {
   Future<Episode> getEpisode(String id) async {
     String apiUrl = "${Globals.BaseUrl}/api/inventory/episode?";
 
-    var response = await http.get(Uri.parse("${apiUrl}id=$id"));
+    var headers = BaseApi.getHeaders();
+
+    var response =
+        await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
 
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);

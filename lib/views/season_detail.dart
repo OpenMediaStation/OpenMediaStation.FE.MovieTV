@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/episode_detail.dart';
+import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/title.dart';
 
 class SeasonDetailView extends StatelessWidget {
@@ -56,9 +58,9 @@ class SeasonDetailView extends StatelessWidget {
                             Rect.fromLTRB(220, 220, rect.width, rect.height));
                       },
                       blendMode: BlendMode.dstIn,
-                      child: CachedNetworkImage(
-                        imageUrl: itemModel.backdropUrl ??
-                            Globals.PictureNotFoundUrl,
+                      child: CustomImage(
+                        imageUrl:
+                            itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                         height: 300,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -114,6 +116,7 @@ class SeasonDetailView extends StatelessWidget {
                                   image: CachedNetworkImageProvider(
                                     element.backdropUrl ??
                                         Globals.PictureNotFoundUrl,
+                                    headers: BaseApi.getHeaders(),
                                   ),
                                 ),
                                 const SizedBox(
@@ -121,7 +124,8 @@ class SeasonDetailView extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         element.metadataModel?.title != null

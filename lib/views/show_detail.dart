@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/season_detail.dart';
+import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/title.dart';
 
 class ShowDetailView extends StatelessWidget {
@@ -53,6 +55,7 @@ class ShowDetailView extends StatelessWidget {
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
                             element.posterUrl ?? Globals.PictureNotFoundUrl,
+                            headers: BaseApi.getHeaders(),
                           ),
                         ),
                         const SizedBox(
@@ -99,8 +102,9 @@ class ShowDetailView extends StatelessWidget {
                         Rect.fromLTRB(220, 220, rect.width, rect.height));
                   },
                   blendMode: BlendMode.dstIn,
-                  child: CachedNetworkImage(
-                    imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                  child: CustomImage(
+                    imageUrl:
+                        itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                     height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,

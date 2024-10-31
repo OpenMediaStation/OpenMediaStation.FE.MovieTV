@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/player.dart';
+import 'package:open_media_server_app/widgets/custom_image.dart';
 
 class EpisodeDetailView extends StatelessWidget {
   const EpisodeDetailView({
@@ -35,7 +35,7 @@ class EpisodeDetailView extends StatelessWidget {
                     Rect.fromLTRB(220, 220, rect.width, rect.height));
               },
               blendMode: BlendMode.dstIn,
-              child: CachedNetworkImage(
+              child: CustomImage(
                 imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                 height: 300,
                 width: double.infinity,

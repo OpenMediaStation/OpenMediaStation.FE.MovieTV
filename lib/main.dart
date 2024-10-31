@@ -2,8 +2,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:open_media_server_app/auth/login_manager.dart';
 import 'package:open_media_server_app/gallery.dart';
 import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/helpers/Preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +24,16 @@ Future main() async {
   if (Globals.isTv) {
     Globals.isMobile = false;
   }
+
+  if (kIsWeb) {
+    Globals.isWeb = true;
+  }
+
+  var prefs = await SharedPreferences.getInstance();
+  Preferences.prefs = prefs;
+
+  LoginManager loginManager = LoginManager();
+  var token = await loginManager.login(Globals.ClientId, Globals.ClientSecret);
 
   runApp(const MyApp());
 }

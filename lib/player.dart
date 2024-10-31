@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/player_controls/material_tv.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
 import 'package:open_media_server_app/globals.dart';
@@ -27,6 +28,7 @@ class _PlayerState extends State<PlayerView> {
     player.open(
       Media(
         widget.url,
+        httpHeaders: BaseApi.getHeaders(),
       ),
     );
 
