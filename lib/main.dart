@@ -25,6 +25,10 @@ Future main() async {
     Globals.isMobile = false;
   }
 
+  if (Globals.isTv && defaultTargetPlatform == TargetPlatform.android) {
+    Globals.isAndroidTv = true;
+  }
+
   if (kIsWeb) {
     Globals.isWeb = true;
   }

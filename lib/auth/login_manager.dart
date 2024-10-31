@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/interfaces.dart';
 import 'package:oauth2_client/oauth2_client.dart';
+import 'package:open_media_server_app/auth/device_code.dart';
 import 'package:open_media_server_app/globals.dart';
 import 'package:open_media_server_app/helpers/Preferences.dart';
 import 'package:random_string/random_string.dart';
@@ -15,7 +16,9 @@ class LoginManager {
   BaseWebAuth? baseWebAuth;
 
   LoginManager() {
-    if (!Globals.isWeb) {
+    if (Globals.isTv) {
+      // Do nothing
+    } else if (!Globals.isWeb) {
       client = OAuth2Client(
         authorizeUrl: Globals.AuthorizeUrl,
         tokenUrl: Globals.TokenUrl,
@@ -40,6 +43,15 @@ class LoginManager {
   }
 
   Future<String?> login(String clientId, String clientSecret) async {
+    if (Globals.isTv) {
+      DeviceCode deviceCode = DeviceCode();
+      var token = await deviceCode.authenticateUser(Globals.ClientId, "offline_access", Globals.DeviceCodeUrl);
+
+      Preferences.prefs?.setString("AccessToken", token!);
+
+      return token;
+    }
+
     var state = Preferences.prefs?.getString("OAuth_State");
     var codeVerifier = Preferences.prefs?.getString("OAuth_CodeVerifier");
 
