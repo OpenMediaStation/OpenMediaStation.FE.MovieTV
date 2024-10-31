@@ -36,9 +36,6 @@ Future main() async {
   var prefs = await SharedPreferences.getInstance();
   Preferences.prefs = prefs;
 
-  LoginManager loginManager = LoginManager();
-  var token = await loginManager.login(Globals.ClientId, Globals.ClientSecret);
-
   runApp(const MyApp());
 }
 
@@ -56,30 +53,42 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: MyHomePage(title: Globals.Title),
+      home: HomePage(title: Globals.Title),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, required this.title});
 
   final String title;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
-        title: Text(widget.title),
+        title: Text(title),
       ),
-      body: const Gallery(),
+      body: FutureBuilder(
+        future: authenticate(context),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          return const Gallery();
+        },
+      ),
     );
+  }
+
+  Future authenticate(BuildContext context) async {
+    LoginManager loginManager = LoginManager();
+    var token =
+        await loginManager.login(Globals.ClientId, Globals.ClientSecret, context);
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_media_server_app/globals.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class DeviceCode {
   Future<Map<String, dynamic>> getDeviceCode(
@@ -20,15 +22,54 @@ class DeviceCode {
     }
   }
 
-  Future<String?> authenticateUser(
-      String clientId, String scope, String deviceCodeUrl) async {
+  Future<String?> authenticateUser(String clientId, String scope,
+      String deviceCodeUrl, BuildContext context) async {
     try {
       final deviceCodeResponse =
           await getDeviceCode(clientId, scope, deviceCodeUrl);
       final userCode = deviceCodeResponse['user_code'];
       final verificationUri = deviceCodeResponse['verification_uri'];
 
-      print('Please go to $verificationUri?code=$userCode');
+      String fullVerificationUrl = "$verificationUri?code=$userCode";
+
+      print('Please go to $fullVerificationUrl');
+
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Login with your phone'),
+            content: SizedBox(
+              height: 200,
+              width: 200,
+              child: QrImageView(
+                eyeStyle: const QrEyeStyle(
+                  color: Colors.white,
+                  eyeShape: QrEyeShape.square,
+                ),
+                dataModuleStyle: const QrDataModuleStyle(
+                  color: Colors.white,
+                  dataModuleShape: QrDataModuleShape.square,
+                ),
+                data: fullVerificationUrl,
+                version: QrVersions.auto,
+                // size: 200.0,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Done'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
 
       final code = deviceCodeResponse['device_code'];
       final interval = deviceCodeResponse['interval'];

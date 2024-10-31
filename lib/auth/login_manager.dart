@@ -2,6 +2,7 @@
 // import 'package:fedodo_general/widgets/auth/oauth_handler/custom_web_base_dummy.dart'
 //     if (dart.library.html) '../oauth_handler/custom_web_base.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/interfaces.dart';
 import 'package:oauth2_client/oauth2_client.dart';
@@ -42,10 +43,10 @@ class LoginManager {
     // }
   }
 
-  Future<String?> login(String clientId, String clientSecret) async {
+  Future<String?> login(String clientId, String clientSecret, BuildContext context) async {
     if (Globals.isTv) {
       DeviceCode deviceCode = DeviceCode();
-      var token = await deviceCode.authenticateUser(Globals.ClientId, "offline_access", Globals.DeviceCodeUrl);
+      var token = await deviceCode.authenticateUser(Globals.ClientId, "offline_access", Globals.DeviceCodeUrl, context);
 
       Preferences.prefs?.setString("AccessToken", token!);
 
