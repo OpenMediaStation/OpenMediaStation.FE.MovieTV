@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:open_media_server_app/apis/auth_info_api.dart';
+import 'package:open_media_server_app/auth/auth_globals.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
 import 'package:open_media_server_app/gallery.dart';
 import 'package:open_media_server_app/globals.dart';
@@ -46,6 +47,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: (settings) {
+        if (settings.name?.contains("code") ?? false) {
+          AuthGlobals.appLoginCodeRoute = settings.name;
+        }
+
+        return null;
+      },
       title: Globals.Title,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

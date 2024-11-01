@@ -1,0 +1,10 @@
+<script>
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        if(code) {
+            let newUrl = window.location.origin + "/#/auth?" + urlParams.toString();
+            window.location.href = newUrl;
+        }
+    }
+</script>

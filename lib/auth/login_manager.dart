@@ -1,6 +1,6 @@
-// import 'package:fedodo_general/globals/preferences.dart';
-// import 'package:fedodo_general/widgets/auth/oauth_handler/custom_web_base_dummy.dart'
-//     if (dart.library.html) '../oauth_handler/custom_web_base.dart';
+import 'package:open_media_server_app/auth/auth_globals.dart';
+import 'package:open_media_server_app/auth/oauth_handler/custom_web_base_dummy.dart'
+    if (dart.library.html) './oauth_handler/custom_web_base.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:oauth2_client/access_token_response.dart';
@@ -27,27 +27,26 @@ class LoginManager {
         redirectUri: "my.test.app:/oauth2redirect", // TODO
         customUriScheme: "my.test.app",
       );
-    } else {
-      // client = OAuth2Client(
-      //   authorizeUrl:
-      //       "https://auth.${Preferences.prefs!.getString("DomainName")}/oauth/authorize",
-      //   tokenUrl:
-      //       "https://auth.${Preferences.prefs!.getString("DomainName")}/oauth/token",
-      //   redirectUri: AuthGlobals.redirectUriWeb,
-      //   // refreshUrl: "https://auth.${GlobalSettings.domainName}/oauth/token",
-      //   customUriScheme: Uri.parse(AuthGlobals.redirectUriWeb).authority,
-      // );
+    } else if (Globals.isWeb) {
+      client = OAuth2Client(
+        authorizeUrl: authInfo.authorizeUrl,
+        tokenUrl: authInfo.tokenUrl,
+        redirectUri: AuthGlobals.redirectUriWeb,
+        // refreshUrl: "https://auth.${GlobalSettings.domainName}/oauth/token",
+        customUriScheme: Uri.parse(AuthGlobals.redirectUriWeb).authority,
+      );
     }
 
-    // if (kIsWeb) {
-    //   baseWebAuth = CustomWebBase();
-    // }
+    if (kIsWeb) {
+      baseWebAuth = CustomWebBase();
+    }
   }
 
   Future<String?> login(AuthInfo authInfo, BuildContext context) async {
     if (Globals.isTv) {
       DeviceCode deviceCode = DeviceCode();
-      var token = await deviceCode.authenticateUser(authInfo, "offline_access", authInfo.deviceCodeUrl, context);
+      var token = await deviceCode.authenticateUser(
+          authInfo, "offline_access", authInfo.deviceCodeUrl, context);
 
       Preferences.prefs?.setString("AccessToken", token!);
 
