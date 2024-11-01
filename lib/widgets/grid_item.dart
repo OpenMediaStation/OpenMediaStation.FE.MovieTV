@@ -6,7 +6,9 @@ import 'package:open_media_server_app/widgets/custom_image.dart';
 class GridItem extends StatelessWidget {
   final GridItemModel item;
 
-  const GridItem({Key? key, required this.item}) : super(key: key);
+  const GridItem({Key? key, required this.item, required this.desiredItemWidth}) : super(key: key);
+
+  final double desiredItemWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class GridItem extends StatelessWidget {
             child: CustomImage(
               imageUrl: item.posterUrl ?? Globals.PictureNotFoundUrl,
               fit: BoxFit.cover,
-              width: double.infinity,
+              width: desiredItemWidth + 150,
             ),
           ),
         ),

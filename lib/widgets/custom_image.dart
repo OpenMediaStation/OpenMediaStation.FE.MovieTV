@@ -18,8 +18,14 @@ class CustomImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String addon = "";
+
+    if (width?.isFinite ?? false) {
+      addon = "?width=${width?.floor()}";
+    }
+
     return CachedNetworkImage(
-      imageUrl: imageUrl,
+      imageUrl: "$imageUrl$addon",
       fit: fit,
       width: width,
       height: height,

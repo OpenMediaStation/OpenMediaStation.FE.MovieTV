@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
-import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
-import 'package:open_media_server_app/widgets/gallery_item.dart';
+import 'package:open_media_server_app/widgets/grid_item.dart';
 import 'package:open_media_server_app/views/detail_views/movie_detail.dart';
-import 'package:open_media_server_app/views/player.dart';
 import 'package:open_media_server_app/views/detail_views/show_detail.dart';
 
 class Gallery extends StatelessWidget {
@@ -48,7 +46,10 @@ class Gallery extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               return InkWell(
-                child: GridItem(item: items[index]),
+                child: GridItem(
+                  item: items[index],
+                  desiredItemWidth: desiredItemWidth,
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
