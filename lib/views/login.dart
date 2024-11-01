@@ -14,6 +14,21 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Preferences.prefs?.getString("BaseUrl") != null) {
+      return FutureBuilder(
+        future: authenticate(context),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          return widget;
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -22,32 +37,83 @@ class LoginView extends StatelessWidget {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              controller: domainController,
-              decoration: const InputDecoration(
-                hintText: 'Domain',
-              ),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  Preferences.prefs!
-                      .setString("BaseUrl", domainController.text);
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: domainController,
+                decoration: InputDecoration(
+                  hintText: 'Host',
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 16.0,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey[400]!,
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(
+                      color: Colors.blue,
+                      width: 2.0,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey[400]!,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
 
-                  authenticate(context);
-                }
-              },
-              child: const Text("Submit"),
-            ),
-          ],
+                  if (!value.contains("http://") && !value.contains("https://")) {
+                    return 'You need to specify the host in this format\nExample: https://example.com';
+                  }
+
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 40,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await Preferences.prefs!
+                          .setString("BaseUrl", domainController.text);
+
+                      await authenticate(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                  ),
+                  child: const Text("Connect"),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

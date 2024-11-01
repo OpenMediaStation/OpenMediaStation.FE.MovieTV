@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/globals/globals.dart';
-import 'package:open_media_server_app/globals/preference_globals.dart';
+import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/views/player.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
@@ -72,7 +72,7 @@ class EpisodeDetailView extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => PlayerView(
                                   url:
-                                      "${PreferenceGlobals.BaseUrl}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}"),
+                                      "${Preferences.prefs?.getString("BaseUrl")}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}"),
                             ),
                           );
                         },
