@@ -88,6 +88,12 @@ class SeasonDetailView extends StatelessWidget {
                 // Episode list items
                 var element = items[index - 1]; // Adjust index for episode
 
+                String imageUrl = Globals.PictureNotFoundUrl;
+
+                if (element.backdropUrl != null) {
+                  imageUrl = "${element.backdropUrl}?width=300";
+                }
+
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
                   child: Material(
@@ -114,8 +120,7 @@ class SeasonDetailView extends StatelessWidget {
                                   width: 125,
                                   fit: BoxFit.cover,
                                   image: CachedNetworkImageProvider(
-                                    element.backdropUrl ??
-                                        Globals.PictureNotFoundUrl,
+                                    imageUrl,
                                     headers: BaseApi.getHeaders(),
                                   ),
                                 ),

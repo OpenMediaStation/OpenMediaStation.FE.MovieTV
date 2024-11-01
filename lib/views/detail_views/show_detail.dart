@@ -85,6 +85,12 @@ class ShowDetailView extends StatelessWidget {
             );
           }
 
+          String imageUrl = Globals.PictureNotFoundUrl;
+
+          if (itemModel.backdropUrl != null) {
+            imageUrl = "${itemModel.backdropUrl!}?height=300";
+          }
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,8 +109,7 @@ class ShowDetailView extends StatelessWidget {
                   },
                   blendMode: BlendMode.dstIn,
                   child: CustomImage(
-                    imageUrl:
-                        itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                    imageUrl: imageUrl,
                     height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,
