@@ -5,31 +5,50 @@ import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key, required this.widget});
+  LoginView({super.key, required this.widget});
 
   final Widget widget;
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final domainController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    Preferences.prefs!.setString("BaseUrl", "");
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
         title: Text(Globals.Title),
       ),
-      body: FutureBuilder(
-        future: authenticate(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: domainController,
+              decoration: const InputDecoration(
+                hintText: 'Domain',
+              ),
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  Preferences.prefs!
+                      .setString("BaseUrl", domainController.text);
 
-          return widget;
-        },
+                  authenticate(context);
+                }
+              },
+              child: const Text("Submit"),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -41,5 +60,19 @@ class LoginView extends StatelessWidget {
     LoginManager loginManager = LoginManager(info);
 
     var token = await loginManager.login(info, context);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            surfaceTintColor: Colors.transparent,
+            title: Text(Globals.Title),
+          ),
+          body: widget,
+        ),
+      ),
+    );
   }
 }

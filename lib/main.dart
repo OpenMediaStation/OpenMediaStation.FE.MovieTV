@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginView(widget: Gallery()),
+      home: LoginView(widget: const Gallery()),
     );
   }
 }
