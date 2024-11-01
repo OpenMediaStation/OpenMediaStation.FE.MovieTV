@@ -1,4 +1,4 @@
-import 'package:open_media_server_app/auth/auth_globals.dart';
+import 'package:open_media_server_app/globals/auth_globals.dart';
 import 'package:open_media_server_app/auth/oauth_handler/custom_web_base_dummy.dart'
     if (dart.library.html) './oauth_handler/custom_web_base.dart';
 import 'package:flutter/foundation.dart';
@@ -7,8 +7,9 @@ import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/interfaces.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:open_media_server_app/auth/device_code.dart';
-import 'package:open_media_server_app/globals.dart';
-import 'package:open_media_server_app/helpers/Preferences.dart';
+import 'package:open_media_server_app/globals/globals.dart';
+import 'package:open_media_server_app/globals/platform_globals.dart';
+import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/auth/auth_info.dart';
 import 'package:random_string/random_string.dart';
 
@@ -18,16 +19,16 @@ class LoginManager {
   BaseWebAuth? baseWebAuth;
 
   LoginManager(AuthInfo authInfo) {
-    if (Globals.isTv) {
+    if (PlatformGlobals.isTv) {
       // Do nothing
-    } else if (!Globals.isWeb) {
+    } else if (!PlatformGlobals.isWeb) {
       client = OAuth2Client(
         authorizeUrl: authInfo.authorizeUrl,
         tokenUrl: authInfo.tokenUrl,
         redirectUri: "my.test.app:/oauth2redirect", // TODO
         customUriScheme: "my.test.app",
       );
-    } else if (Globals.isWeb) {
+    } else if (PlatformGlobals.isWeb) {
       client = OAuth2Client(
         authorizeUrl: authInfo.authorizeUrl,
         tokenUrl: authInfo.tokenUrl,
@@ -43,7 +44,7 @@ class LoginManager {
   }
 
   Future<String?> login(AuthInfo authInfo, BuildContext context) async {
-    if (Globals.isTv) {
+    if (PlatformGlobals.isTv) {
       DeviceCode deviceCode = DeviceCode();
       var token = await deviceCode.authenticateUser(
           authInfo, "offline_access", authInfo.deviceCodeUrl, context);

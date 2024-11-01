@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
-import 'package:open_media_server_app/player_controls/material_tv.dart';
+import 'package:open_media_server_app/globals/platform_globals.dart';
+import 'package:open_media_server_app/widgets/player_controls/material_tv.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 
 class PlayerView extends StatefulWidget {
   const PlayerView({super.key, required this.url});
@@ -142,7 +143,7 @@ class _PlayerState extends State<PlayerView> {
           : const SizedBox(),
     ];
 
-    if (!Globals.isTv) {
+    if (!PlatformGlobals.isTv) {
       bottomButtonBar.add(
         const MaterialFullscreenButton(),
       );
@@ -230,7 +231,7 @@ class _PlayerState extends State<PlayerView> {
       },
     );
 
-    if (Globals.isMobile) {
+    if (PlatformGlobals.isMobile) {
       return MaterialVideoControlsTheme(
         normal: mobileThemeData,
         fullscreen: mobileThemeData,
@@ -243,7 +244,7 @@ class _PlayerState extends State<PlayerView> {
           ),
         ),
       );
-    } else if (Globals.isTv) {
+    } else if (PlatformGlobals.isTv) {
       return MaterialTvVideoControlsTheme(
         normal: tvThemeData,
         fullscreen: tvThemeData,

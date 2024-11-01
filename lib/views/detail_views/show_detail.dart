@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
-import 'package:open_media_server_app/views/season_detail.dart';
+import 'package:open_media_server_app/views/detail_views/season_detail.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/title.dart';
 

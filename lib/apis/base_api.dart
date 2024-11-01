@@ -1,4 +1,4 @@
-import 'package:open_media_server_app/helpers/Preferences.dart';
+import 'package:open_media_server_app/helpers/preferences.dart';
 
 class BaseApi {
   static Map<String, String> getHeaders() {

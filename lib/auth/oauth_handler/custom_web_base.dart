@@ -1,9 +1,9 @@
 import 'package:oauth2_client/interfaces.dart';
-import 'package:open_media_server_app/auth/auth_globals.dart';
+import 'package:open_media_server_app/globals/auth_globals.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-import 'package:open_media_server_app/helpers/Preferences.dart';
+import 'package:open_media_server_app/helpers/preferences.dart';
 
 class CustomWebBase implements BaseWebAuth {
   @override

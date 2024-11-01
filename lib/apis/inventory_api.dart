@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:open_media_server_app/apis/base_api.dart';
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/globals/preference_globals.dart';
 import 'package:open_media_server_app/models/inventory/episode.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +10,7 @@ import 'package:open_media_server_app/models/inventory/show.dart';
 
 class InventoryApi {
   Future<List<InventoryItem>> listItems(String category) async {
-    String apiUrl = "${Globals.BaseUrl}/api/inventory/items?";
+    String apiUrl = "${PreferenceGlobals.BaseUrl}/api/inventory/items?";
 
     var headers = BaseApi.getHeaders();
 
@@ -26,7 +26,7 @@ class InventoryApi {
   }
 
   Future<Movie> getMovie(String id) async {
-    String apiUrl = "${Globals.BaseUrl}/api/inventory/movie?";
+    String apiUrl = "${PreferenceGlobals.BaseUrl}/api/inventory/movie?";
 
     var headers = BaseApi.getHeaders();
 
@@ -42,7 +42,7 @@ class InventoryApi {
   }
 
   Future<Show> getShow(String id) async {
-    String apiUrl = "${Globals.BaseUrl}/api/inventory/show?";
+    String apiUrl = "${PreferenceGlobals.BaseUrl}/api/inventory/show?";
 
     var headers = BaseApi.getHeaders();
 
@@ -58,7 +58,7 @@ class InventoryApi {
   }
 
   Future<Season> getSeason(String id) async {
-    String apiUrl = "${Globals.BaseUrl}/api/inventory/season?";
+    String apiUrl = "${PreferenceGlobals.BaseUrl}/api/inventory/season?";
 
     var headers = BaseApi.getHeaders();
 
@@ -74,7 +74,7 @@ class InventoryApi {
   }
 
   Future<Episode> getEpisode(String id) async {
-    String apiUrl = "${Globals.BaseUrl}/api/inventory/episode?";
+    String apiUrl = "${PreferenceGlobals.BaseUrl}/api/inventory/episode?";
 
     var headers = BaseApi.getHeaders();
 

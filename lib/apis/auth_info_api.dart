@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:http/http.dart' as http;
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/globals/preference_globals.dart';
 import 'package:open_media_server_app/models/auth/auth_info.dart';
 
 class AuthInfoApi {
   Future<AuthInfo> getAuthInfo() async {
-    String apiUrl = "${Globals.BaseUrl}/auth/info";
+    String apiUrl = "${PreferenceGlobals.BaseUrl}/auth/info";
 
     var headers = BaseApi.getHeaders();
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 

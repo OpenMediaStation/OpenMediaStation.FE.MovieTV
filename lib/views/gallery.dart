@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
-import 'package:open_media_server_app/globals.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
-import 'package:open_media_server_app/gallery_item.dart';
-import 'package:open_media_server_app/views/movie_detail.dart';
-import 'package:open_media_server_app/player.dart';
-import 'package:open_media_server_app/views/show_detail.dart';
+import 'package:open_media_server_app/widgets/gallery_item.dart';
+import 'package:open_media_server_app/views/detail_views/movie_detail.dart';
+import 'package:open_media_server_app/views/player.dart';
+import 'package:open_media_server_app/views/detail_views/show_detail.dart';
 
 class Gallery extends StatelessWidget {
   const Gallery({Key? key}) : super(key: key);
