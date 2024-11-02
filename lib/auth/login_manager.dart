@@ -19,7 +19,12 @@ class LoginManager {
 
   LoginManager(AuthInfo authInfo) {
     if (PlatformGlobals.isTv) {
-      // Do nothing
+      client = OAuth2Client(
+        authorizeUrl: authInfo.authorizeUrl,
+        tokenUrl: authInfo.tokenUrl,
+        redirectUri: "my.test.app:/oauth2redirect", // TODO
+        customUriScheme: "my.test.app",
+      );
     } else if (!PlatformGlobals.isWeb) {
       client = OAuth2Client(
         authorizeUrl: authInfo.authorizeUrl,

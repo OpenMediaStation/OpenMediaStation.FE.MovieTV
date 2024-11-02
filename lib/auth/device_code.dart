@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/auth/auth_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -78,6 +79,7 @@ class DeviceCode {
         interval,
         authInfo.clientId,
         authInfo.tokenUrl,
+        scope,
       );
 
       return token;
@@ -89,7 +91,7 @@ class DeviceCode {
   }
 
   Future<String?> pollForToken(
-      String deviceCode, int interval, String clientId, String tokenUrl) async {
+      String deviceCode, int interval, String clientId, String tokenUrl, String scope) async {
     while (true) {
       await Future.delayed(Duration(seconds: interval));
 
@@ -102,12 +104,16 @@ class DeviceCode {
           'client_id': clientId,
           'grant_type': 'urn:ietf:params:oauth:grant-type:device_code',
           'device_code': deviceCode,
+          'scope': scope
         },
       );
 
       if (response.statusCode == 200) {
         final tokenResponse = json.decode(response.body);
         print('Access token: ${tokenResponse['access_token']}');
+
+        Preferences.prefs?.setString("RefreshToken", tokenResponse['refresh_token']);
+        print('Refresh token: ${tokenResponse['refresh_token']}');
 
         return tokenResponse['access_token'];
       } else {

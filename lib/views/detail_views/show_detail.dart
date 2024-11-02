@@ -40,6 +40,12 @@ class ShowDetailView extends StatelessWidget {
           List<Widget> seasons = [];
 
           for (var element in items) {
+            String imageUrl = Globals.PictureNotFoundUrl;
+
+            if (element.posterUrl != null) {
+              imageUrl = "${element.posterUrl!}?height=300";
+            }
+
             seasons.add(
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -54,7 +60,7 @@ class ShowDetailView extends StatelessWidget {
                           width: 300 * (9 / 14),
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
-                            element.posterUrl ?? Globals.PictureNotFoundUrl,
+                            imageUrl,
                             headers: BaseApi.getHeaders(),
                           ),
                         ),
@@ -85,12 +91,6 @@ class ShowDetailView extends StatelessWidget {
             );
           }
 
-          String imageUrl = Globals.PictureNotFoundUrl;
-
-          if (itemModel.backdropUrl != null) {
-            imageUrl = "${itemModel.backdropUrl!}?height=300";
-          }
-
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +109,8 @@ class ShowDetailView extends StatelessWidget {
                   },
                   blendMode: BlendMode.dstIn,
                   child: CustomImage(
-                    imageUrl: imageUrl,
+                    imageUrl:
+                        itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                     height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,

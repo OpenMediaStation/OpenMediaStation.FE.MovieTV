@@ -8,13 +8,15 @@ class CustomImage extends StatelessWidget {
     required this.imageUrl,
     this.fit,
     this.width,
-    this.height,
+    this.height, 
+    this.disableAdaptiveImage = false,
   });
 
   final String imageUrl;
   final BoxFit? fit;
   final double? width;
   final double? height;
+  final bool disableAdaptiveImage;
 
   @override
   Widget build(BuildContext context) {
