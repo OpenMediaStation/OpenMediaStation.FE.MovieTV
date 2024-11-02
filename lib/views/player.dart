@@ -6,7 +6,6 @@ import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/widgets/player_controls/material_tv.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
-import 'package:open_media_server_app/globals/globals.dart';
 
 class PlayerView extends StatefulWidget {
   const PlayerView({super.key, required this.url});

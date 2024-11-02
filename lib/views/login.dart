@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/auth_info_api.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
+import 'package:open_media_server_app/globals/auth_globals.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
 
@@ -76,7 +77,8 @@ class LoginView extends StatelessWidget {
                     return 'Please enter some text';
                   }
 
-                  if (!value.contains("http://") && !value.contains("https://")) {
+                  if (!value.contains("http://") &&
+                      !value.contains("https://")) {
                     return 'You need to specify the host in this format\nExample: https://example.com';
                   }
 
@@ -120,12 +122,20 @@ class LoginView extends StatelessWidget {
   }
 
   Future authenticate(BuildContext context) async {
+    var refreshToken = Preferences.prefs?.getString("RefreshToken");
+    var accessToken = Preferences.prefs?.getString("AccessToken");
+
     AuthInfoApi authInfoApi = AuthInfoApi();
     var info = await authInfoApi.getAuthInfo();
+    AuthGlobals.authInfo = info;
 
     LoginManager loginManager = LoginManager(info);
 
-    var token = await loginManager.login(info, context);
+    if (refreshToken != null && accessToken != null) {
+      var token = await loginManager.refreshAsync(info);
+    } else {
+      var token = await loginManager.login(info, context);
+    }
 
     Navigator.pushReplacement(
       context,

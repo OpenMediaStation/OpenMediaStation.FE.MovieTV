@@ -7,7 +7,6 @@ import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/interfaces.dart';
 import 'package:oauth2_client/oauth2_client.dart';
 import 'package:open_media_server_app/auth/device_code.dart';
-import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/auth/auth_info.dart';
@@ -80,14 +79,10 @@ class LoginManager {
     return tknResponse.accessToken;
   }
 
-  Future<String?> refreshAsync() async {
-    String clientId = Preferences.prefs!.getString("ClientId")!;
-    String clientSecret = Preferences.prefs!.getString("ClientSecret")!;
-
+  Future<String?> refreshAsync(AuthInfo authInfo) async {
     var tknResponse = await client.refreshToken(
       Preferences.prefs!.getString("RefreshToken")!,
-      clientId: clientId,
-      clientSecret: Uri.encodeQueryComponent(clientSecret),
+      clientId: authInfo.clientId,
     );
 
     Preferences.prefs?.setString("AccessToken", tknResponse.accessToken!);

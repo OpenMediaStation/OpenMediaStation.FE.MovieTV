@@ -8,7 +8,7 @@ class AuthInfoApi {
   Future<AuthInfo> getAuthInfo() async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/auth/info";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response = await http.get(
       Uri.parse(apiUrl),

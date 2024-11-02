@@ -8,7 +8,7 @@ class MetadataApi {
   Future<MetadataModel> getMetadata(String id, String category) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/metadata?";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response = await http
         .get(Uri.parse("${apiUrl}id=$id&category=$category"), headers: headers);

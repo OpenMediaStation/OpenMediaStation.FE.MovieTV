@@ -12,7 +12,7 @@ class InventoryApi {
   Future<List<InventoryItem>> listItems(String category) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/items?";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response = await http.get(Uri.parse("${apiUrl}category=$category"),
         headers: headers);
@@ -28,7 +28,7 @@ class InventoryApi {
   Future<Movie> getMovie(String id) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/movie?";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response =
         await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
@@ -44,7 +44,7 @@ class InventoryApi {
   Future<Show> getShow(String id) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/show?";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response =
         await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
@@ -60,7 +60,7 @@ class InventoryApi {
   Future<Season> getSeason(String id) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/season?";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response =
         await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
@@ -76,7 +76,7 @@ class InventoryApi {
   Future<Episode> getEpisode(String id) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/episode?";
 
-    var headers = BaseApi.getHeaders();
+    var headers = await BaseApi.getRefreshedHeaders();
 
     var response =
         await http.get(Uri.parse("${apiUrl}id=$id"), headers: headers);
