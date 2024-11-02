@@ -137,7 +137,7 @@ class LoginView extends StatelessWidget {
       var token = await loginManager.login(info, context);
     }
 
-    Navigator.pushReplacement(
+    await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
@@ -145,6 +145,7 @@ class LoginView extends StatelessWidget {
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             surfaceTintColor: Colors.transparent,
             title: Text(Globals.Title),
+            automaticallyImplyLeading: false,
           ),
           body: widget,
         ),
