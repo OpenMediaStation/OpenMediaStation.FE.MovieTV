@@ -392,6 +392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  media_kit_tv:
+    dependency: "direct main"
+    description:
+      name: media_kit_tv
+      sha256: e67fb5c4a7164bf2e6cf80b3876a40233e6910bf5b2487c17cfee110c86e4e95
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   media_kit_video:
     dependency: "direct main"
     description:
@@ -958,5 +966,5 @@ packages:
     source: hosted
     version: "6.5.0"
 sdks:
-  dart: ">=3.5.0 <4.0.0"
+  dart: ">=3.5.3 <4.0.0"
   flutter: ">=3.24.0"

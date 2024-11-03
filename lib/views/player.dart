@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_tv/material_tv.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
-import 'package:open_media_server_app/widgets/player_controls/material_tv.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
 
 class PlayerView extends StatefulWidget {
