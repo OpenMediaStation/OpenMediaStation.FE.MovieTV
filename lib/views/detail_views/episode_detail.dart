@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/globals/globals.dart';
-import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/views/player.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
+import 'package:open_media_server_app/widgets/play_button.dart';
 
 class EpisodeDetailView extends StatelessWidget {
   const EpisodeDetailView({
@@ -61,36 +60,8 @@ class EpisodeDetailView extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  Center(
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 40,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PlayerView(
-                                  url:
-                                      "${Preferences.prefs?.getString("BaseUrl")}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}"),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.play_arrow),
-                        label: const Text("Play"),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                          ),
-                          textStyle: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                        ),
-                      ),
-                    ),
+                  PlayButton(
+                    itemModel: itemModel,
                   ),
                   const SizedBox(
                     height: 8,

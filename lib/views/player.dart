@@ -32,6 +32,13 @@ class _PlayerState extends State<PlayerView> {
       ),
     );
 
+    if (player.platform is NativePlayer) {
+      (player.platform as dynamic).setProperty(
+        'http-header-fields',
+        'Authentication=test',
+      );
+    }
+
     player.setSubtitleTrack(SubtitleTrack.no());
   }
 
