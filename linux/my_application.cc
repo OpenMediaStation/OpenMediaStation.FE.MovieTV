@@ -14,6 +14,24 @@ struct _MyApplication {
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 
+void enable_fullscreen(GtkWindow* window) {
+  gtk_window_fullscreen(window);
+}
+
+static void method_call_handler(FlMethodChannel* channel,
+                                FlMethodCall* method_call,
+                                gpointer user_data) {
+  const gchar* method = fl_method_call_get_name(method_call);
+
+  if (strcmp(method, "enableFullscreen") == 0) {
+    GtkWindow* window = GTK_WINDOW(user_data);
+    enable_fullscreen(window);
+    fl_method_call_respond_success(method_call, nullptr, nullptr);
+  } else {
+    fl_method_call_respond_not_implemented(method_call, nullptr);
+  }
+}
+
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
@@ -58,6 +76,13 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+
+  FlEngine* engine = fl_view_get_engine(view);
+  FlMethodChannel* channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(engine),
+      "my_app/fullscreen",
+      FL_METHOD_CODEC(fl_standard_method_codec_new()));
+  fl_method_channel_set_method_call_handler(channel, method_call_handler, window, nullptr);
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }

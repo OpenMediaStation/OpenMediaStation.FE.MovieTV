@@ -3,6 +3,7 @@ import 'package:open_media_server_app/apis/auth_info_api.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
 import 'package:open_media_server_app/globals/auth_globals.dart';
 import 'package:open_media_server_app/globals/globals.dart';
+import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
 
 class LoginView extends StatelessWidget {
@@ -146,6 +147,8 @@ class LoginView extends StatelessWidget {
             surfaceTintColor: Colors.transparent,
             title: Text(Globals.Title),
             automaticallyImplyLeading: false,
+            actions: 
+              PlatformGlobals.isKiosk ? [IconButton(onPressed: ()=>exit(0), icon: const Icon(Icons.close))]: []
           ),
           body: widget,
         ),

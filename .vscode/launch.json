@@ -8,6 +8,17 @@
             "name": "OpenMediaStation.FE.MovieTV",
             "request": "launch",
             "type": "dart",
+        },
+        {
+            "name": "KioskMode",
+            "request": "launch",
+            "type": "dart",
+            "args": ["--dart-entrypoint-args","--kiosk"]
+        },
+        {
+            "name": "OpenMediaStation.FE.MovieTV (Chrome Debug)",
+            "request": "launch",
+            "type": "dart",
             "args": ["-d", "chrome","--web-port", "8000"]
         },
         {

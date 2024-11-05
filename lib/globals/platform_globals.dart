@@ -6,6 +6,7 @@ class PlatformGlobals {
   static bool isAndroidTv = false;
   static bool isMobile = false;
   static bool isWeb = false;
+  static bool isKiosk = false;
 
   static Future setGlobals() async {
     PlatformGlobals.isMobile = defaultTargetPlatform == TargetPlatform.iOS ||
