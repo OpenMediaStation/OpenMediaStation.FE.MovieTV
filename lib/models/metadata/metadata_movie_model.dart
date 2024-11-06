@@ -28,36 +28,37 @@ class MetadataMovieModel {
   final String? website;
 
   MetadataMovieModel({
-    required this.year,
-    required this.rated,
-    required this.released,
-    required this.runtime,
-    required this.genre,
-    required this.director,
-    required this.writer,
-    required this.actors,
-    required this.plot,
-    required this.language,
-    required this.country,
-    required this.awards,
-    required this.poster,
-    required this.logo,
-    required this.backdrop,
-    required this.ratings,
-    required this.metascore,
-    required this.imdbRating,
-    required this.imdbVotes,
-    required this.imdbID,
-    required this.type,
-    required this.dvd,
-    required this.boxOffice,
-    required this.production,
-    required this.website,
+    this.year,
+    this.rated,
+    this.released,
+    this.runtime,
+    this.genre,
+    this.director,
+    this.writer,
+    this.actors,
+    this.plot,
+    this.language,
+    this.country,
+    this.awards,
+    this.poster,
+    this.logo,
+    this.backdrop,
+    this.ratings,
+    this.metascore,
+    this.imdbRating,
+    this.imdbVotes,
+    this.imdbID,
+    this.type,
+    this.dvd,
+    this.boxOffice,
+    this.production,
+    this.website,
   });
 
   factory MetadataMovieModel.fromJson(Map<String, dynamic> json) {
     var ratingsList = json['ratings'] as List?;
-    List<Rating>? ratings = ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
+    List<Rating>? ratings =
+        ratingsList?.map((ratingJson) => Rating.fromJson(ratingJson)).toList();
 
     var poster = (json['poster'] as String?);
 

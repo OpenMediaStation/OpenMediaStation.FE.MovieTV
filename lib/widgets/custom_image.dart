@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 
 class CustomImage extends StatelessWidget {
   const CustomImage({
@@ -8,7 +9,7 @@ class CustomImage extends StatelessWidget {
     required this.imageUrl,
     this.fit,
     this.width,
-    this.height, 
+    this.height,
     this.disableAdaptiveImage = false,
   });
 
@@ -32,6 +33,15 @@ class CustomImage extends StatelessWidget {
       width: width,
       height: height,
       httpHeaders: BaseApi.getHeaders(),
+      errorWidget: (context, url, error) {
+        return CustomImage(
+          imageUrl: Globals.PictureNotFoundUrl,
+          width: width,
+          height: height,
+          fit: fit,
+          disableAdaptiveImage: disableAdaptiveImage,
+        );
+      },
     );
   }
 }
