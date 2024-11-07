@@ -14,7 +14,7 @@ class Gallery extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var futureItems = getGridItems();
+    var futureItems = getInventoryItems();
 
     double screenWidth = MediaQuery.of(context).size.width;
     double desiredItemWidth = 150;
@@ -47,44 +47,57 @@ class Gallery extends StatelessWidget {
               childAspectRatio: 0.7, // Adjust for desired aspect ratio
             ),
             itemBuilder: (context, index) {
-              var gridItemFake = GridItemModel(
-                inventoryItem: items[index],
-                metadataModel: null,
-              );
-
-              gridItemFake.posterUrl =
-                  "${Preferences.prefs?.getString("BaseUrl")}/images/${items[index].category}/${items[index].metadataId}/poster";
-
-              return InkWell(
-                child: GridItem(
-                  item: gridItemFake,
-                  desiredItemWidth: desiredItemWidth,
-                ),
-                onTap: () async {
+              return FutureBuilder<GridItemModel>(
+                future: items[index].category == "Movie"
+                    ? getMovie(items[index])
+                    : getShow(items[index]),
+                builder: (context, snapshot) {
                   GridItemModel gridItem;
 
-                  if (items[index].category == "Movie") {
-                    gridItem = await getMovie(items[index]);
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    gridItem = GridItemModel(
+                      inventoryItem: items[index],
+                      metadataModel: null,
+                    );
+
+                    gridItem.fake = true;
+                    gridItem.posterUrl =
+                        "${Preferences.prefs?.getString("BaseUrl")}/images/${items[index].category}/${items[index].metadataId}/poster";
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData) {
+                    return const Center(
+                        child: Text('Grid item could not be loaded'));
                   } else {
-                    gridItem = await getShow(items[index]);
+                    gridItem = snapshot.data!;
                   }
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      if (items[index].category == "Movie") {
-                        return MovieDetailView(
-                          itemModel: gridItem,
-                        );
-                      }
-                      if (items[index].category == "Show") {
-                        return ShowDetailView(
-                          itemModel: gridItem,
-                        );
-                      }
+                  return InkWell(
+                    child: GridItem(
+                      item: gridItem,
+                      desiredItemWidth: desiredItemWidth,
+                    ),
+                    onTap: () {
+                      if (!gridItem.fake) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            if (items[index].category == "Movie") {
+                              return MovieDetailView(
+                                itemModel: gridItem,
+                              );
+                            }
+                            if (items[index].category == "Show") {
+                              return ShowDetailView(
+                                itemModel: gridItem,
+                              );
+                            }
 
-                      throw ArgumentError("Server models not correct");
-                    }),
+                            throw ArgumentError("Server models not correct");
+                          }),
+                        );
+                      }
+                    },
                   );
                 },
               );
@@ -95,7 +108,7 @@ class Gallery extends StatelessWidget {
     );
   }
 
-  Future<List<InventoryItem>> getGridItems() async {
+  Future<List<InventoryItem>> getInventoryItems() async {
     InventoryApi inventoryApi = InventoryApi();
 
     var items = await inventoryApi.listItems("Movie");

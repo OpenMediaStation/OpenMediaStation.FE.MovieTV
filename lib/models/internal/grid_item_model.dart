@@ -8,6 +8,7 @@ class GridItemModel {
   String? backdropUrl;
   List<String>? childIds;
   int? listPosition;
+  bool fake = false;
 
   GridItemModel({
     required this.inventoryItem,
