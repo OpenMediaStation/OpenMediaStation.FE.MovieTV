@@ -1,16 +1,19 @@
-# open_media_server_app
+<div align="center">
+  <a href="https://github.com/OpenMediaStation">
+    <img src="https://openmediastation.org/assets/logo/logo.svg" alt="Logo" width="200" height="200">
+  </a>
 
-A new Flutter project.
+<br>
+<br>
 
-## Getting Started
+OpenMediaStation is a collection of server and client software to manage and stream your media libary.
 
-This project is a starting point for a Flutter application.
+<p align="center">
 
-A few resources to get you started if this is your first Flutter project:
+<a href="https://openmediastation.org"><strong>Explore the Project »</strong></a>
+  </p>
+</div>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## About this repo
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This repo contains the tv show and movie frontend application for our project.
