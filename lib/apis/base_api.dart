@@ -5,9 +5,11 @@ import 'package:open_media_server_app/helpers/preferences.dart';
 
 class BaseApi {
   static Map<String, String> getHeaders() {
-    return {
+    var map = {
       "Authorization": "Bearer ${Preferences.prefs?.getString("AccessToken")}"
     };
+
+    return map;
   }
 
   static Future<Map<String, String>> getRefreshedHeaders() async {

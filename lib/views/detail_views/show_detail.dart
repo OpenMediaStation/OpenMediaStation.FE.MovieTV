@@ -61,6 +61,9 @@ class ShowDetailView extends StatelessWidget {
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
                             imageUrl,
+                            errorListener: (p0) {
+                              print("fuck");
+                            },
                             headers: BaseApi.getHeaders(),
                           ),
                         ),
@@ -174,7 +177,7 @@ class ShowDetailView extends StatelessWidget {
       var gridItem =
           GridItemModel(inventoryItem: season, metadataModel: metadata);
       gridItem.childIds = season.episodeIds;
-      gridItem.listPosition = season.seasonNr;
+      gridItem.listPosition = season.seasonNr ?? 0;
       gridItem.posterUrl = metadata?.season?.poster;
       gridItem.backdropUrl = itemModel.backdropUrl;
 

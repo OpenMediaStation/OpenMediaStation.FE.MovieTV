@@ -194,7 +194,7 @@ class SeasonDetailView extends StatelessWidget {
           GridItemModel(inventoryItem: episode, metadataModel: metadata);
       gridItem.backdropUrl = metadata?.episode?.backdrop;
 
-      gridItem.listPosition = episode.episodeNr;
+      gridItem.listPosition = episode.episodeNr ?? 0;
 
       gridItems.add(gridItem);
     }

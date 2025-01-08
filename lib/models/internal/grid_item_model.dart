@@ -7,7 +7,7 @@ class GridItemModel {
   String? posterUrl;
   String? backdropUrl;
   List<String>? childIds;
-  int? listPosition;
+  int listPosition = 0;
   bool fake = false;
 
   GridItemModel({
