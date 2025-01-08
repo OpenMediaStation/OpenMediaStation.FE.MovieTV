@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/auth_info_api.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
@@ -136,6 +135,11 @@ class LoginView extends StatelessWidget {
 
     if (refreshToken != null && accessToken != null) {
       var token = await loginManager.refreshAsync(info);
+
+      if (token == null || token.isEmpty) {
+        token = await loginManager.login(info, context);
+      }
+
     } else {
       var token = await loginManager.login(info, context);
     }
