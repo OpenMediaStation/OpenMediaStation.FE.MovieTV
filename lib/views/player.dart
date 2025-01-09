@@ -5,7 +5,8 @@ import 'package:media_kit_tv/material_tv.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
-import 'package:open_media_server_app/helpers/wrapper.dart';
+import 'package:open_media_server_app/widgets/audio_button.dart';
+import 'package:open_media_server_app/widgets/subtitle_button.dart';
 
 class PlayerView extends StatefulWidget {
   const PlayerView({super.key, required this.url});
@@ -20,8 +21,6 @@ class _PlayerState extends State<PlayerView> {
   late final player = Player();
   late final controller = VideoController(player);
 
-  SubtitleTrack? selectedSubtitle;
-
   @override
   void initState() {
     super.initState();
@@ -31,13 +30,6 @@ class _PlayerState extends State<PlayerView> {
         httpHeaders: BaseApi.getHeaders(),
       ),
     );
-
-    if (player.platform is NativePlayer) {
-      (player.platform as dynamic).setProperty(
-        'http-header-fields',
-        'Authentication=test',
-      );
-    }
 
     player.setSubtitleTrack(SubtitleTrack.no());
   }
@@ -59,94 +51,11 @@ class _PlayerState extends State<PlayerView> {
       ),
     ];
 
-    List<SubtitleTrack> subtitles = player.state.tracks.subtitle;
-    List<AudioTrack> audios = player.state.tracks.audio;
-
     var bottomButtonBar = [
       const MaterialPositionIndicator(),
       const Spacer(),
-      subtitles.isNotEmpty
-          ? PopupMenuButton<SubtitleTrack>(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                  (Set<WidgetState> states) {
-                    if (states.contains(WidgetState.focused)) {
-                      return const Color.fromARGB(83, 86, 86, 86);
-                    }
-                  },
-                ),
-              ),
-              icon: const Icon(
-                Icons.subtitles,
-                color: Colors.white,
-              ),
-              initialValue: selectedSubtitle,
-              onSelected: (SubtitleTrack newTrack) async {
-                setState(() {
-                  selectedSubtitle = newTrack;
-                });
-                await player.setSubtitleTrack(newTrack);
-              },
-              itemBuilder: (BuildContext context) {
-                return subtitles.map((SubtitleTrack track) {
-                  return PopupMenuItem<SubtitleTrack>(
-                    value: track,
-                    child: OptionEntryItemWrapper(
-                      builder: (p0, p1) {
-                        return Text(
-                          track.title ?? track.id,
-                          style: TextStyle(
-                            decoration: p1
-                                ? TextDecoration.underline
-                                : TextDecoration.none,
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }).toList();
-              },
-            )
-          : const SizedBox(), // Return an empty widget if no subtitles
-      audios.isNotEmpty
-          ? PopupMenuButton<AudioTrack>(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                  (Set<WidgetState> states) {
-                    if (states.contains(WidgetState.focused)) {
-                      return const Color.fromARGB(83, 86, 86, 86);
-                    }
-                  },
-                ),
-              ),
-              icon: const Icon(
-                Icons.audio_file,
-                color: Colors.white,
-              ),
-              onSelected: (AudioTrack newTrack) async {
-                await player.setAudioTrack(newTrack);
-              },
-              itemBuilder: (BuildContext context) {
-                return audios.map((AudioTrack track) {
-                  return PopupMenuItem<AudioTrack>(
-                    value: track,
-                    child: OptionEntryItemWrapper(
-                      builder: (p0, p1) {
-                        return Text(
-                          track.title ?? track.id,
-                          style: TextStyle(
-                            decoration: p1
-                                ? TextDecoration.underline
-                                : TextDecoration.none,
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }).toList();
-              },
-            )
-          : const SizedBox(),
+      SubtitleButton(player: player),
+      AudioButton(player: player),
     ];
 
     if (!PlatformGlobals.isTv) {
