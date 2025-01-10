@@ -21,6 +21,9 @@ class _SubtitleButtonState extends State<SubtitleButton> {
 
   List<StreamSubscription> subscriptions = [];
 
+  // GlobalKey for the button to track its position
+  final GlobalKey _buttonKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -51,49 +54,55 @@ class _SubtitleButtonState extends State<SubtitleButton> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<SubtitleTrack>(
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.focused)) {
-              return const Color.fromARGB(83, 86, 86, 86);
-            }
+  // Function to show the subtitle menu
+  void pressed(BuildContext context) {
+    tracks.subtitle.removeWhere((i) => i.id == "auto");
 
-            return null;
+    var items = tracks.subtitle.map((SubtitleTrack track) {
+      return PopupMenuItem<SubtitleTrack>(
+        value: track,
+        onTap: () async {
+          await widget.player.setSubtitleTrack(track);
+        },
+        child: OptionEntryItemWrapper(
+          builder: (p0, p1) {
+            return Text(
+              track.language ?? track.title ?? track.id,
+              style: TextStyle(
+                decoration: p1 ? TextDecoration.underline : TextDecoration.none,
+              ),
+            );
           },
         ),
+      );
+    }).toList();
+
+    // Get the button's position using the GlobalKey
+    final RenderBox buttonRenderBox = _buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final Offset buttonPosition = buttonRenderBox.localToGlobal(Offset.zero);
+
+    // Show the menu at the button's location
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        buttonPosition.dx,
+        buttonPosition.dy + buttonRenderBox.size.height, // Position it below the button
+        0,
+        0,
       ),
+      items: items,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      key: _buttonKey, 
       icon: const Icon(
         Icons.subtitles,
         color: Colors.white,
       ),
-      initialValue: SubtitleTrack.no(),
-      onSelected: (SubtitleTrack newTrack) async {
-        await widget.player.setSubtitleTrack(newTrack);
-        setState(() {});
-      },
-      itemBuilder: (BuildContext context) {
-        tracks.subtitle.removeWhere((i) => i.id == "auto");
-
-        return tracks.subtitle.map((SubtitleTrack track) {
-          return PopupMenuItem<SubtitleTrack>(
-            value: track,
-            child: OptionEntryItemWrapper(
-              builder: (p0, p1) {
-                return Text(
-                  track.language ?? track.title ?? track.id,
-                  style: TextStyle(
-                    decoration:
-                        p1 ? TextDecoration.underline : TextDecoration.none,
-                  ),
-                );
-              },
-            ),
-          );
-        }).toList();
-      },
+      onPressed: () => pressed(context), 
     );
   }
 }

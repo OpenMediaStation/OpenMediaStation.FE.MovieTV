@@ -21,6 +21,9 @@ class _AudioButtonState extends State<AudioButton> {
 
   List<StreamSubscription> subscriptions = [];
 
+  // GlobalKey for the button to track its position
+  final GlobalKey _buttonKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -51,50 +54,58 @@ class _AudioButtonState extends State<AudioButton> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<AudioTrack>(
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.focused)) {
-              return const Color.fromARGB(83, 86, 86, 86);
-            }
+  // Function to show the subtitle menu
+  void pressed(BuildContext context) {
+    tracks.audio.removeWhere((i) => i.id == "auto");
+    tracks.audio.removeWhere((i) => i.id == "no");
 
-            return null;
+    var items = tracks.audio.map((AudioTrack track) {
+      return PopupMenuItem<AudioTrack>(
+        value: track,
+        onTap: () async {
+          await widget.player.setAudioTrack(track);
+        },
+        child: OptionEntryItemWrapper(
+          builder: (p0, p1) {
+            return Text(
+              track.title ?? track.language ?? track.id,
+              style: TextStyle(
+                decoration: p1 ? TextDecoration.underline : TextDecoration.none,
+              ),
+            );
           },
         ),
+      );
+    }).toList();
+
+    // Get the button's position using the GlobalKey
+    final RenderBox buttonRenderBox =
+        _buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final Offset buttonPosition = buttonRenderBox.localToGlobal(Offset.zero);
+
+    // Show the menu at the button's location
+    showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        buttonPosition.dx,
+        buttonPosition.dy +
+            buttonRenderBox.size.height, // Position it below the button
+        0,
+        0,
       ),
+      items: items,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      key: _buttonKey,
       icon: const Icon(
         Icons.audio_file,
         color: Colors.white,
       ),
-      initialValue: AudioTrack.no(),
-      onSelected: (AudioTrack newTrack) async {
-        await widget.player.setAudioTrack(newTrack);
-        setState(() {});
-      },
-      itemBuilder: (BuildContext context) {
-        tracks.audio.removeWhere((i) => i.id == "auto");
-        tracks.audio.removeWhere((i) => i.id == "no");
-
-        return tracks.audio.map((AudioTrack track) {
-          return PopupMenuItem<AudioTrack>(
-            value: track,
-            child: OptionEntryItemWrapper(
-              builder: (p0, p1) {
-                return Text(
-                  track.title ?? track.language ?? track.id,
-                  style: TextStyle(
-                    decoration:
-                        p1 ? TextDecoration.underline : TextDecoration.none,
-                  ),
-                );
-              },
-            ),
-          );
-        }).toList();
-      },
+      onPressed: () => pressed(context),
     );
   }
 }
