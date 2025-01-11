@@ -1,4 +1,5 @@
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
+import 'package:open_media_server_app/models/inventory/inventory_item_addon.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item_version.dart';
 
 class Episode extends InventoryItem {
@@ -12,6 +13,7 @@ class Episode extends InventoryItem {
     required super.metadataId,
     required super.folderPath,
     required super.versions,
+    required super.addons,
     required this.seasonNr,
     required this.episodeNr,
   });
@@ -28,6 +30,10 @@ class Episode extends InventoryItem {
       versions: (json['versions'] as List<dynamic>?)
           ?.map((version) =>
               InventoryItemVersion.fromJson(version as Map<String, dynamic>))
+          .toList(),
+      addons: (json['addons'] as List<dynamic>?)
+          ?.map((addon) =>
+              InventoryItemAddon.fromJson(addon as Map<String, dynamic>))
           .toList(),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
+import 'package:open_media_server_app/models/inventory/inventory_item_addon.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item_version.dart';
 
 class Movie extends InventoryItem {
@@ -8,7 +9,8 @@ class Movie extends InventoryItem {
       required super.category,
       required super.metadataId,
       required super.folderPath,
-      required super.versions});
+      required super.versions,
+      required super.addons});
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
@@ -20,6 +22,10 @@ class Movie extends InventoryItem {
       versions: (json['versions'] as List<dynamic>?)
           ?.map((version) =>
               InventoryItemVersion.fromJson(version as Map<String, dynamic>))
+          .toList(),
+      addons: (json['addons'] as List<dynamic>?)
+          ?.map((addon) =>
+              InventoryItemAddon.fromJson(addon as Map<String, dynamic>))
           .toList(),
     );
   }

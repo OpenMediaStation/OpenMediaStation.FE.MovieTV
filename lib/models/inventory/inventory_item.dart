@@ -1,3 +1,4 @@
+import 'package:open_media_server_app/models/inventory/inventory_item_addon.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item_version.dart';
 
 class InventoryItem {
@@ -7,6 +8,7 @@ class InventoryItem {
   final String? metadataId;
   final String? folderPath;
   final List<InventoryItemVersion>? versions;
+  final List<InventoryItemAddon>? addons;
 
   InventoryItem({
     required this.id,
@@ -15,6 +17,7 @@ class InventoryItem {
     required this.metadataId,
     required this.folderPath,
     required this.versions,
+    required this.addons,
   });
 
   factory InventoryItem.fromJson(Map<String, dynamic> json) {
@@ -28,6 +31,10 @@ class InventoryItem {
           ?.map((version) =>
               InventoryItemVersion.fromJson(version as Map<String, dynamic>))
           .toList(),
+      addons: (json['addons'] as List<dynamic>?)
+          ?.map((addon) =>
+              InventoryItemAddon.fromJson(addon as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -39,6 +46,7 @@ class InventoryItem {
       'metadataId': metadataId,
       'folderPath': folderPath,
       'versions': versions,
+      'addons': addons,
     };
   }
 }
