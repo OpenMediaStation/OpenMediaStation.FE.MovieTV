@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:open_media_server_app/apis/subtitle_api.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
+import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 
 class SubtitleButton extends StatefulWidget {
   final Player player;
+  final GridItemModel gridItemModel;
 
   const SubtitleButton({
     Key? key,
     required this.player,
+    required this.gridItemModel,
   }) : super(key: key);
 
   @override
@@ -55,10 +59,26 @@ class _SubtitleButtonState extends State<SubtitleButton> {
   }
 
   // Function to show the subtitle menu
-  void pressed(BuildContext context) {
-    tracks.subtitle.removeWhere((i) => i.id == "auto");
+  void pressed(BuildContext context) async {
+    var subTracks = tracks.subtitle;
+    subTracks.removeWhere((i) => i.id == "auto");
 
-    var items = tracks.subtitle.map((SubtitleTrack track) {
+    SubtitleApi subtitleApi = SubtitleApi();
+    var inventoryItem = widget.gridItemModel.inventoryItem;
+
+    if (inventoryItem?.addons != null && subTracks.where((i) => i.title == "OMSRemoteSubtitle").isEmpty) {
+      for (var addon in inventoryItem!.addons!) {
+        var track = await subtitleApi.getSubtitle(
+          addon,
+          inventoryItem.category,
+          inventoryItem.id,
+        );
+
+        subTracks.add(track);
+      }
+    }
+
+    var items = subTracks.map((SubtitleTrack track) {
       return PopupMenuItem<SubtitleTrack>(
         value: track,
         onTap: () async {
@@ -78,7 +98,8 @@ class _SubtitleButtonState extends State<SubtitleButton> {
     }).toList();
 
     // Get the button's position using the GlobalKey
-    final RenderBox buttonRenderBox = _buttonKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox buttonRenderBox =
+        _buttonKey.currentContext!.findRenderObject() as RenderBox;
     final Offset buttonPosition = buttonRenderBox.localToGlobal(Offset.zero);
 
     // Show the menu at the button's location
@@ -86,7 +107,8 @@ class _SubtitleButtonState extends State<SubtitleButton> {
       context: context,
       position: RelativeRect.fromLTRB(
         buttonPosition.dx,
-        buttonPosition.dy + buttonRenderBox.size.height, // Position it below the button
+        buttonPosition.dy +
+            buttonRenderBox.size.height, // Position it below the button
         0,
         0,
       ),
@@ -97,12 +119,12 @@ class _SubtitleButtonState extends State<SubtitleButton> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      key: _buttonKey, 
+      key: _buttonKey,
       icon: const Icon(
         Icons.subtitles,
         color: Colors.white,
       ),
-      onPressed: () => pressed(context), 
+      onPressed: () => pressed(context),
     );
   }
 }

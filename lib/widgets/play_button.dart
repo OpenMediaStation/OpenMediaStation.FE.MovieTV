@@ -23,6 +23,7 @@ class PlayButton extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => PlayerView(
+                    gridItem: itemModel,
                     url:
                         "${Preferences.prefs?.getString("BaseUrl")}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}"),
               ),

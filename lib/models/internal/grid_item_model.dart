@@ -9,7 +9,7 @@ class GridItemModel {
   List<String>? childIds;
   int listPosition = 0;
   bool fake = false;
-
+  
   GridItemModel({
     required this.inventoryItem,
     required this.metadataModel,

@@ -5,13 +5,19 @@ import 'package:media_kit_tv/material_tv.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
+import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/audio_button.dart';
 import 'package:open_media_server_app/widgets/subtitle_button.dart';
 
 class PlayerView extends StatefulWidget {
-  const PlayerView({super.key, required this.url});
+  const PlayerView({
+    super.key,
+    required this.url,
+    required this.gridItem,
+  });
 
   final String url;
+  final GridItemModel gridItem;
 
   @override
   State<PlayerView> createState() => _PlayerState();
@@ -54,7 +60,10 @@ class _PlayerState extends State<PlayerView> {
     var bottomButtonBar = [
       const MaterialPositionIndicator(),
       const Spacer(),
-      SubtitleButton(player: player),
+      SubtitleButton(
+        player: player,
+        gridItemModel: widget.gridItem,
+      ),
       AudioButton(player: player),
     ];
 
