@@ -117,7 +117,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: linux-bin
-          path: ./linux-bin
+          path: ./linux-bin.zip
 
       # Install Flatpak and flatpak-builder
       - name: Install Flatpak and Dependencies
