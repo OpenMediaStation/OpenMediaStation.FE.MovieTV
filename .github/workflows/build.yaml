@@ -80,6 +80,12 @@ jobs:
         with:
           flutter-version: '3.24.3'
 
+      # Install Linux dependencies
+      - name: Install AppImage and Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libblkid-dev e2fslibs-dev liblzma-dev libmpv-dev mpv ninja-build fuse desktop-file-utils
+
       # Fetch Flutter dependencies
       - name: Install Flutter dependencies
         run: flutter pub get
