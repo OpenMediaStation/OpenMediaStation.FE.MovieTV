@@ -46,3 +46,8 @@ app.*.map.json
 assets/AppImage/usr/bin/**
 *.AppImage
 assets/AppImage/.DirIcon
+
+.flatpak-builder
+repo
+linux-bin.zip
+app.flatpak
