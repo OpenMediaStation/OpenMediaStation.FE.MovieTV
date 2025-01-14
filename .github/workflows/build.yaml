@@ -84,7 +84,7 @@ jobs:
       - name: Install AppImage and Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libblkid-dev e2fslibs-dev liblzma-dev libmpv-dev mpv ninja-build fuse desktop-file-utils
+          sudo apt-get install -y libgtk-3-dev libblkid-dev e2fslibs-dev liblzma-dev libmpv-dev mpv ninja-build fuse desktop-file-utils libsecret-1-dev
           wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
           chmod +x ./appimagetool-x86_64.AppImage
 
