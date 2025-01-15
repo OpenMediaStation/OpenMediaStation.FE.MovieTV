@@ -25,7 +25,7 @@ class LoginManager {
         redirectUri: "my.test.app:/oauth2redirect", // TODO
         customUriScheme: "my.test.app",
       );
-    } else if (!PlatformGlobals.isWeb) {
+    } else if (PlatformGlobals.isMobile) {
       client = OAuth2Client(
         authorizeUrl: authInfo.authorizeUrl,
         tokenUrl: authInfo.tokenUrl,
@@ -39,6 +39,14 @@ class LoginManager {
         redirectUri: AuthGlobals.redirectUriWeb,
         // refreshUrl: "https://auth.${GlobalSettings.domainName}/oauth/token",
         customUriScheme: Uri.parse(AuthGlobals.redirectUriWeb).authority,
+      );
+    } else{
+        // Used for Linux for example
+        client = OAuth2Client(
+        authorizeUrl: authInfo.authorizeUrl,
+        tokenUrl: authInfo.tokenUrl,
+        redirectUri: AuthGlobals.redirectUriWeb,
+        customUriScheme: "http://localhost:8000",
       );
     }
 
