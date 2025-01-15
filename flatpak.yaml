@@ -137,9 +137,9 @@ modules:
   - chmod +x /app/open_media_server_app/open_media_server_app
   - ln -s /app/open_media_server_app/open_media_server_app /app/bin/open_media_server_app
   sources:
-  - type: archive
-    path: linux-bin.zip
-    dest: open_media_server_app
+  # - type: archive
+  #   path: linux-bin.zip
+  #   dest: open_media_server_app
   - type: file
     path: linux-bin.zip
     # dest: open_media_server_app
