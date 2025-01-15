@@ -129,6 +129,7 @@ modules:
 
   - install -Dm644 open_media_server_app/org.openmediastation.open_media_server_app.appdata.xml /app/share/appdata/org.openmediastation.open_media_server_app.appdata.xml
   - install -Dm644 open_media_server_app/oms.desktop /app/share/applications/org.openmediastation.open_media_server_app.desktop
+  - install -Dm644 open_media_server_app/AppIcon.png /app/share/icons/hicolor/512x512/apps/org.openmediastation.open_media_server_app.png
 
   - cp /app/lib/libmpv.so.2 /app/lib/libmpv.so.1
 
