@@ -120,7 +120,7 @@ jobs:
           path: .
 
       - run: pwd
-      - run: ls -al
+      - run: ls -R
 
       # Install Flatpak and flatpak-builder
       - name: Install Flatpak and Dependencies
