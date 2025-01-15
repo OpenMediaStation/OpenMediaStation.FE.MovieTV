@@ -120,7 +120,7 @@ jobs:
           path: .
 
       - run: pwd
-      - run: ls
+      - run: ls -al
 
       # Install Flatpak and flatpak-builder
       - name: Install Flatpak and Dependencies
@@ -179,30 +179,30 @@ jobs:
           path: "./build/app/outputs/apk/release/app-release.apk"
 
 
-  build-web:
-    runs-on: ubuntu-latest
+  # build-web:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #   steps:
+  #     # Checkout the repository
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      # Install Flutter SDK
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.3'
+  #     # Install Flutter SDK
+  #     - name: Install Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.24.3'
 
-      # Fetch Flutter dependencies
-      - name: Install Flutter dependencies
-        run: flutter pub get
+  #     # Fetch Flutter dependencies
+  #     - name: Install Flutter dependencies
+  #       run: flutter pub get
 
-      - run: flutter build web
-        working-directory: ./
-        shell: bash
+  #     - run: flutter build web
+  #       working-directory: ./
+  #       shell: bash
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          name: web
-          path: ./build/web/
+  #     - name: Upload a Build Artifact
+  #       uses: actions/upload-artifact@v3.1.0
+  #       with:
+  #         name: web
+  #         path: ./build/web/
