@@ -119,7 +119,7 @@ jobs:
           name: linux-bin
           path: .
 
-      - run: pwd
+      - run: zip -r linux-bin.zip linux-bin
       - run: ls -R
 
       # Install Flatpak and flatpak-builder
