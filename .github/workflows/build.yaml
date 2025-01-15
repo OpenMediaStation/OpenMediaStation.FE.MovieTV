@@ -119,6 +119,8 @@ jobs:
           name: linux-bin
           path: ./linux-bin.zip
 
+      - run: ls
+
       # Install Flatpak and flatpak-builder
       - name: Install Flatpak and Dependencies
         run: |
