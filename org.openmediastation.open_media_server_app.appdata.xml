@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.openmediastation.open_media_server_app</id>
+  
+  <name>OMS - OpenMediaStation</name>
+  <summary>Movie and TV show client for OMS</summary>
+  
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>AGPL-3.0-only</project_license>
+  
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  
+  <description>
+    <p>
+      This client acts as a movie and tv show client for the OpenMediaStation software.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">org.openmediastation.open_media_server_app.desktop</launchable>
+</component>

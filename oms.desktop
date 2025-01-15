@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=OMS - OpenMediaStation
+Comment=Movie and TV show client for OMS
+Categories=AudioVideo;TV;
+
+Icon=oms-openmediastation
+Exec=open_media_server_app
+Terminal=false

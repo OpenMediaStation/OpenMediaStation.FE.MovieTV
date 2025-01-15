@@ -127,6 +127,9 @@ modules:
   - pwd
   - ls open_media_server_app -la
 
+  - install -Dm644 open_media_server_app/org.openmediastation.open_media_server_app.appdata.xml /app/share/appdata/org.openmediastation.open_media_server_app.appdata.xml
+  - install -Dm644 open_media_server_app/oms.desktop /app/share/applications/org.openmediastation.open_media_server_app.desktop
+
   - cp /app/lib/libmpv.so.2 /app/lib/libmpv.so.1
 
   - install -dm755 /app/bin /app/open_media_server_app
