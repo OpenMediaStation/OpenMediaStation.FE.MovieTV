@@ -6,6 +6,6 @@ Name=OMS - OpenMediaStation
 Comment=Movie and TV show client for OMS
 Categories=AudioVideo;TV;
 
-Icon=oms-openmediastation
+Icon=org.openmediastation.open_media_server_app
 Exec=open_media_server_app
 Terminal=false
