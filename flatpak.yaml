@@ -127,19 +127,19 @@ modules:
   - pwd
   - ls open_media_server_app -la
 
-  - mkdir -p /app/open_media_server_app
-  - unzip linux-bin.zip -d /app/open_media_server_app
+  # - mkdir -p /app/open_media_server_app
+  # - unzip linux-bin.zip -d /app/open_media_server_app
 
   - cp /app/lib/libmpv.so.2 /app/lib/libmpv.so.1
 
-  # - install -dm755 /app/bin /app/open_media_server_app
-  # - cp -R open_media_server_app/ /app
+  - install -dm755 /app/bin /app/open_media_server_app
+  - cp -R open_media_server_app/ /app
   - chmod +x /app/open_media_server_app/open_media_server_app
   - ln -s /app/open_media_server_app/open_media_server_app /app/bin/open_media_server_app
   sources:
-  # - type: archive
-  #   path: linux-bin.zip
-  #   dest: open_media_server_app
-  - type: file
+  - type: archive
     path: linux-bin.zip
-    # dest: open_media_server_app
+    dest: open_media_server_app
+  # - type: file
+  #   path: linux-bin.zip
+  #   # dest: open_media_server_app
