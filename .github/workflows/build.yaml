@@ -117,7 +117,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: linux-bin
-          path: ./linux-bin.zip
+          path: .
 
       - run: pwd
       - run: ls
