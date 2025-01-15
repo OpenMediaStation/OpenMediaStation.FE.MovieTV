@@ -139,7 +139,7 @@ jobs:
 
       - run: flatpak-builder --force-clean build-dir flatpak.yaml --repo=repo
 
-      - run: flatpak build-bundle repo app.flatpak com.github.KRTirtho.open_media_server_app
+      - run: flatpak build-bundle repo app.flatpak org.openmediastation.open_media_server_app
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0

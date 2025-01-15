@@ -3,7 +3,12 @@
         "autofocus",
         "Focusable",
         "fullscreen",
-        "grey"
+        "grey",
+        "libmpv",
+        "linux",
+        "openmediastation",
+        "pulseaudio",
+        "wayland"
     ],
     "cmake.sourceDirectory": "/home/lna-dev/Documents/Repos/OpenMediaStation.FE.MovieTV/windows/runner"
 }
