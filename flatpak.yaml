@@ -141,3 +141,12 @@ modules:
   - type: archive
     path: linux-bin.zip
     dest: open_media_server_app
+  - type: file
+    path: org.openmediastation.open_media_server_app.appdata.xml
+    dest: open_media_server_app
+  - type: file
+    path: oms.desktop
+    dest: open_media_server_app
+  - type: file
+    path: AppIcon.png
+    dest: open_media_server_app
