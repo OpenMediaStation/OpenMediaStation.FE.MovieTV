@@ -45,7 +45,7 @@ class LoginManager {
         client = OAuth2Client(
         authorizeUrl: authInfo.authorizeUrl,
         tokenUrl: authInfo.tokenUrl,
-        redirectUri: AuthGlobals.redirectUriWeb,
+        redirectUri: "http://localhost:8000/redirect.html",
         customUriScheme: "http://localhost:8000",
       );
     }
