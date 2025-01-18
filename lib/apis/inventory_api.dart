@@ -21,7 +21,7 @@ class InventoryApi {
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((json) => InventoryItem.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load movies');
+      return [];
     }
   }
 
