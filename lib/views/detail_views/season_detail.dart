@@ -135,7 +135,7 @@ class SeasonDetailView extends StatelessWidget {
                                       Text(
                                         element.metadataModel?.title != null
                                             ? "${element.listPosition}. ${element.metadataModel?.title}"
-                                            : "No title",
+                                            : "${element.listPosition}. No title",
                                         softWrap: true,
                                         maxLines: 2,
                                         style: const TextStyle(
