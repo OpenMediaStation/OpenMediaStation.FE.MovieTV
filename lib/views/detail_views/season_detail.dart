@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
+import 'package:open_media_server_app/apis/favorites_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
@@ -8,6 +9,7 @@ import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/detail_views/episode_detail.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
+import 'package:open_media_server_app/widgets/favorite_button.dart';
 import 'package:open_media_server_app/widgets/title.dart';
 
 class SeasonDetailView extends StatelessWidget {
@@ -24,6 +26,9 @@ class SeasonDetailView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
+        actions: [
+          FavoriteButton(itemModel: itemModel),
+        ],
       ),
       body: FutureBuilder<List<GridItemModel>>(
         future: getChildren(),
@@ -186,12 +191,20 @@ class SeasonDetailView extends StatelessWidget {
       MetadataModel? metadata;
 
       if (episode.metadataId != null) {
-        metadata =
-            await metadataApi.getMetadata(episode.metadataId!, "Episode");
+        metadata = await metadataApi.getMetadata(
+          episode.metadataId!,
+          "Episode",
+        );
       }
 
-      var gridItem =
-          GridItemModel(inventoryItem: episode, metadataModel: metadata);
+      FavoritesApi favoritesApi = FavoritesApi();
+      var fav = await favoritesApi.isFavorited("Episode", episode.id);
+
+      var gridItem = GridItemModel(
+        inventoryItem: episode,
+        metadataModel: metadata,
+        isFavorite: fav,
+      );
       gridItem.backdropUrl = metadata?.episode?.backdrop;
 
       gridItem.listPosition = episode.episodeNr ?? 0;

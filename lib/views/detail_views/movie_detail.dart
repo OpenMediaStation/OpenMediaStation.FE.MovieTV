@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
+import 'package:open_media_server_app/widgets/favorite_button.dart';
 import 'package:open_media_server_app/widgets/play_button.dart';
 
 class MovieDetailView extends StatelessWidget {
@@ -18,6 +19,9 @@ class MovieDetailView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
+        actions: [
+          FavoriteButton(itemModel: itemModel),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -37,7 +41,8 @@ class MovieDetailView extends StatelessWidget {
               },
               blendMode: BlendMode.dstIn,
               child: CustomImage(
-                imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                imageUrl:
+                    itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,

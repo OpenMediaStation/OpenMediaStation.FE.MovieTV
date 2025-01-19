@@ -4,6 +4,7 @@ import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 class GridItemModel {
   final InventoryItem? inventoryItem;
   final MetadataModel? metadataModel;
+  bool? isFavorite;
   String? posterUrl;
   String? backdropUrl;
   List<String>? childIds;
@@ -13,5 +14,6 @@ class GridItemModel {
   GridItemModel({
     required this.inventoryItem,
     required this.metadataModel,
+    required this.isFavorite
   });
 }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
+import 'package:open_media_server_app/apis/favorites_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
@@ -8,6 +9,7 @@ import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/views/detail_views/season_detail.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
+import 'package:open_media_server_app/widgets/favorite_button.dart';
 import 'package:open_media_server_app/widgets/title.dart';
 
 class ShowDetailView extends StatelessWidget {
@@ -24,6 +26,9 @@ class ShowDetailView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
+        actions: [
+          FavoriteButton(itemModel: itemModel),
+        ],
       ),
       body: FutureBuilder<List<GridItemModel>>(
         future: getChildren(),
@@ -174,8 +179,14 @@ class ShowDetailView extends StatelessWidget {
         metadata = await metadataApi.getMetadata(season.metadataId!, "Season");
       }
 
-      var gridItem =
-          GridItemModel(inventoryItem: season, metadataModel: metadata);
+      FavoritesApi favoritesApi = FavoritesApi();
+      var fav = await favoritesApi.isFavorited("Season", season.id);
+
+      var gridItem = GridItemModel(
+        inventoryItem: season,
+        metadataModel: metadata,
+        isFavorite: fav,
+      );
       gridItem.childIds = season.episodeIds;
       gridItem.listPosition = season.seasonNr ?? 0;
       gridItem.posterUrl = metadata?.season?.poster;

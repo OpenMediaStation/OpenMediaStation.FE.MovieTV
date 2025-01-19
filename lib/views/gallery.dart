@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/apis/favorites_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
@@ -58,6 +59,7 @@ class Gallery extends StatelessWidget {
                     gridItem = GridItemModel(
                       inventoryItem: items[index],
                       metadataModel: null,
+                      isFavorite: null,
                     );
 
                     gridItem.fake = true;
@@ -122,6 +124,7 @@ class Gallery extends StatelessWidget {
   Future<GridItemModel> getMovie(InventoryItem element) async {
     InventoryApi inventoryApi = InventoryApi();
     MetadataApi metadataApi = MetadataApi();
+    FavoritesApi favoritesApi = FavoritesApi();
 
     var movie = await inventoryApi.getMovie(element.id);
 
@@ -131,7 +134,13 @@ class Gallery extends StatelessWidget {
       metadata = await metadataApi.getMetadata(movie.metadataId!, "Movie");
     }
 
-    var gridItem = GridItemModel(inventoryItem: movie, metadataModel: metadata);
+    var fav = await favoritesApi.isFavorited("Movie", movie.id);
+
+    var gridItem = GridItemModel(
+      inventoryItem: movie,
+      metadataModel: metadata,
+      isFavorite: fav,
+    );
 
     gridItem.posterUrl = metadata?.movie?.poster;
     gridItem.backdropUrl = metadata?.movie?.backdrop;
@@ -141,6 +150,7 @@ class Gallery extends StatelessWidget {
   Future<GridItemModel> getShow(InventoryItem element) async {
     InventoryApi inventoryApi = InventoryApi();
     MetadataApi metadataApi = MetadataApi();
+    FavoritesApi favoritesApi = FavoritesApi();
 
     var show = await inventoryApi.getShow(element.id);
 
@@ -150,7 +160,13 @@ class Gallery extends StatelessWidget {
       metadata = await metadataApi.getMetadata(show.metadataId!, "Show");
     }
 
-    var gridItem = GridItemModel(inventoryItem: show, metadataModel: metadata);
+    var fav = await favoritesApi.isFavorited("Show", show.id);
+
+    var gridItem = GridItemModel(
+      inventoryItem: show,
+      metadataModel: metadata,
+      isFavorite: fav,
+    );
 
     gridItem.posterUrl = metadata?.show?.poster;
     gridItem.backdropUrl = metadata?.show?.backdrop;
