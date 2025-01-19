@@ -35,7 +35,7 @@ class ShowDetailView extends StatelessWidget {
           }
 
           List<GridItemModel> items = snapshot.data!;
-          items.sort((a, b) => a.listPosition!.compareTo(b.listPosition!));
+          items.sort((a, b) => a.listPosition.compareTo(b.listPosition));
 
           List<Widget> seasons = [];
 

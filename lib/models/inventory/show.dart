@@ -37,8 +37,4 @@ class Show extends InventoryItem {
     );
   }
 
-  @override
-  Map<String, dynamic> toJson() {
-    return super.toJson();
-  }
 }

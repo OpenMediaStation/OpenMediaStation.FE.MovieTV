@@ -40,8 +40,4 @@ class Season extends InventoryItem {
     );
   }
 
-  @override
-  Map<String, dynamic> toJson() {
-    return super.toJson();
-  }
 }

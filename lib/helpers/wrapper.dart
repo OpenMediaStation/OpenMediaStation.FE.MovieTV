@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class OptionEntryItemWrapper extends StatefulWidget {
   Widget Function(BuildContext, bool) builder;
 
-  OptionEntryItemWrapper({required this.builder});
+  OptionEntryItemWrapper({super.key, required this.builder});
 
   @override
   _OptionEntryItemWrapper createState() => _OptionEntryItemWrapper();
@@ -14,11 +14,11 @@ class _OptionEntryItemWrapper extends State<OptionEntryItemWrapper> {
   FocusNode? node;
 
   void focus_listener() {
-    if (mounted && node != null)
+    if (mounted && node != null) {
       setState(() {
         focused = node!.hasFocus;
       });
-    ;
+    }
   }
 
   @override
