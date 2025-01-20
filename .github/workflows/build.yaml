@@ -136,18 +136,10 @@ jobs:
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install --user -y org.gnome.Sdk/x86_64/47 
           flatpak install --user -y org.gnome.Platform/x86_64/47
-          flatpak install --user -y org.gnome.Sdk/aarch64/47
-          flatpak install --user -y org.gnome.Platform/aarch64/47
 
+      - run: flatpak-builder --force-clean build-dir flatpak.yaml --repo=repo
 
-      - run: flatpak-builder --force-clean build-dir flatpak.yaml --repo=repo-x64
-
-      - run: flatpak build-bundle repo-x64 app-x64.flatpak org.openmediastation.open_media_server_app
-      
-      # Build for Arm64
-      - run: flatpak-builder --force-clean --arch=aarch64 build-dir-aarch64 flatpak.yaml --repo=repo-aarch64
-
-      - run: flatpak build-bundle repo-aarch64 app-arm64.flatpak org.openmediastation.open_media_server_app aarch64
+      - run: flatpak build-bundle repo app.flatpak org.openmediastation.open_media_server_app
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
