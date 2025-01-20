@@ -98,6 +98,9 @@ class LoginManager {
       clientId: authInfo.clientId,
     );
 
+    if (tknResponse.accessToken == null) {
+      throw Exception("Refreshing the token has failed: ${tknResponse.errorDescription}");
+    }
     Preferences.prefs?.setString("AccessToken", tknResponse.accessToken!);
     Preferences.prefs?.setString("RefreshToken", tknResponse.refreshToken!);
 
