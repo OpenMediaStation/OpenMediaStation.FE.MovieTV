@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:open_media_server_app/apis/auth_info_api.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
 import 'package:open_media_server_app/globals/auth_globals.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
+import 'package:open_media_server_app/views/gallery.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key, required this.widget});
@@ -14,6 +17,7 @@ class LoginView extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final domainController = TextEditingController();
+  var displayMessage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,83 @@ class LoginView extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "🫤",
+                  style: TextStyle(
+                      color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontSize: 60),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Looks like \n that's not working...",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      decoration: TextDecoration.none,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+                //Text('Error: ${snapshot.error}'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () async => await Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginView(widget: const Gallery()))),
+                        label: const Text("Retry Login"),
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          Preferences.prefs?.remove("BaseUrl");
+                          Preferences.prefs?.remove("AccessToken");
+                          Preferences.prefs?.remove("RefreshToken");
+                          await Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      LoginView(widget: const Gallery())));
+                        },
+                        label: const Text("Change URL"),
+                        icon: const Icon(Icons.edit),
+                      ),
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () => {showDialog(context: context, builder: (BuildContext context){
+                    return Dialog(
+                      insetPadding: EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10)),
+                      
+                      child: SizedBox(width: 300, height: 300, child: SingleChildScrollView(padding: const EdgeInsets.all(8), scrollDirection: Axis.vertical , child: Text('Error: ${snapshot.error}' ,textWidthBasis: TextWidthBasis.parent, softWrap: true,)))
+                    );
+                  })},
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStateColor.transparent,
+                      enableFeedback: false),
+                  child: const Text("what happened?"),
+                ),
+                SingleChildScrollView(scrollDirection: Axis.vertical , child: Text(displayMessage ? 'Error: ${snapshot.error}' : ''))
+              ],
+            ));
           }
 
           return widget;
@@ -139,7 +219,6 @@ class LoginView extends StatelessWidget {
       if (token == null || token.isEmpty) {
         token = await loginManager.login(info, context);
       }
-
     } else {
       var token = await loginManager.login(info, context);
     }
@@ -149,13 +228,17 @@ class LoginView extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            surfaceTintColor: Colors.transparent,
-            title: Text(Globals.Title),
-            automaticallyImplyLeading: false,
-            actions: 
-              PlatformGlobals.isKiosk ? [IconButton(onPressed: ()=>exit(0), icon: const Icon(Icons.close))]: []
-          ),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              surfaceTintColor: Colors.transparent,
+              title: Text(Globals.Title),
+              automaticallyImplyLeading: false,
+              actions: PlatformGlobals.isKiosk
+                  ? [
+                      IconButton(
+                          onPressed: () => exit(0),
+                          icon: const Icon(Icons.close))
+                    ]
+                  : []),
           body: widget,
         ),
       ),

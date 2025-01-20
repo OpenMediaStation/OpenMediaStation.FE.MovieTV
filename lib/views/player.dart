@@ -71,6 +71,7 @@ class _PlayerState extends State<PlayerView> {
       bottomButtonBar.add(
         const MaterialFullscreenButton(),
       );
+      bottomButtonBar.insert(0, const MaterialTvVolumeButton(volumeHighIcon: Icon(Icons.volume_up), volumeLowIcon: Icon(Icons.volume_down), volumeMuteIcon: Icon(Icons.volume_mute),));
     }
 
     var seekBarColor = const Color.fromARGB(255, 82, 26, 114);
