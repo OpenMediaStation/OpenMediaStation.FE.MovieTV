@@ -119,11 +119,9 @@ jobs:
       # Install Flutter SDK
       - name: Install Flutter
         run: |
-          sudo apt-get install -y wget curl git unzip xz-utils zip libglu1-mesa clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
-          wget https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.3-stable.tar.xz
-          mkdir sdk
-          tar -xf ./flutter_linux_3.24.3-stable.tar.xz -C ./sdk/
-          echo 'export PATH="./sdk/flutter/bin:$PATH"' >> ~/.bash_profile
+          sudo apt-get install -y wget curl git unzip xz-utils zip libglu1-mesa clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev snapd
+          sudo snap install snapd
+          sudo snap install flutter --classic
 
       # Fetch Flutter dependencies
       - name: Install Flutter dependencies
