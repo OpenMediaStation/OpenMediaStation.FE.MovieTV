@@ -113,7 +113,7 @@ jobs:
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libblkid-dev e2fslibs-dev liblzma-dev libmpv-dev:arm64 mpv:arm64 ninja-build fuse desktop-file-utils libsecret-1-dev
+          sudo apt-get install -y libgtk-3-dev libblkid-dev e2fslibs-dev liblzma-dev libmpv-dev mpv mpv-devel mpv-libs-devel ninja-build fuse desktop-file-utils libsecret-1-dev
         
 
       # Install Flutter SDK
