@@ -122,6 +122,8 @@ jobs:
           sudo apt-get install -y wget curl git unzip xz-utils zip libglu1-mesa clang cmake git ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev snapd
           sudo snap install snapd
           sudo snap install flutter --classic
+          find /usr/lib /usr/local/lib -name "mpv.pc"
+          pkg-config --cflags --libs mpv
 
       # Fetch Flutter dependencies
       - name: Install Flutter dependencies
