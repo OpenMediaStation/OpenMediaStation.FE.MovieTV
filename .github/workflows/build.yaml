@@ -162,11 +162,11 @@ jobs:
           name: linux-bin.zip
           path: linux-bin.zip
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          name: linux-bin-arm64.zip
-          path: linux-bin-arm64.zip
+      # - name: Upload a Build Artifact
+      #   uses: actions/upload-artifact@v3.1.0
+      #   with:
+      #     name: linux-bin-arm64.zip
+      #     path: linux-bin-arm64.zip
 
       # Install Flatpak and flatpak-builder
       - name: Install Flatpak and Dependencies
@@ -187,7 +187,7 @@ jobs:
       # Build for Arm64
       - run: flatpak-builder --force-clean --arch=aarch64 build-dir-aarch64 flatpak.yaml --repo=repo-aarch64
 
-      - run: flatpak build-bundle repo-aarch64 app-arm64.flatpak org.openmediastation.open_media_server_app aarch64
+      # - run: flatpak build-bundle repo-aarch64 app-arm64.flatpak org.openmediastation.open_media_server_app aarch64
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0

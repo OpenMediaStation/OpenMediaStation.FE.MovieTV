@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:open_media_server_app/apis/auth_info_api.dart';
 import 'package:open_media_server_app/auth/login_manager.dart';
 import 'package:open_media_server_app/globals/auth_globals.dart';
 import 'package:open_media_server_app/globals/globals.dart';
-import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/views/gallery.dart';
 
@@ -91,7 +87,7 @@ class LoginView extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () => {showDialog(context: context, builder: (BuildContext context){
                     return Dialog(
-                      insetPadding: EdgeInsets.all(20),
+                      insetPadding: const EdgeInsets.all(20),
                       shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10)),
                       
                       child: SizedBox(width: 300, height: 300, child: SingleChildScrollView(padding: const EdgeInsets.all(8), scrollDirection: Axis.vertical , child: Text('Error: ${snapshot.error}' ,textWidthBasis: TextWidthBasis.parent, softWrap: true,)))
@@ -223,25 +219,16 @@ class LoginView extends StatelessWidget {
       var token = await loginManager.login(info, context);
     }
 
-    await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              surfaceTintColor: Colors.transparent,
-              title: Text(Globals.Title),
-              automaticallyImplyLeading: false,
-              actions: PlatformGlobals.isKiosk
-                  ? [
-                      IconButton(
-                          onPressed: () => exit(0),
-                          icon: const Icon(Icons.close))
-                    ]
-                  : []),
-          body: widget,
+    if (context.mounted){
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget
         ),
-      ),
-    );
+      );
+    }else
+    {
+      throw Exception("Context wasn't mounted correctly!");
+    }
   }
 }

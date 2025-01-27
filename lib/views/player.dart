@@ -183,11 +183,17 @@ class _PlayerState extends State<PlayerView> {
         ),
       );
     } else {
+      var videoSize = controller.rect.value?.size;
       return MaterialDesktopVideoControlsTheme(
         normal: desktopThemeData,
         fullscreen: desktopThemeData,
         child: Scaffold(
           body: Video(
+             fit: BoxFit.fitHeight,
+            //width: videoWidth != null ? (videoWidth / 2) : null,
+            aspectRatio: videoSize != null ? videoSize.aspectRatio * 2: null,
+            //width: MediaQuery.of(context).size.width /2,
+            alignment: Alignment.centerLeft,
             controller: controller,
             controls: (state) {
               return MaterialDesktopVideoControls(state);
