@@ -185,7 +185,7 @@ jobs:
       - run: flatpak build-bundle repo-x64 app-x64.flatpak org.openmediastation.open_media_server_app
       
       # Build for Arm64
-      - run: flatpak-builder --force-clean --arch=aarch64 build-dir-aarch64 flatpak.yaml --repo=repo-aarch64
+      #- run: flatpak-builder --force-clean --arch=aarch64 build-dir-aarch64 flatpak.yaml --repo=repo-aarch64
 
       # - run: flatpak build-bundle repo-aarch64 app-arm64.flatpak org.openmediastation.open_media_server_app aarch64
 
