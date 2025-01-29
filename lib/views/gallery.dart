@@ -31,6 +31,7 @@ class _GalleryState extends State<Gallery> {
   bool displayShows = true;
   GlobalKey fstItemGlobalKey = GlobalKey();
   double? gridItemHeight;
+  ValueNotifier<bool> filterChanged = ValueNotifier<bool>(false);
 
   void _getItemSize() {
     if (fstItemGlobalKey.currentContext != null) {
@@ -80,7 +81,7 @@ class _GalleryState extends State<Gallery> {
                   }),
               icon: const Icon(Icons.sort_by_alpha)),
           IconButton(
-              onPressed: () => setState(() {
+              onPressed: () => {
                     showDialog(
                       context: context,
                       builder: (context) {
@@ -92,37 +93,51 @@ class _GalleryState extends State<Gallery> {
                           child: SizedBox(
                             height: 50,
                             width: 20,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Checkbox(
-                                        value: displayMovies,
-                                        onChanged: (value) =>
-                                            {displayMovies = !displayMovies}),
-                                    const Text("Movies")
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Checkbox(
-                                        value: displayShows,
-                                        onChanged: (value) =>
-                                            {displayShows = !displayShows}),
-                                    const Text("Shows")
-                                  ],
-                                )
-                              ],
-                            ),
+                            child: ValueListenableBuilder(
+                                valueListenable: filterChanged,
+                                builder: (context, _, __) {
+                                  filterChanged.value = false;
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Checkbox(
+                                              value: displayMovies,
+                                              onChanged: (value) =>
+                                                  setState(() {
+                                                    displayMovies =
+                                                        !displayMovies;
+                                                    filterChanged.value = true;
+                                                  })),
+                                          const Text("Movies")
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Checkbox(
+                                              value: displayShows,
+                                              onChanged: (value) =>
+                                                  setState(() {
+                                                    displayShows =
+                                                        !displayShows;
+                                                    filterChanged.value = true;
+                                                  })),
+                                          const Text("Shows")
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                }),
                           ),
                         );
                       },
-                    );
-                  }),
+                    )
+                  },
               icon: const Icon(Icons.filter_alt))
         ],
       ),
@@ -286,8 +301,8 @@ class _GalleryState extends State<Gallery> {
                               onLetterChange: (letter) {
                                 // await
                                 HapticFeedback.mediumImpact();
-                                _scrollController.jumpTo(
-                                  // .animateTo(
+                                _scrollController
+                                  .animateTo(
                                   ((gridItemHeight ??
                                               (desiredItemWidth /
                                                   gridItemAspectRatio)) +
@@ -298,8 +313,8 @@ class _GalleryState extends State<Gallery> {
                                                   .startsWith(letter) ??
                                               false) ~/
                                           crossAxisCount),
-                                  // duration: const Duration(seconds: 2),
-                                  // curve: Curves.bounceIn,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.fastOutSlowIn,
                                 );
                               },
                               factor: 15,

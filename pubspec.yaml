@@ -23,7 +23,7 @@ dependencies:
   random_string: ^2.3.1
   qr_flutter: ^4.1.0
   icons_plus: ^5.0.0
-  alphabet_scrollbar: ^0.0.7
+  alphabet_scrollbar: ^0.0.8
 
 dev_dependencies:
   flutter_test:
