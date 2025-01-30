@@ -5,10 +5,10 @@ packages:
     dependency: "direct main"
     description:
       name: alphabet_scrollbar
-      sha256: "0d4099d7dd1d35482501d558978a7d1ae857aaf6450dff4a8cfb431d998036ab"
+      sha256: "4a588503eaccb793a8bc7bef206f8f88304a795d9391a4b9817ca54aff78faff"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.8"
+    version: "0.1.0"
   archive:
     dependency: transitive
     description:
