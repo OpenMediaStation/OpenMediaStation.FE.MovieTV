@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:open_media_server_app/apis/favorites_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
+import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
@@ -262,6 +263,7 @@ class _GalleryState extends State<Gallery> {
                                         inventoryItem: filteredItems[index],
                                         metadataModel: null,
                                         isFavorite: null,
+                                        progress: null,
                                       );
                                           
                                       gridItem.fake = true;
@@ -412,6 +414,7 @@ class _GalleryState extends State<Gallery> {
     InventoryApi inventoryApi = InventoryApi();
     MetadataApi metadataApi = MetadataApi();
     FavoritesApi favoritesApi = FavoritesApi();
+    ProgressApi progressApi = ProgressApi();
 
     var movie = await inventoryApi.getMovie(element.id);
 
@@ -423,10 +426,13 @@ class _GalleryState extends State<Gallery> {
 
     var fav = await favoritesApi.isFavorited("Movie", movie.id);
 
+    var progress = await progressApi.getProgress("Movie", movie.id);
+
     var gridItem = GridItemModel(
       inventoryItem: movie,
       metadataModel: metadata,
       isFavorite: fav,
+      progress: progress,
     );
 
     gridItem.posterUrl = metadata?.movie?.poster;
@@ -438,6 +444,7 @@ class _GalleryState extends State<Gallery> {
     InventoryApi inventoryApi = InventoryApi();
     MetadataApi metadataApi = MetadataApi();
     FavoritesApi favoritesApi = FavoritesApi();
+    ProgressApi progressApi = ProgressApi();
 
     var show = await inventoryApi.getShow(element.id);
 
@@ -449,10 +456,13 @@ class _GalleryState extends State<Gallery> {
 
     var fav = await favoritesApi.isFavorited("Show", show.id);
 
+    var progress = await progressApi.getProgress("Show", show.id);
+
     var gridItem = GridItemModel(
       inventoryItem: show,
       metadataModel: metadata,
       isFavorite: fav,
+      progress: progress,
     );
 
     gridItem.posterUrl = metadata?.show?.poster;

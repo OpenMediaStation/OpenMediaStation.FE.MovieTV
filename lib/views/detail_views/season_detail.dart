@@ -4,6 +4,7 @@ import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/apis/favorites_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
+import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
@@ -178,6 +179,7 @@ class SeasonDetailView extends StatelessWidget {
   Future<List<GridItemModel>> getChildren() async {
     InventoryApi inventoryApi = InventoryApi();
     MetadataApi metadataApi = MetadataApi();
+    ProgressApi progressApi = ProgressApi();
 
     List<GridItemModel> gridItems = [];
 
@@ -200,10 +202,13 @@ class SeasonDetailView extends StatelessWidget {
       FavoritesApi favoritesApi = FavoritesApi();
       var fav = await favoritesApi.isFavorited("Episode", episode.id);
 
+      var progress = await progressApi.getProgress("Episode", episode.id);
+
       var gridItem = GridItemModel(
         inventoryItem: episode,
         metadataModel: metadata,
         isFavorite: fav,
+        progress: progress,
       );
       gridItem.backdropUrl = metadata?.episode?.backdrop;
 
