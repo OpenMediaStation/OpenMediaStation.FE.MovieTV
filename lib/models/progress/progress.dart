@@ -1,12 +1,10 @@
-import 'dart:ffi';
-
 class Progress {
-  final String? id;
-  final String? category;
-  final String? parentId;
-  final Float? progressPercentage;
-  final int? progressSeconds;
-  final int? completions;
+  String? id;
+  String? category;
+  String? parentId;
+  double? progressPercentage; 
+  int? progressSeconds;
+  int? completions;
 
   Progress({
     required this.id,
@@ -22,7 +20,9 @@ class Progress {
       id: json['id'] as String?,
       category: json['category'] as String?,
       parentId: json['parentId'] as String?,
-      progressPercentage: json['progressPercentage'] as Float?,
+      progressPercentage: json['progressPercentage'] != null
+          ? (json['progressPercentage'] as num).toDouble()
+          : null, 
       progressSeconds: json['progressSeconds'] as int?,
       completions: json['completions'] as int?,
     );

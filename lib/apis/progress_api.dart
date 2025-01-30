@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:open_media_server_app/models/progress/progress.dart';
 
 class ProgressApi {
-  Future<Progress?> getProgress(String category, String inventoryItemId) async {
+  Future<Progress?> getProgress(String? category, String? inventoryItemId) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/progress?";
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -16,7 +16,9 @@ class ProgressApi {
 
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
-      return Progress.fromJson(jsonResponse);
+      var progress = Progress.fromJson(jsonResponse);
+
+      return progress;
     } else {
       return null;
     }
@@ -40,11 +42,14 @@ class ProgressApi {
   Future<bool> updateProgress(Progress progress) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/progress";
     var headers = await BaseApi.getRefreshedHeaders();
+    headers["Content-Type"] = "application/json";
+
+    var jsonContent = json.encode(progress.toJson());
 
     var response = await http.post(
       Uri.parse(apiUrl),
       headers: headers,
-      body: json.encode(progress.toJson()),
+      body: jsonContent,
     );
 
     return response.statusCode == 200;

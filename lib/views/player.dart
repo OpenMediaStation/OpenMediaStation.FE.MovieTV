@@ -4,8 +4,10 @@ import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_tv/material_tv.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
+import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/globals/platform_globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
+import 'package:open_media_server_app/models/progress/progress.dart';
 import 'package:open_media_server_app/widgets/audio_button.dart';
 import 'package:open_media_server_app/widgets/subtitle_button.dart';
 
@@ -30,6 +32,7 @@ class _PlayerState extends State<PlayerView> {
   @override
   void initState() {
     super.initState();
+
     player.open(
       Media(
         widget.url,
@@ -37,7 +40,39 @@ class _PlayerState extends State<PlayerView> {
       ),
     );
 
+    player.seek(
+      Duration(seconds: widget.gridItem.progress?.progressSeconds ?? 0),
+    );
+
     player.setSubtitleTrack(SubtitleTrack.no());
+
+    player.stream.position.listen((duration) async {
+      var seconds = duration.inSeconds;
+
+      if (seconds % 10 == 0) {
+        ProgressApi progressApi = ProgressApi();
+
+
+        widget.gridItem.progress ??= Progress(
+          id: null,
+          category: widget.gridItem.inventoryItem?.category,
+          parentId: widget.gridItem.inventoryItem?.id,
+          progressSeconds: seconds,
+          progressPercentage: null,
+          completions: null,
+        );
+
+        widget.gridItem.progress!.progressSeconds = seconds;
+
+        await progressApi.updateProgress(widget.gridItem.progress!);
+        widget.gridItem.progress = await progressApi.getProgress(
+          widget.gridItem.inventoryItem?.category,
+          widget.gridItem.inventoryItem?.id,
+        );
+
+        print("test");
+      }
+    });
   }
 
   @override
@@ -71,7 +106,13 @@ class _PlayerState extends State<PlayerView> {
       bottomButtonBar.add(
         const MaterialFullscreenButton(),
       );
-      bottomButtonBar.insert(0, const MaterialTvVolumeButton(volumeHighIcon: Icon(Icons.volume_up), volumeLowIcon: Icon(Icons.volume_down), volumeMuteIcon: Icon(Icons.volume_mute),));
+      bottomButtonBar.insert(
+          0,
+          const MaterialTvVolumeButton(
+            volumeHighIcon: Icon(Icons.volume_up),
+            volumeLowIcon: Icon(Icons.volume_down),
+            volumeMuteIcon: Icon(Icons.volume_mute),
+          ));
     }
 
     var seekBarColor = const Color.fromARGB(255, 82, 26, 114);
@@ -189,9 +230,9 @@ class _PlayerState extends State<PlayerView> {
         fullscreen: desktopThemeData,
         child: Scaffold(
           body: Video(
-             fit: BoxFit.fitHeight,
+            fit: BoxFit.fitHeight,
             //width: videoWidth != null ? (videoWidth / 2) : null,
-            aspectRatio: videoSize != null ? videoSize.aspectRatio * 2: null,
+            aspectRatio: videoSize != null ? videoSize.aspectRatio * 2 : null,
             //width: MediaQuery.of(context).size.width /2,
             alignment: Alignment.centerLeft,
             controller: controller,
