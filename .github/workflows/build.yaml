@@ -95,7 +95,7 @@ jobs:
         run: flutter build linux
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: linux-bin
           path: build/linux/x64/release/bundle
@@ -111,7 +111,7 @@ jobs:
 
       # Download the previously uploaded build artifact (linux-bin)
       - name: Download linux-bin artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-bin
           path: ./linux-bin
@@ -120,7 +120,7 @@ jobs:
       - run: ls -R
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: linux-bin.zip
           path: linux-bin.zip
@@ -139,7 +139,7 @@ jobs:
       - run: flatpak build-bundle repo app.flatpak org.openmediastation.open_media_server_app
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: app.flatpak
           path: app.flatpak
@@ -176,7 +176,7 @@ jobs:
 
       # Upload the AppImage as an artifact
       - name: Upload AppImage artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: my-flutter-app.apk
           path: "./build/app/outputs/apk/release/app-release.apk"
