@@ -11,7 +11,7 @@ OpenMediaStation is a collection of server and client software to manage and str
 <p align="center">
 
 <a href="https://openmediastation.org"><strong>Explore the Project »</strong></a>
-  </p>
+</p>
 </div>
 
 ## About this repo
