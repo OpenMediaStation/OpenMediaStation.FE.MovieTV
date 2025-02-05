@@ -46,13 +46,15 @@ class _PlayerState extends State<PlayerView> {
 
     player.setSubtitleTrack(SubtitleTrack.no());
 
+    int? lastUpdatedSecond;
+
     player.stream.position.listen((duration) async {
       var seconds = duration.inSeconds;
 
-      if (seconds % 10 == 0) {
+      if (seconds % 10 == 0 && lastUpdatedSecond != seconds && seconds != 0) {
+        lastUpdatedSecond = seconds;
+
         ProgressApi progressApi = ProgressApi();
-
-
         widget.gridItem.progress ??= Progress(
           id: null,
           category: widget.gridItem.inventoryItem?.category,
@@ -69,8 +71,6 @@ class _PlayerState extends State<PlayerView> {
           widget.gridItem.inventoryItem?.category,
           widget.gridItem.inventoryItem?.id,
         );
-
-        print("test");
       }
     });
   }
