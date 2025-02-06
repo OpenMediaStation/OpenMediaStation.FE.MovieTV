@@ -32,27 +32,28 @@ class _PlayerState extends State<PlayerView> {
   @override
   void initState() {
     super.initState();
+    _initializePlayer();
+  }
 
-    player.open(
+  Future<void> _initializePlayer() async {
+    await player.open(
       Media(
         widget.url,
         httpHeaders: BaseApi.getHeaders(),
       ),
     );
 
-    player.seek(
-      Duration(seconds: widget.gridItem.progress?.progressSeconds ?? 0),
-    );
+    await player.setSubtitleTrack(SubtitleTrack.no());
 
-    player.setSubtitleTrack(SubtitleTrack.no());
+    int? lastUpdatedSecond;
 
     player.stream.position.listen((duration) async {
       var seconds = duration.inSeconds;
 
-      if (seconds % 10 == 0) {
+      if (seconds % 10 == 0 && lastUpdatedSecond != seconds && seconds != 0) {
+        lastUpdatedSecond = seconds;
+
         ProgressApi progressApi = ProgressApi();
-
-
         widget.gridItem.progress ??= Progress(
           id: null,
           category: widget.gridItem.inventoryItem?.category,
@@ -69,9 +70,18 @@ class _PlayerState extends State<PlayerView> {
           widget.gridItem.inventoryItem?.category,
           widget.gridItem.inventoryItem?.id,
         );
-
-        print("test");
       }
+    });
+
+    await controller.waitUntilFirstFrameRendered.then((_) async {
+      // TODO LNA
+      // On Android it's working without this line
+      // Linux needs this and an even longer duration if the network is bad
+      // await Future.delayed(const Duration(milliseconds: 100));
+
+      await player.seek(
+        Duration(seconds: widget.gridItem.progress?.progressSeconds ?? 0),
+      );
     });
   }
 
