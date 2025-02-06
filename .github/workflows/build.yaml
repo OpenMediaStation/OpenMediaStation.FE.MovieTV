@@ -6,7 +6,7 @@ on:
       - main
       - dev
     tags:
-      - 'v*' # Runs only when a version tag (e.g., v1.0.0) is pushed
+      - "v*" # Runs only when a version tag (e.g., v1.0.0) is pushed
   pull_request:
     branches:
       - main
@@ -22,7 +22,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: "3.24.3"
 
       - name: Install Linux dependencies
         run: |
@@ -90,13 +90,13 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: "3.24.3"
 
       - name: Install Flutter dependencies
         run: flutter pub get
@@ -136,7 +136,10 @@ jobs:
           name: windows-build
           path: build\windows\x64\runner\Release\
 
-      - run: zip -r windows-bin.zip build\windows\x64\runner\Release\
+      - name: Zip Windows Build
+        run: |
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath windows-bin.zip
+        shell: pwsh
 
       - name: Upload Zipped Windows Artifact
         uses: actions/upload-artifact@v4
@@ -173,4 +176,3 @@ jobs:
             artifacts/linux-bin.zip/linux-bin.zip
             artifacts/windows-bin.zip/windows-bin.zip
             artifacts/my-flutter-app.apk/app-release.apk
-
