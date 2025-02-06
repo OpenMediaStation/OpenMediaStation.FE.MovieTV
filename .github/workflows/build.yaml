@@ -148,6 +148,7 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
+          merge-multiple: true
           path: artifacts
 
       - run: ls -R artifacts
@@ -161,7 +162,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            artifacts/linux-bin.zip
-            artifacts/app.flatpak
-            artifacts/my-flutter-app.apk
-            artifacts/windows-build/*
+            artifacts/*
