@@ -12,7 +12,7 @@ extension FileInfoBoxCreator on FileInfo{
     if(duration != null)
       {boxes.add(FileInfoBox(duration.toformattedString()));}
     boxes.add(FileInfoBox("format: ${mediaData.format.formatLongName}"));
-    boxes.addAll(mediaData.format.tags?.entries.map((t) => FileInfoBox("${t.key}:${t.value}")) ?? []);
+    // boxes.addAll(mediaData.format.tags?.entries.map((t) => FileInfoBox("${t.key}:${t.value}")) ?? []);
 
     return boxes;
   }
