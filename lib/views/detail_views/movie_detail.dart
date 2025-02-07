@@ -15,6 +15,34 @@ class MovieDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<String?> selectedVersionID = ValueNotifier<String?>(
+        itemModel.inventoryItem?.versions?.firstOrNull?.id);
+
+    bool smallScreen = (MediaQuery.of(context).size.width < 434);
+
+    var versionDropdown = ((itemModel.inventoryItem?.versions?.length ?? 0) > 1)
+        ? Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: DropdownMenu(
+              inputDecorationTheme: Theme.of(context).inputDecorationTheme,
+              // textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+              enableSearch: false,
+              dropdownMenuEntries: itemModel.inventoryItem?.versions
+                      ?.map((v) => DropdownMenuEntry(
+                          value: v.id,
+                          label: v.name ??
+                              itemModel.inventoryItem!.versions!
+                                  .indexOf(v)
+                                  .toString()))
+                      .toList() ??
+                  List.empty(),
+              initialSelection: itemModel.inventoryItem?.versions?.first.id,
+              onSelected: (newVID) =>
+                  selectedVersionID.value = newVID as String,
+            ),
+          )
+        : null;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -41,11 +69,11 @@ class MovieDetailView extends StatelessWidget {
               },
               blendMode: BlendMode.dstIn,
               child: CustomImage(
-                imageUrl:
-                    itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
             ),
             Padding(
@@ -54,19 +82,33 @@ class MovieDetailView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  Text(
-                    itemModel.inventoryItem?.title ?? "Title unknown",
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          itemModel.inventoryItem?.title ?? "Title unknown",
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      if (!smallScreen && versionDropdown != null)
+                        Padding(padding: const EdgeInsets.only(left: 16),child: versionDropdown)
+                    ],
                   ),
+                  if(smallScreen && versionDropdown != null)
+                    versionDropdown,
                   const SizedBox(
                     height: 16,
                   ),
-                  PlayButton(
-                    itemModel: itemModel,
-                  ),
+                  ValueListenableBuilder(
+                      valueListenable: selectedVersionID,
+                      builder: (context, versionID, __) {
+                        return PlayButton(
+                            itemModel: itemModel, versionID: versionID);
+                      }),
                   const SizedBox(height: 8),
                   Text(
                     itemModel.metadataModel?.movie?.plot ?? "",

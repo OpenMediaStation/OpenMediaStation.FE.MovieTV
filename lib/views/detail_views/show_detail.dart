@@ -123,6 +123,7 @@ class ShowDetailView extends StatelessWidget {
                     height: 300,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
                   ),
                 ),
                 Padding(

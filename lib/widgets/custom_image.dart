@@ -10,6 +10,7 @@ class CustomImage extends StatelessWidget {
     this.fit,
     this.width,
     this.height,
+    this.alignment,
     this.disableAdaptiveImage = false,
   });
 
@@ -18,6 +19,7 @@ class CustomImage extends StatelessWidget {
   final double? width;
   final double? height;
   final bool disableAdaptiveImage;
+  final Alignment? alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class CustomImage extends StatelessWidget {
       fit: fit,
       width: width,
       height: height,
+      alignment: alignment ?? Alignment.center,
       httpHeaders: BaseApi.getHeaders(),
       errorWidget: (context, url, error) {
         return CustomImage(

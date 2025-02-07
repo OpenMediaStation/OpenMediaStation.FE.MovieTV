@@ -391,7 +391,7 @@ class _GalleryState extends State<Gallery> {
 
   List<String> createAlphabetList(List<InventoryItem> filteredItems) {
     var letters = filteredItems
-        .map((item) => item.title?.toUpperCase().characters.first ?? "")
+        .map((item) {var letter = (item.title?.toUpperCase().characters.first ?? ""); if (['1','2','3','4','5','6','7','8','9','0'].contains(letter)){letter = '#';} return letter;})
         .where((c) => c != "")
         .toSet()
         .toList();
