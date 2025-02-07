@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/apis/file_info_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
+import 'package:open_media_server_app/helpers/file_info_box_creator.dart';
+import 'package:open_media_server_app/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
@@ -15,6 +18,8 @@ class EpisodeDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<FileInfo?> fileInfoFuture = FileInfoApi().getFileInfo(itemModel.inventoryItem?.category ?? "", itemModel.inventoryItem?.versions?.firstOrNull?.fileInfoId ?? "");
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -62,6 +67,16 @@ class EpisodeDetailView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  FutureBuilder(
+                            future: fileInfoFuture,
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData || snapshot.data == null || snapshot.error != null) {
+                                return const Text("");
+                              }
+                              return Wrap(
+                                children: snapshot.data!.createBoxes(),
+                              );
+                            }),
                   const SizedBox(
                     height: 16,
                   ),

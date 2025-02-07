@@ -69,9 +69,9 @@ class LoginView extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton.icon(
                         onPressed: () async {
-                          Preferences.prefs?.remove("BaseUrl");
-                          Preferences.prefs?.remove("AccessToken");
-                          Preferences.prefs?.remove("RefreshToken");
+                          await Preferences.prefs?.remove("BaseUrl");
+                          await Preferences.prefs?.remove("AccessToken");
+                          await Preferences.prefs?.remove("RefreshToken");
                           await Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

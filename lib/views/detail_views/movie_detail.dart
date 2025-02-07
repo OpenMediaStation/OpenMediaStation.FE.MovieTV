@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/apis/file_info_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
+import 'package:open_media_server_app/helpers/file_info_box_creator.dart';
+import 'package:open_media_server_app/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
+import 'package:open_media_server_app/widgets/file_info_box.dart';
 import 'package:open_media_server_app/widgets/play_button.dart';
 
 class MovieDetailView extends StatelessWidget {
@@ -17,6 +21,10 @@ class MovieDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     ValueNotifier<String?> selectedVersionID = ValueNotifier<String?>(
         itemModel.inventoryItem?.versions?.firstOrNull?.id);
+
+    Future<FileInfo?> fileInfoFuture = FileInfoApi().getFileInfo(
+                      itemModel.inventoryItem!.category,
+                      itemModel.inventoryItem!.versions?.firstWhere((v) => v.id == (selectedVersionID.value ?? "")).fileInfoId ?? "");
 
     bool smallScreen = (MediaQuery.of(context).size.width < 434);
 
@@ -37,8 +45,17 @@ class MovieDetailView extends StatelessWidget {
                       .toList() ??
                   List.empty(),
               initialSelection: itemModel.inventoryItem?.versions?.first.id,
-              onSelected: (newVID) =>
-                  selectedVersionID.value = newVID as String,
+              onSelected: (newVID) {
+                selectedVersionID.value = newVID as String;
+                if (itemModel.inventoryItem?.category != null) {
+                  fileInfoFuture = FileInfoApi().getFileInfo(
+                      itemModel.inventoryItem!.category,
+                      itemModel.inventoryItem!.versions!
+                              .firstWhere((v) => v.id == newVID)
+                              .fileInfoId ??
+                          "");
+                }
+              },
             ),
           )
         : null;
@@ -95,11 +112,27 @@ class MovieDetailView extends StatelessWidget {
                         ),
                       ),
                       if (!smallScreen && versionDropdown != null)
-                        Padding(padding: const EdgeInsets.only(left: 16),child: versionDropdown)
+                        Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: versionDropdown)
                     ],
                   ),
-                  if(smallScreen && versionDropdown != null)
-                    versionDropdown,
+                  if (smallScreen && versionDropdown != null) versionDropdown,
+                  ValueListenableBuilder(
+                      valueListenable: selectedVersionID,
+                      builder: (context, _, __) {
+                        return FutureBuilder(
+                            future: fileInfoFuture,
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData || snapshot.data == null || snapshot.error != null) {
+                                return const Text("");
+                              }
+                              return Wrap(
+                                children: snapshot.data!.createBoxes(),
+                              );
+                            });
+                      }
+                    ),
                   const SizedBox(
                     height: 16,
                   ),
