@@ -8,17 +8,18 @@ class FileInfoBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade400),
+          border: Border.all(color: const Color.fromARGB(99, 158, 158, 158)),
           borderRadius: BorderRadius.circular(8),
-          color: const Color.fromARGB(41, 158, 158, 158),
+          color: Colors.transparent
+          // color: const Color.fromARGB(0, 158, 158, 158),
         ),
         child: Text(
           text,
-          style: TextStyle(color: Colors.grey.shade300),
+          style: TextStyle(color: Colors.grey.shade400),
         ),
       ),
     );

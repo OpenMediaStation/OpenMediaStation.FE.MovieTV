@@ -6,7 +6,6 @@ import 'package:open_media_server_app/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
-import 'package:open_media_server_app/widgets/file_info_box.dart';
 import 'package:open_media_server_app/widgets/play_button.dart';
 
 class MovieDetailView extends StatelessWidget {
@@ -29,35 +28,33 @@ class MovieDetailView extends StatelessWidget {
     bool smallScreen = (MediaQuery.of(context).size.width < 434);
 
     var versionDropdown = ((itemModel.inventoryItem?.versions?.length ?? 0) > 1)
-        ? Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: DropdownMenu(
-              inputDecorationTheme: Theme.of(context).inputDecorationTheme,
-              // textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
-              enableSearch: false,
-              dropdownMenuEntries: itemModel.inventoryItem?.versions
-                      ?.map((v) => DropdownMenuEntry(
-                          value: v.id,
-                          label: v.name ??
-                              itemModel.inventoryItem!.versions!
-                                  .indexOf(v)
-                                  .toString()))
-                      .toList() ??
-                  List.empty(),
-              initialSelection: itemModel.inventoryItem?.versions?.first.id,
-              onSelected: (newVID) {
-                selectedVersionID.value = newVID as String;
-                if (itemModel.inventoryItem?.category != null) {
-                  fileInfoFuture = FileInfoApi().getFileInfo(
-                      itemModel.inventoryItem!.category,
-                      itemModel.inventoryItem!.versions!
-                              .firstWhere((v) => v.id == newVID)
-                              .fileInfoId ??
-                          "");
-                }
-              },
-            ),
-          )
+        ? DropdownMenu(
+          textStyle: const TextStyle(fontSize: 15),
+          inputDecorationTheme: Theme.of(context).inputDecorationTheme,
+          // textStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.normal),
+          enableSearch: false,
+          dropdownMenuEntries: itemModel.inventoryItem?.versions
+                  ?.map((v) => DropdownMenuEntry(
+                      value: v.id,
+                      label: v.name ??
+                          itemModel.inventoryItem!.versions!
+                              .indexOf(v)
+                              .toString()))
+                  .toList() ??
+              List.empty(),
+          initialSelection: itemModel.inventoryItem?.versions?.first.id,
+          onSelected: (newVID) {
+            selectedVersionID.value = newVID as String;
+            if (itemModel.inventoryItem?.category != null) {
+              fileInfoFuture = FileInfoApi().getFileInfo(
+                  itemModel.inventoryItem!.category,
+                  itemModel.inventoryItem!.versions!
+                          .firstWhere((v) => v.id == newVID)
+                          .fileInfoId ??
+                      "");
+            }
+          },
+        )
         : null;
 
     return Scaffold(

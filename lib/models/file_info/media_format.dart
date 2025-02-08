@@ -1,6 +1,4 @@
 
-import 'dart:ffi';
-
 import 'package:open_media_server_app/helpers/duration_extension_methods.dart';
 
 class MediaFormat {
@@ -14,8 +12,8 @@ class MediaFormat {
       required this.tags});
 
   final Duration? duration;
-  final String formatName;
-  final String formatLongName;
+  final String? formatName;
+  final String? formatLongName;
   final int streamCount;
   final double probeScore;
   final double bitRate;
