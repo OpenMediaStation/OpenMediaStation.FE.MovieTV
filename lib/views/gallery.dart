@@ -91,13 +91,9 @@ class _GalleryState extends State<Gallery> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: !largeScreen,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
         title: Row(
-          mainAxisAlignment: largeScreen
-              ? MainAxisAlignment.spaceBetween
-              : MainAxisAlignment.center,
           children: appBarTitleSpace,
         ),
         automaticallyImplyLeading: false,
