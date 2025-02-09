@@ -97,22 +97,17 @@ class _PlayerState extends State<PlayerView> {
       }
     });
 
-    await controller.waitUntilFirstFrameRendered.then((_) async {
-      // On Android it's working without a delay
-      // Linux needs this and who knows what all the other platforms do
+    var position = player.state.duration.inSeconds;
 
-      var position = player.state.duration.inSeconds;
+    while (position < (widget.gridItem.progress?.progressSeconds ?? 0)) {
+      await player.seek(
+        Duration(seconds: widget.gridItem.progress?.progressSeconds ?? 0),
+      );
 
-      while (position < (widget.gridItem.progress?.progressSeconds ?? 0)) {
-        await player.seek(
-          Duration(seconds: widget.gridItem.progress?.progressSeconds ?? 0),
-        );
+      await Future.delayed(const Duration(milliseconds: 100));
 
-        await Future.delayed(const Duration(milliseconds: 100));
-
-        position = player.state.position.inSeconds;
-      }
-    });
+      position = player.state.position.inSeconds;
+    }
   }
 
   @override
