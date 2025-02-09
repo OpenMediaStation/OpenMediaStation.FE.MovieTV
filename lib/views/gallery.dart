@@ -5,6 +5,7 @@ import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
 import 'package:open_media_server_app/services/inventory_service.dart';
+import 'package:open_media_server_app/views/settings.dart';
 import 'package:open_media_server_app/widgets/alphabet_bar.dart';
 import 'package:open_media_server_app/widgets/app_bar_title.dart';
 import 'package:open_media_server_app/widgets/grid_item.dart';
@@ -182,7 +183,17 @@ class _GalleryState extends State<Gallery> {
                   onPressed: () => setState(() {
                         futureItems = InventoryService.getInventoryItems();
                       }),
-                  icon: const Icon(Icons.refresh))
+                  icon: const Icon(Icons.refresh)),
+          IconButton(
+              onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Settings(),
+                      ),
+                    )
+                  },
+              icon: const Icon(Icons.settings)),
         ],
       ),
       body: Padding(
@@ -212,7 +223,8 @@ class _GalleryState extends State<Gallery> {
                             displacement: 40,
                             onRefresh: () async {
                               setState(() {
-                                futureItems = InventoryService.getInventoryItems();
+                                futureItems =
+                                    InventoryService.getInventoryItems();
                               });
                             },
                             child: GridView.builder(
@@ -230,8 +242,10 @@ class _GalleryState extends State<Gallery> {
                                 return FutureBuilder<GridItemModel>(
                                   future:
                                       filteredItems[index].category == "Movie"
-                                          ? InventoryService.getMovie(filteredItems[index])
-                                          : InventoryService.getShow(filteredItems[index]),
+                                          ? InventoryService.getMovie(
+                                              filteredItems[index])
+                                          : InventoryService.getShow(
+                                              filteredItems[index]),
                                   builder: (context, snapshot) {
                                     GridItemModel gridItem;
 
