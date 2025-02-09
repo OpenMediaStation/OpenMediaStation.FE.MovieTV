@@ -23,13 +23,45 @@ class GridItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: CustomImage(
-                  imageUrl: item.posterUrl ?? Globals.PictureNotFoundUrl,
-                  fit: BoxFit.cover,
-                  width: desiredItemWidth + 150,
-                ),
+              child: Stack(
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Stack(
+                        children: [
+                          CustomImage(
+                            imageUrl:
+                                item.posterUrl ?? Globals.PictureNotFoundUrl,
+                            fit: BoxFit.cover,
+                            width: desiredItemWidth + 150,
+                            height: double
+                                .infinity, // In combination with the expanded this makes sure the image uses the whole space.
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: LinearProgressIndicator(
+                              value: (item.progress?.progressPercentage ?? 0) /
+                                  100.0,
+                              minHeight: 6,
+                              backgroundColor: Colors.black.withOpacity(0.2),
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color.fromARGB(255, 82, 26, 114),
+                              ),
+                              borderRadius:
+                                  const BorderRadiusDirectional.horizontal(
+                                start: Radius.circular(0),
+                                end: Radius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 8.0),
