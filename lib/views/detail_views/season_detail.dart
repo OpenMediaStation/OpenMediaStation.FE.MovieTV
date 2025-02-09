@@ -108,12 +108,12 @@ class SeasonDetailView extends StatelessWidget {
                     child: InkWell(
                       splashColor: Colors.black26,
                       onTap: () {
-                        (
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
                                 EpisodeDetailView(itemModel: element),
-                          ),Navigator.push
+                          ),
                         );
                       },
                       child: Padding(
