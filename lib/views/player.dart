@@ -48,22 +48,26 @@ class _PlayerState extends State<PlayerView> {
     int? lastUpdatedSecond;
 
     player.stream.position.listen((duration) async {
-      var seconds = duration.inSeconds;
+      var positionInSeconds = duration.inSeconds;
+      var durationInSeconds = player.state.duration.inSeconds;
 
-      if (seconds % 10 == 0 && lastUpdatedSecond != seconds && seconds != 0) {
-        lastUpdatedSecond = seconds;
+      if (positionInSeconds % 10 == 0 && lastUpdatedSecond != positionInSeconds && positionInSeconds != 0 && durationInSeconds != 0) {
+        lastUpdatedSecond = positionInSeconds;
+
+        double? progressPercentage = (positionInSeconds / durationInSeconds) * 100;
 
         ProgressApi progressApi = ProgressApi();
         widget.gridItem.progress ??= Progress(
           id: null,
           category: widget.gridItem.inventoryItem?.category,
           parentId: widget.gridItem.inventoryItem?.id,
-          progressSeconds: seconds,
-          progressPercentage: null,
+          progressSeconds: positionInSeconds,
+          progressPercentage: progressPercentage,
           completions: null,
         );
 
-        widget.gridItem.progress!.progressSeconds = seconds;
+        widget.gridItem.progress!.progressSeconds = positionInSeconds;
+        widget.gridItem.progress!.progressPercentage = progressPercentage;
 
         await progressApi.updateProgress(widget.gridItem.progress!);
         widget.gridItem.progress = await progressApi.getProgress(
