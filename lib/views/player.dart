@@ -46,15 +46,21 @@ class _PlayerState extends State<PlayerView> {
     await player.setSubtitleTrack(SubtitleTrack.no());
 
     int? lastUpdatedSecond;
+    bool finished = false;
 
     player.stream.position.listen((duration) async {
       var positionInSeconds = duration.inSeconds;
       var durationInSeconds = player.state.duration.inSeconds;
 
-      if (positionInSeconds % 10 == 0 && lastUpdatedSecond != positionInSeconds && positionInSeconds != 0 && durationInSeconds != 0) {
+      if (positionInSeconds % 10 == 0 &&
+          !finished &&
+          lastUpdatedSecond != positionInSeconds &&
+          positionInSeconds != 0 &&
+          durationInSeconds != 0) {
         lastUpdatedSecond = positionInSeconds;
 
-        double? progressPercentage = (positionInSeconds / durationInSeconds) * 100;
+        double? progressPercentage =
+            (positionInSeconds / durationInSeconds) * 100;
 
         ProgressApi progressApi = ProgressApi();
         widget.gridItem.progress ??= Progress(
@@ -66,8 +72,22 @@ class _PlayerState extends State<PlayerView> {
           completions: null,
         );
 
-        widget.gridItem.progress!.progressSeconds = positionInSeconds;
-        widget.gridItem.progress!.progressPercentage = progressPercentage;
+        if (progressPercentage >= 85) {
+          widget.gridItem.progress!.completions ??= 0;
+          widget.gridItem.progress!.completions =
+              widget.gridItem.progress!.completions! + 1;
+
+          widget.gridItem.progress!.completions =
+              widget.gridItem.progress!.completions! + 1;
+
+          finished = true;
+
+          widget.gridItem.progress!.progressSeconds = 0;
+          widget.gridItem.progress!.progressPercentage = 0;
+        } else {
+          widget.gridItem.progress!.progressSeconds = positionInSeconds;
+          widget.gridItem.progress!.progressPercentage = progressPercentage;
+        }
 
         await progressApi.updateProgress(widget.gridItem.progress!);
         widget.gridItem.progress = await progressApi.getProgress(
