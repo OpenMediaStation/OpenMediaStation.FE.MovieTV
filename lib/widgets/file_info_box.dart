@@ -10,7 +10,7 @@ class FileInfoBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 8),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
         decoration: BoxDecoration(
           border: Border.all(color: const Color.fromARGB(99, 158, 158, 158)),
           borderRadius: BorderRadius.circular(8),
@@ -19,7 +19,7 @@ class FileInfoBox extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: TextStyle(color: Colors.grey.shade400),
+          style: TextStyle(color: Colors.grey.shade500, fontSize: 9, fontWeight: FontWeight.bold),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 extension DurationParser on String {
   // Statische Methode zur sicheren Umwandlung eines Strings in eine Duration
   Duration? tryParseDuration() {
-    final regex = RegExp(r"^(\d{2}):(\d{2}):(\d{2})\.(\d{7})$");
+    final regex = RegExp(r"^(\d{2}):(\d{2}):(\d{2})(\.(\d{7}))?$");
     final match = regex.firstMatch(this);
   
     if (match != null) {
@@ -9,7 +9,7 @@ extension DurationParser on String {
         final hours = int.parse(match.group(1)!);
         final minutes = int.parse(match.group(2)!);
         final seconds = int.parse(match.group(3)!);
-        final microseconds = int.parse(match.group(4)!);
+        final microseconds = int.parse(match.group(5) ?? "0");
 
         return Duration(
           hours: hours,

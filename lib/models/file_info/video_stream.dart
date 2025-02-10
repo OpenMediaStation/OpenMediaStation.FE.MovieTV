@@ -69,7 +69,7 @@ class VideoStream extends MediaStream {
       tags: (json['tags'] as Map<String, dynamic>?)
           ?.map((key, value) => MapEntry(key, value as String)),
       bitDepth: json['bitDepth'] as int?,
-      avgFrameRate: (json['avgFrameRate'] as num).toDouble(),
+      avgFrameRate: (json['avgFrameRate'] is String && json['avgFrameRate'].toLowerCase() == "nan") ? double.nan : (json['avgFrameRate'] as num).toDouble(),
       bitsPerRawSample: json['bitsPerRawSample'] as int,
       displayAspectRatio: (
         (json['displayAspectRatio']['Width'] as int?) ?? 0,
@@ -79,13 +79,13 @@ class VideoStream extends MediaStream {
         (json['sampleAspectRatio']['Width'] as int?) ?? 0,
         (json['sampleAspectRatio']['Height'] as int?) ?? 0
       ),
-      profile: json['profile'] as String,
+      profile: json['profile'] as String?,
       width: json['width'] as int,
       height: json['height'] as int,
-      frameRate: (json['frameRate'] as num).toDouble(),
-      pixelFormat: json['pixelFormat'] as String,
+      frameRate: (json['frameRate'] is String && json['frameRate'].toLowerCase() == "nan") ? double.nan : (json['frameRate'] as num).toDouble(),
+      pixelFormat: json['pixelFormat'] as String?,
       rotation: json['rotation'] as int,
-      averageFrameRate: (json['averageFrameRate'] as num).toDouble(),
+      averageFrameRate: (json['averageFrameRate'] is String && json['averageFrameRate'].toLowerCase() == "nan") ? double.nan : (json['averageFrameRate'] as num).toDouble(),
     );
   }
 }

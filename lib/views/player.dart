@@ -244,7 +244,7 @@ class _PlayerState extends State<PlayerView> {
             //width: videoWidth != null ? (videoWidth / 2) : null,
             // aspectRatio: videoSize != null ? videoSize.aspectRatio * 2 : null,
             //width: MediaQuery.of(context).size.width /2,
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             controller: controller,
             controls: (state) {
               return MaterialDesktopVideoControls(state);

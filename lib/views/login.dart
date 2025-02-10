@@ -108,6 +108,8 @@ class LoginView extends StatelessWidget {
       );
     }
 
+    var focusNode = FocusNode();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -121,7 +123,11 @@ class LoginView extends StatelessWidget {
           child: Column(
             children: [
               TextFormField(
+                focusNode: focusNode,
+                keyboardType: TextInputType.url,
                 controller: domainController,
+                onFieldSubmitted: (value) async { await validateAndAuthenticate(context, focusNode);
+                },
                 decoration: InputDecoration(
                   hintText: 'Host',
                   contentPadding: const EdgeInsets.symmetric(
@@ -171,12 +177,7 @@ class LoginView extends StatelessWidget {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await Preferences.prefs!
-                          .setString("BaseUrl", domainController.text);
-
-                      await authenticate(context);
-                    }
+                    await validateAndAuthenticate(context, focusNode);
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -197,6 +198,16 @@ class LoginView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future validateAndAuthenticate(BuildContext context, FocusNode focusNode)async {
+    if(_formKey.currentState!.validate()){
+      await Preferences.prefs!.setString("BaseUrl", domainController.text);
+      await authenticate(context);
+    }
+    else{
+      focusNode.requestFocus();
+    }
   }
 
   Future authenticate(BuildContext context) async {
