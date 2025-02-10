@@ -46,24 +46,48 @@ class _PlayerState extends State<PlayerView> {
     await player.setSubtitleTrack(SubtitleTrack.no());
 
     int? lastUpdatedSecond;
+    bool finished = false;
 
     player.stream.position.listen((duration) async {
-      var seconds = duration.inSeconds;
+      var positionInSeconds = duration.inSeconds;
+      var durationInSeconds = player.state.duration.inSeconds;
 
-      if (seconds % 10 == 0 && lastUpdatedSecond != seconds && seconds != 0) {
-        lastUpdatedSecond = seconds;
+      if (positionInSeconds % 10 == 0 &&
+          !finished &&
+          lastUpdatedSecond != positionInSeconds &&
+          positionInSeconds != 0 &&
+          durationInSeconds != 0) {
+        lastUpdatedSecond = positionInSeconds;
+
+        double? progressPercentage =
+            (positionInSeconds / durationInSeconds) * 100;
 
         ProgressApi progressApi = ProgressApi();
         widget.gridItem.progress ??= Progress(
           id: null,
           category: widget.gridItem.inventoryItem?.category,
           parentId: widget.gridItem.inventoryItem?.id,
-          progressSeconds: seconds,
-          progressPercentage: null,
+          progressSeconds: positionInSeconds,
+          progressPercentage: progressPercentage,
           completions: null,
         );
 
-        widget.gridItem.progress!.progressSeconds = seconds;
+        if (progressPercentage >= 85) {
+          widget.gridItem.progress!.completions ??= 0;
+          widget.gridItem.progress!.completions =
+              widget.gridItem.progress!.completions! + 1;
+
+          widget.gridItem.progress!.completions =
+              widget.gridItem.progress!.completions! + 1;
+
+          finished = true;
+
+          widget.gridItem.progress!.progressSeconds = 0;
+          widget.gridItem.progress!.progressPercentage = 0;
+        } else {
+          widget.gridItem.progress!.progressSeconds = positionInSeconds;
+          widget.gridItem.progress!.progressPercentage = progressPercentage;
+        }
 
         await progressApi.updateProgress(widget.gridItem.progress!);
         widget.gridItem.progress = await progressApi.getProgress(
@@ -73,16 +97,17 @@ class _PlayerState extends State<PlayerView> {
       }
     });
 
-    await controller.waitUntilFirstFrameRendered.then((_) async {
-      // TODO LNA
-      // On Android it's working without this line
-      // Linux needs this and an even longer duration if the network is bad
-      // await Future.delayed(const Duration(milliseconds: 100));
+    var position = player.state.duration.inSeconds;
 
+    while (position < (widget.gridItem.progress?.progressSeconds ?? 0)) {
       await player.seek(
         Duration(seconds: widget.gridItem.progress?.progressSeconds ?? 0),
       );
-    });
+
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      position = player.state.position.inSeconds;
+    }
   }
 
   @override
