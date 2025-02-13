@@ -6,6 +6,7 @@ import 'package:open_media_server_app/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
+import 'package:open_media_server_app/widgets/file_info_row.dart';
 import 'package:open_media_server_app/widgets/play_button.dart';
 
 class MovieDetailView extends StatelessWidget {
@@ -124,9 +125,7 @@ class MovieDetailView extends StatelessWidget {
                               if (!snapshot.hasData || snapshot.data == null || snapshot.error != null) {
                                 return const Text("");
                               }
-                              return Wrap(
-                                children: snapshot.data!.createBoxes(),
-                              );
+                              return FileInfoRow(fileInfo: snapshot.data!);
                             });
                       }
                     ),

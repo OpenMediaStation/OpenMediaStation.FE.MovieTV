@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:open_media_server_app/helpers/duration_extension_methods.dart';
 import 'package:open_media_server_app/models/file_info/file_info.dart';
 import 'package:open_media_server_app/widgets/file_info_box.dart';
@@ -10,7 +11,7 @@ extension FileInfoBoxCreator on FileInfo {
 
     var duration = mediaData.duration ?? mediaData.format.duration;
     if (duration != null) {
-      boxes.add(FileInfoBox(duration.toformattedString()));
+      boxes.add(FileInfoBox(duration.toformattedString(), key: GlobalKey(),));
     }
     // if(mediaData.videoStreams.isNotEmpty){
     // for (var vStr in mediaData.videoStreams) {
@@ -24,9 +25,9 @@ extension FileInfoBoxCreator on FileInfo {
                 ? "Full HD"
                 : vStr.width >= 720
                     ? "SD"
-                    : resolution));
+                    : resolution, key: GlobalKey(),));
     if (vStr.codecName != null || vStr.profile != null) {
-      boxes.add(FileInfoBox(vStr.codecName?.toUpperCase() ?? vStr.profile!));
+      boxes.add(FileInfoBox(vStr.codecName?.toUpperCase() ?? vStr.profile!, key: GlobalKey(),));
     }
     //   }
     // }
@@ -35,12 +36,12 @@ extension FileInfoBoxCreator on FileInfo {
     if (mediaData.audioStreams.isNotEmpty) {
       for (var aStr in mediaData.audioStreams) {
         boxes.add(FileInfoBox(
-            "${aStr.profile ?? aStr.codecName?.toUpperCase() ?? ""} ${aStr.channelLayout}${" ${aStr.language ?? ""}"}"));
+            "${aStr.profile ?? aStr.codecName?.toUpperCase() ?? ""} ${aStr.channelLayout}${" ${aStr.language ?? ""}"}", key: GlobalKey(),));
       }
     }
 
     if (mediaData.format.formatLongName != null) {
-      boxes.add(FileInfoBox(mediaData.format.formatLongName!));
+      boxes.add(FileInfoBox(mediaData.format.formatLongName!, key: GlobalKey(),));
     }
     // boxes.addAll(mediaData.format.tags?.entries.map((t) => FileInfoBox("${t.key}:${t.value}")) ?? []);
 
