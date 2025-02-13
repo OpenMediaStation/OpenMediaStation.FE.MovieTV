@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:open_media_server_app/apis/base_api.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' if(Platform.isIOS) 'package:cupertino_http' as http;
 import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/auth/auth_info.dart';
 
