@@ -26,7 +26,12 @@ class PlayerView extends StatefulWidget {
 }
 
 class _PlayerState extends State<PlayerView> {
-  late final player = Player();
+  late final player = Player(
+    configuration: const PlayerConfiguration(
+      libass: true,
+      libassAndroidFont: "assets/fonts/DroidSans.ttf",
+    ),
+  );
   late final controller = VideoController(player);
 
   @override
