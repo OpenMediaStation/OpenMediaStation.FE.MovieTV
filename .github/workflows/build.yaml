@@ -147,6 +147,51 @@ jobs:
           name: windows-bin.zip
           path: windows-bin.zip
 
+  build-ios:
+    runs-on: macos-latest  # Nutzt macOS für Xcode & iOS Builds
+
+    steps:
+      - name: 🛠️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: flutter pub get
+
+      - name: 📱 Build iOS App
+        run: flutter build ios --no-codesign
+
+      # Optional: Signiere das iOS-Build mit einem kostenpflichtigen Apple Developer Account
+      - name: 🔑 Setup Code Signing (Falls Apple-Zertifikat vorhanden)
+        if: env.APPLE_SIGNING_CERT != ''
+        env:
+          APPLE_SIGNING_CERT: ${{ secrets.APPLE_SIGNING_CERT }}
+          APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+        run: |
+          echo "$APPLE_SIGNING_CERT" | base64 --decode > apple_distribution.p12
+          echo "$APPLE_PROVISIONING_PROFILE" | base64 --decode > provisioning.mobileprovision
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security import apple_distribution.p12 -k build.keychain -P "" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "" build.keychain
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      # Optional: Hochladen zu TestFlight (Nur mit Apple Developer Account)
+      - name: 🚀 Upload to TestFlight
+        if: env.APPLE_API_KEY != ''
+        env:
+          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+          APPLE_APP_ID: ${{ secrets.APPLE_APP_ID }}
+        run: |
+          xcrun altool --upload-app -f build/ios/ipa/*.ipa -t ios --apiKey "$APPLE_API_KEY" --apiIssuer "$APPLE_API_ISSUER_ID"
+
   release:
     runs-on: ubuntu-latest
     needs: [build-linux, build-flatpak, build-apk, build-windows]
