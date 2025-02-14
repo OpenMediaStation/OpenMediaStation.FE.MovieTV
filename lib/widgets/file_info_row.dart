@@ -38,16 +38,17 @@ class FileInfoRowState extends State<FileInfoRow> {
           for (var box in infoBoxes) {
             final size = (box.key as GlobalKey).getWidgetSize();
             if (size != null) {
-              if (usedWidth + size.width > availableWidth - rightPaddingAsButtonSpacer) {
+              if (usedWidth + size.width >
+                  availableWidth - rightPaddingAsButtonSpacer) {
                 needsMoreSpace = true;
                 break;
               }
-              usedWidth += size.width; //maybe need to add spacing
+              usedWidth += size.width;
             }
           }
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (showButton != needsMoreSpace) {
+            if (showButton != needsMoreSpace || usedWidth == 0) {
               setState(() {
                 showButton = needsMoreSpace;
               });
@@ -59,13 +60,10 @@ class FileInfoRowState extends State<FileInfoRow> {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             constraints: BoxConstraints(maxHeight: expanded ? 1000 : 40),
-            // height: expanded ? 100 : 40, // Geschlossene Höhe
             width: double.maxFinite,
             clipBehavior: Clip.hardEdge,
             decoration: const BoxDecoration(color: Colors.transparent),
             child: Wrap(
-              // spacing: 8,
-              // runSpacing: 8,
               children: infoBoxes,
             ),
           );
@@ -74,33 +72,14 @@ class FileInfoRowState extends State<FileInfoRow> {
           // Der Button, der das Wrap ausklappt
           Positioned(
             right: 0,
-            // top: 0,
             child: IconButton(
                 onPressed: () => setState(() {
                       expanded = !expanded;
                     }),
                 icon: Icon(
                     !expanded ? Icons.arrow_drop_down : Icons.arrow_drop_up)),
-            // child: Container(
-            //   padding: const EdgeInsets.all(4),
-            //   decoration: BoxDecoration(
-            //     color: const Color.fromARGB(108, 66, 66, 66),
-            //     borderRadius: BorderRadius.circular(8),
-            //   ),
-            //   child: Icon(
-            //     expanded ? Icons.expand_less : Icons.arrow_drop_down,
-            //     color: Colors.white,
-            //   ),
-            // ),
           ),
       ],
     );
   }
-
-  // Size? _getInfoBoxSize(GlobalKey key) {
-  //   final context = key.currentContext;
-  //   if (context == null) return null;
-  //   final renderBox = context.findRenderObject() as RenderBox?;
-  //   return renderBox?.size;
-  // }
 }
