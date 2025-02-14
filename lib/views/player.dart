@@ -29,7 +29,7 @@ class _PlayerState extends State<PlayerView> {
   late final player = Player(
     configuration: const PlayerConfiguration(
       libass: true,
-      libassAndroidFont: "assets/fonts/DroidSans.ttf",
+      libassAndroidFont: "assets/fonts/subfont.ttf",
     ),
   );
   late final controller = VideoController(player);
