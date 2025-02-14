@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
@@ -26,12 +27,7 @@ class PlayerView extends StatefulWidget {
 }
 
 class _PlayerState extends State<PlayerView> {
-  late final player = Player(
-    configuration: const PlayerConfiguration(
-      libass: true,
-      libassAndroidFont: "assets/fonts/subfont.ttf",
-    ),
-  );
+  late final player = Player(configuration: getConfig());
   late final controller = VideoController(player);
 
   @override
@@ -283,5 +279,18 @@ class _PlayerState extends State<PlayerView> {
         ),
       );
     }
+  }
+
+  PlayerConfiguration getConfig() {
+    if (!Platform.isLinux) {
+      return const PlayerConfiguration();
+    }
+
+    var config = const PlayerConfiguration(
+      libass: true,
+      libassAndroidFont: "assets/fonts/subfont.ttf",
+    );
+
+    return config;
   }
 }
