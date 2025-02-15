@@ -6,7 +6,7 @@ import 'package:open_media_server_app/widgets/file_info_box.dart';
 
 class FileInfoRow extends StatefulWidget {
   const FileInfoRow({super.key, required this.fileInfo});
-  final FileInfo fileInfo;
+  final FileInfo? fileInfo;
 
   @override
   State<StatefulWidget> createState() => FileInfoRowState();
@@ -21,7 +21,7 @@ class FileInfoRowState extends State<FileInfoRow> {
   @override
   void initState() {
     super.initState();
-    infoBoxes = widget.fileInfo.createBoxes();
+    infoBoxes = widget.fileInfo?.createBoxes() ?? [];
   }
 
   @override

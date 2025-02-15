@@ -9,8 +9,8 @@ import 'package:open_media_server_app/views/settings.dart';
 import 'package:open_media_server_app/widgets/alphabet_bar.dart';
 import 'package:open_media_server_app/widgets/app_bar_title.dart';
 import 'package:open_media_server_app/widgets/grid_item.dart';
-import 'package:open_media_server_app/views/detail_views/movie_detail.dart';
-import 'package:open_media_server_app/views/detail_views/show_detail.dart';
+import 'package:open_media_server_app/views/detail_views/movie/movie_detail.dart';
+import 'package:open_media_server_app/views/detail_views/show/show_detail.dart';
 
 class Gallery extends StatefulWidget {
   const Gallery({Key? key}) : super(key: key);

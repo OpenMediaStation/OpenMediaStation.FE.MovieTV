@@ -20,7 +20,7 @@ class MovieDetailContent extends StatelessWidget {
     ValueNotifier<String?> selectedVersionID = ValueNotifier<String?>(
         itemModel.inventoryItem?.versions?.firstOrNull?.id);
 
-    Future<FileInfo?> fileInfoFuture = FileInfoApi().getFileInfo(
+    Future<FileInfo?> fileInfoFuture = FileInfoApi.getFileInfo(
         itemModel.inventoryItem!.category,
         itemModel.inventoryItem!.versions
                 ?.firstWhere((v) => v.id == (selectedVersionID.value ?? ""))
@@ -47,7 +47,7 @@ class MovieDetailContent extends StatelessWidget {
             onSelected: (newVID) {
               selectedVersionID.value = newVID as String;
               if (itemModel.inventoryItem?.category != null) {
-                fileInfoFuture = FileInfoApi().getFileInfo(
+                fileInfoFuture = FileInfoApi.getFileInfo(
                     itemModel.inventoryItem!.category,
                     itemModel.inventoryItem!.versions!
                             .firstWhere((v) => v.id == newVID)

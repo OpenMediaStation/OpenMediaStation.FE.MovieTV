@@ -6,7 +6,7 @@ import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/file_info/file_info.dart';
 
 class FileInfoApi {
-  Future<FileInfo?> getFileInfo(String category, String versionID) async {
+  static Future<FileInfo?> getFileInfo(String category, String versionID) async {
     if (category == "" || versionID == "") {
       return null;
     }

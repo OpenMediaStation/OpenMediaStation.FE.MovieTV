@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/apis/favorites_api.dart';
+import 'package:open_media_server_app/apis/file_info_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/apis/progress_api.dart';
@@ -135,6 +136,10 @@ class SeasonDetailView extends StatelessWidget {
         metadataModel: metadata,
         isFavorite: fav,
         progress: progress,
+        fileInfo: await FileInfoApi.getFileInfo(
+          episode.category,
+          episode.versions?.firstOrNull?.fileInfoId ?? "",
+        ),
       );
       gridItem.backdropUrl = metadata?.episode?.backdrop;
 
