@@ -55,7 +55,6 @@ class GridItem extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Checkmark & View Count
                         Positioned(
                           bottom: 12.0,
                           right: 6.0,

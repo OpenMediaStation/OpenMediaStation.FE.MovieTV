@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/views/detail_views/episode_detail.dart';
+import 'package:open_media_server_app/widgets/view_counter.dart';
 
 class SeasonItem extends StatelessWidget {
   const SeasonItem({super.key, required this.itemModel});
@@ -49,13 +51,14 @@ class SeasonItem extends StatelessWidget {
                             headers: BaseApi.getHeaders(),
                           ),
                         ),
-                                                Positioned(
+                        Positioned(
                           bottom: 0,
                           left: 0,
                           right: 0,
                           child: LinearProgressIndicator(
-                            value: (itemModel.progress?.progressPercentage ?? 0) /
-                                100.0,
+                            value:
+                                (itemModel.progress?.progressPercentage ?? 0) /
+                                    100.0,
                             minHeight: 4,
                             backgroundColor: Colors.black.withOpacity(0.2),
                             valueColor: const AlwaysStoppedAnimation<Color>(
@@ -68,6 +71,24 @@ class SeasonItem extends StatelessWidget {
                             ),
                           ),
                         ),
+                        Positioned(
+                          bottom: 7.0,
+                          right: 4.0,
+                          child: ViewCounter(
+                            completions: itemModel.progress?.completions ?? 0,
+                            scaleFactor: 0.7,
+                          ),
+                        ),
+                        if (itemModel.isFavorite ?? false)
+                          const Positioned(
+                            top: 4.0,
+                            right: 4.0,
+                            child: Icon(
+                              size: 16,
+                              AntDesign.heart_fill,
+                              color: Colors.red,
+                            ),
+                          ),
                       ],
                     ),
                     const SizedBox(
