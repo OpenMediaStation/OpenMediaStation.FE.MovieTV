@@ -77,9 +77,6 @@ class _PlayerState extends State<PlayerView> {
           widget.gridItem.progress!.completions =
               widget.gridItem.progress!.completions! + 1;
 
-          widget.gridItem.progress!.completions =
-              widget.gridItem.progress!.completions! + 1;
-
           finished = true;
 
           widget.gridItem.progress!.progressSeconds = 0;
