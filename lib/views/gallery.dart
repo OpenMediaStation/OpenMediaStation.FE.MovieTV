@@ -288,31 +288,26 @@ class _GalleryState extends State<Gallery> {
                                         desiredItemWidth: desiredItemWidth,
                                       ),
                                       onTap: () {
-                                        if (!gridItem.fake) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                              if (filteredItems[index]
-                                                      .category ==
-                                                  "Movie") {
-                                                return MovieDetailView(
-                                                  itemModel: gridItem,
-                                                );
-                                              }
-                                              if (filteredItems[index]
-                                                      .category ==
-                                                  "Show") {
-                                                return ShowDetailView(
-                                                  itemModel: gridItem,
-                                                );
-                                              }
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) {
+                                            if (filteredItems[index].category ==
+                                                "Movie") {
+                                              return MovieDetailView(
+                                                itemModel: gridItem,
+                                              );
+                                            }
+                                            if (filteredItems[index].category ==
+                                                "Show") {
+                                              return ShowDetailView(
+                                                itemModel: gridItem,
+                                              );
+                                            }
 
-                                              throw ArgumentError(
-                                                  "Server models not correct");
-                                            }),
-                                          );
-                                        }
+                                            throw ArgumentError(
+                                                "Server models not correct");
+                                          }),
+                                        );
                                       },
                                     );
                                   },
