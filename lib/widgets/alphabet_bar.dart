@@ -30,6 +30,7 @@ class AlphabetBar extends StatelessWidget {
       bottom: 0,
       top: 0,
       child: AlphabetScrollbar(
+        padding: const EdgeInsets.only(right: 8),
         letterCollection: createAlphabetList(filteredItems),
         onLetterChange: (letter) {
           // await

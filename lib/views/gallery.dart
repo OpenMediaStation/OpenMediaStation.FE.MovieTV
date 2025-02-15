@@ -197,7 +197,7 @@ class _GalleryState extends State<Gallery> {
         ],
       ),
       body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(right: 0, left: 8, top: 8, bottom: 8),
           child: FutureBuilder<List<InventoryItem>>(
               future: futureItems,
               builder: (context, snapshot) {
