@@ -10,7 +10,7 @@ class AlphabetBar extends StatelessWidget {
     required this.filteredItems,
     required this.descending,
     required this.gridItemHeight,
-    required this.desiredItemWidth,
+    required this.scrollableWidth,
     required this.gridItemAspectRatio,
     required this.crossAxisCount,
   });
@@ -19,7 +19,7 @@ class AlphabetBar extends StatelessWidget {
   final List<InventoryItem> filteredItems;
   final bool descending;
   final double? gridItemHeight;
-  final double desiredItemWidth;
+  final double scrollableWidth;
   final double gridItemAspectRatio;
   final int crossAxisCount;
 
@@ -35,7 +35,7 @@ class AlphabetBar extends StatelessWidget {
           // await
           HapticFeedback.mediumImpact();
           scrollController.animateTo(
-            ((gridItemHeight ?? (desiredItemWidth / gridItemAspectRatio)) + 8) *
+            ((gridItemHeight ?? (((scrollableWidth - 8 * (crossAxisCount-1)) / crossAxisCount)/ gridItemAspectRatio)) + 8) *
                 (filteredItems.indexWhere((item) =>
                         item.title?.toUpperCase().startsWith(letter) ??
                         false) ~/

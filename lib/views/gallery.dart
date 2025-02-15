@@ -330,7 +330,7 @@ class _GalleryState extends State<Gallery> {
                         filteredItems: filteredItems,
                         descending: _descending,
                         gridItemHeight: gridItemHeight,
-                        desiredItemWidth: desiredItemWidth,
+                        scrollableWidth: screenWidth - 50,
                         gridItemAspectRatio: gridItemAspectRatio,
                         crossAxisCount: crossAxisCount,
                       ),
