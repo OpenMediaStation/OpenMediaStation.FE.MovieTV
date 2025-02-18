@@ -9,18 +9,14 @@ class AlphabetBar extends StatelessWidget {
     required this.scrollController,
     required this.filteredItems,
     required this.descending,
-    required this.gridItemHeight,
-    required this.scrollableWidth,
-    required this.gridItemAspectRatio,
+    required this.gridLineHeight,
     required this.crossAxisCount,
   });
 
   final ScrollController scrollController;
   final List<InventoryItem> filteredItems;
   final bool descending;
-  final double? gridItemHeight;
-  final double scrollableWidth;
-  final double gridItemAspectRatio;
+  final double gridLineHeight;  
   final int crossAxisCount;
 
   @override
@@ -30,13 +26,13 @@ class AlphabetBar extends StatelessWidget {
       bottom: 0,
       top: 0,
       child: AlphabetScrollbar(
-        padding: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.only(right: 8, left: 15),
         letterCollection: createAlphabetList(filteredItems),
         onLetterChange: (letter) {
           // await
           HapticFeedback.mediumImpact();
           scrollController.animateTo(
-            ((gridItemHeight ?? (((scrollableWidth - 8 * (crossAxisCount-1)) / crossAxisCount)/ gridItemAspectRatio)) + 8) *
+            gridLineHeight *
                 (filteredItems.indexWhere((item) =>
                         item.title?.toUpperCase().startsWith(letter) ??
                         false) ~/

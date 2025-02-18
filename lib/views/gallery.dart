@@ -26,18 +26,9 @@ class _GalleryState extends State<Gallery> {
   bool displayMovies = true;
   bool displayShows = true;
   bool searchBarVisible = false;
-  GlobalKey fstItemGlobalKey = GlobalKey();
   double? gridItemHeight;
   ValueNotifier<bool> filterChanged = ValueNotifier<bool>(false);
   late Future<List<InventoryItem>> futureItems;
-
-  void _getItemSize() {
-    if (fstItemGlobalKey.currentContext != null) {
-      final RenderBox renderbox =
-          fstItemGlobalKey.currentContext?.findRenderObject() as RenderBox;
-      gridItemHeight ??= renderbox.size.height;
-    }
-  }
 
   @override
   void initState() {
@@ -56,6 +47,10 @@ class _GalleryState extends State<Gallery> {
     }
     int crossAxisCount = (screenWidth / desiredItemWidth).floor();
     double gridItemAspectRatio = 0.6;
+    double gridMainAxisSpacing = 8.0;
+    double gridCrossAxisSpacing = 8.0;
+    double scrollableWidth = screenWidth - 50;
+    double gridItemHeight = (((scrollableWidth - gridCrossAxisSpacing * (crossAxisCount-1)) / crossAxisCount)/ gridItemAspectRatio);
 
     var searchBar = Flexible(
       fit: FlexFit.tight,
@@ -218,7 +213,7 @@ class _GalleryState extends State<Gallery> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(
-                          width: screenWidth - 50,
+                          width: scrollableWidth,
                           child: RefreshIndicator(
                             displacement: 40,
                             onRefresh: () async {
@@ -227,92 +222,86 @@ class _GalleryState extends State<Gallery> {
                                     InventoryService.getInventoryItems();
                               });
                             },
-                            child: GridView.builder(
-                              controller: _scrollController,
-                              itemCount: filteredItems.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                crossAxisSpacing: 8.0,
-                                mainAxisSpacing: 8.0,
-                                childAspectRatio:
-                                    gridItemAspectRatio, // Adjust for desired aspect ratio
-                              ),
-                              itemBuilder: (context, index) {
-                                return FutureBuilder<GridItemModel>(
-                                  future:
-                                      filteredItems[index].category == "Movie"
-                                          ? InventoryService.getMovie(
-                                              filteredItems[index])
-                                          : InventoryService.getShow(
-                                              filteredItems[index]),
-                                  builder: (context, snapshot) {
-                                    GridItemModel gridItem;
-
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      gridItem = GridItemModel(
-                                        inventoryItem: filteredItems[index],
-                                        metadataModel: null,
-                                        isFavorite: null,
-                                        progress: null,
-                                      );
-
-                                      gridItem.fake = true;
-                                      gridItem.posterUrl =
-                                          "${Preferences.prefs?.getString("BaseUrl")}/images/${filteredItems[index].category}/${filteredItems[index].metadataId}/poster";
-                                    } else if (snapshot.hasError) {
-                                      return Center(
-                                          child:
-                                              Text('Error: ${snapshot.error}'));
-                                    } else if (!snapshot.hasData) {
-                                      return const Center(
-                                          child: Text(
-                                              'Grid item could not be loaded'));
-                                    } else {
-                                      gridItem = snapshot.data!;
-                                    }
-
-                                    Key? inkwellKey;
-                                    if ((fstItemGlobalKey.currentContext ==
-                                        null)) {
-                                      inkwellKey = fstItemGlobalKey;
-                                    } else if (gridItemHeight == null) {
-                                      _getItemSize();
-                                    }
-
-                                    return InkWell(
-                                      key: inkwellKey,
-                                      child: GridItem(
-                                        item: gridItem,
-                                        desiredItemWidth: desiredItemWidth,
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) {
-                                            if (filteredItems[index].category ==
-                                                "Movie") {
-                                              return MovieDetailView(
-                                                itemModel: gridItem,
-                                              );
-                                            }
-                                            if (filteredItems[index].category ==
-                                                "Show") {
-                                              return ShowDetailView(
-                                                itemModel: gridItem,
-                                              );
-                                            }
-
-                                            throw ArgumentError(
-                                                "Server models not correct");
-                                          }),
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                              child: GridView.builder(
+                                controller: _scrollController,
+                                itemCount: filteredItems.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: gridCrossAxisSpacing,
+                                  mainAxisSpacing: gridMainAxisSpacing,
+                                  childAspectRatio:
+                                      gridItemAspectRatio, // Adjust for desired aspect ratio
+                                ),
+                                itemBuilder: (context, index) {
+                                  return FutureBuilder<GridItemModel>(
+                                    future:
+                                        filteredItems[index].category == "Movie"
+                                            ? InventoryService.getMovie(
+                                                filteredItems[index])
+                                            : InventoryService.getShow(
+                                                filteredItems[index]),
+                                    builder: (context, snapshot) {
+                                      GridItemModel gridItem;
+                              
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        gridItem = GridItemModel(
+                                          inventoryItem: filteredItems[index],
+                                          metadataModel: null,
+                                          isFavorite: null,
+                                          progress: null,
                                         );
-                                      },
-                                    );
-                                  },
-                                );
-                              },
+                              
+                                        gridItem.fake = true;
+                                        gridItem.posterUrl =
+                                            "${Preferences.prefs?.getString("BaseUrl")}/images/${filteredItems[index].category}/${filteredItems[index].metadataId}/poster";
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child:
+                                                Text('Error: ${snapshot.error}'));
+                                      } else if (!snapshot.hasData) {
+                                        return const Center(
+                                            child: Text(
+                                                'Grid item could not be loaded'));
+                                      } else {
+                                        gridItem = snapshot.data!;
+                                      }
+                              
+                                      return InkWell(
+                                        child: GridItem(
+                                          item: gridItem,
+                                          desiredItemWidth: desiredItemWidth,
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) {
+                                              if (filteredItems[index].category ==
+                                                  "Movie") {
+                                                return MovieDetailView(
+                                                  itemModel: gridItem,
+                                                );
+                                              }
+                                              if (filteredItems[index].category ==
+                                                  "Show") {
+                                                return ShowDetailView(
+                                                  itemModel: gridItem,
+                                                );
+                                              }
+                              
+                                              throw ArgumentError(
+                                                  "Server models not correct");
+                                            }),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -324,9 +313,7 @@ class _GalleryState extends State<Gallery> {
                         scrollController: _scrollController,
                         filteredItems: filteredItems,
                         descending: _descending,
-                        gridItemHeight: gridItemHeight,
-                        scrollableWidth: screenWidth - 50,
-                        gridItemAspectRatio: gridItemAspectRatio,
+                        gridLineHeight: gridItemHeight + gridMainAxisSpacing,
                         crossAxisCount: crossAxisCount,
                       ),
                   ],
