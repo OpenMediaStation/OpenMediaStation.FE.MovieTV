@@ -6,7 +6,6 @@ import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/models/metadata/metadata_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
 import 'package:open_media_server_app/widgets/season_item.dart';
@@ -105,8 +104,6 @@ class SeasonDetailView extends StatelessWidget {
 
   Future<List<GridItemModel>> getChildren() async {
     InventoryApi inventoryApi = InventoryApi();
-    MetadataApi metadataApi = MetadataApi();
-    ProgressApi progressApi = ProgressApi();
 
     List<GridItemModel> gridItems = [];
 
@@ -114,32 +111,42 @@ class SeasonDetailView extends StatelessWidget {
       return [];
     }
 
-    for (var element in itemModel.childIds!) {
-      var episode = await inventoryApi.getEpisode(element);
+    var episodes = await inventoryApi.getEpisodes(itemModel.childIds!);
 
-      MetadataModel? metadata;
+    List<String> metadataIds = [];
+    List<String> episodeIds = [];
+    List<String> fileInfoIds = [];
 
-      if (episode.metadataId != null) {
-        metadata = await metadataApi.getMetadata(
-          episode.metadataId!,
-          "Episode",
-        );
+    for (var element in episodes) {
+      if (element.metadataId != null) {
+        metadataIds.add(element.metadataId!);
+      }
+      if (element.versions?.firstOrNull?.fileInfoId != null) {
+        fileInfoIds.add(element.versions!.firstOrNull!.fileInfoId!);
       }
 
-      FavoritesApi favoritesApi = FavoritesApi();
-      var fav = await favoritesApi.isFavorited("Episode", episode.id);
+      episodeIds.add(element.id);
+    }
 
-      var progress = await progressApi.getProgress("Episode", episode.id);
+    var metadatas = await MetadataApi.getMetadatas(metadataIds, "Episode");
+    var favorites =
+        await FavoritesApi.isFavoritedBatch(itemModel.childIds!, "Episode");
+    var progresses = await ProgressApi.getProgresses("Episode", episodeIds);
+    var fileInfos = await FileInfoApi.getFileInfos("Episode", fileInfoIds);
+
+    for (var episode in episodes) {
+      var metadata =
+          metadatas.where((i) => i.id == episode.metadataId).firstOrNull;
 
       var gridItem = GridItemModel(
         inventoryItem: episode,
         metadataModel: metadata,
-        isFavorite: fav,
-        progress: progress,
-        fileInfo: await FileInfoApi.getFileInfo(
-          episode.category,
-          episode.versions?.firstOrNull?.fileInfoId ?? "",
-        ),
+        isFavorite: favorites[episode.id.toString()] ?? false,
+        progress:
+            progresses?.where((i) => i.parentId == episode.id).firstOrNull,
+        fileInfo: fileInfos
+            ?.where((i) => i.id == episode.versions?.firstOrNull?.fileInfoId)
+            .firstOrNull,
       );
       gridItem.backdropUrl = metadata?.episode?.backdrop;
 
