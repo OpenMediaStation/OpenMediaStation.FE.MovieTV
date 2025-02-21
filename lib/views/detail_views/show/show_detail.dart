@@ -5,6 +5,7 @@ import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
+import 'package:open_media_server_app/models/progress/progress.dart';
 import 'package:open_media_server_app/services/inventory_service.dart';
 import 'package:open_media_server_app/views/detail_views/show/show_detail_content.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
@@ -59,38 +60,49 @@ class ShowDetailView extends StatelessWidget {
   }
 
   Future<List<GridItemModel>> getChildren(GridItemModel showModel) async {
-    InventoryApi inventoryApi = InventoryApi();
-    MetadataApi metadataApi = MetadataApi();
-    ProgressApi progressApi = ProgressApi();
-
     List<GridItemModel> gridItems = [];
 
     if (showModel.childIds == null) {
       return [];
     }
 
-    for (var element in showModel.childIds!) {
-      var season = await inventoryApi.getSeason(element);
+    var seasons = await InventoryApi.getSeasons(showModel.childIds ?? []);
 
-      MetadataModel? metadata;
+    List<String> metadataIds = [];
+    List<String> seasonIds = [];
 
+    for (var season in seasons) {
       if (season.metadataId != null) {
-        metadata = await metadataApi.getMetadata(season.metadataId!, "Season");
+        metadataIds.add(season.metadataId!);
       }
+      seasonIds.add(season.id);
+    }
 
-      FavoritesApi favoritesApi = FavoritesApi();
-      var fav = await favoritesApi.isFavorited("Season", season.id);
+    // Run the following API calls in parallel
+    var results = await Future.wait([
+      MetadataApi.getMetadatas(metadataIds, "Season"),
+      FavoritesApi.isFavoritedBatch(showModel.childIds ?? [], "Season"),
+      ProgressApi.getProgresses("Season", seasonIds),
+    ]);
 
-      var progress = await progressApi.getProgress("Season", season.id);
+    var metadatas = results[0] as List<MetadataModel>?;
+    var favorites = results[1] as Map<String, bool>?;
+    var progresses = results[2] as List<Progress>?;
+
+    for (var season in seasons) {
+      var metadata =
+          metadatas?.where((i) => i.id == season.metadataId).firstOrNull;
 
       var gridItem = GridItemModel(
         inventoryItem: season,
         metadataModel: metadata,
-        isFavorite: fav,
-        progress: progress,
+        isFavorite: favorites?[season.id.toString()] ?? false,
+        progress: progresses?.where((i) => i.parentId == season.id).firstOrNull,
       );
-      gridItem.childIds = season.episodeIds;
+
+      gridItem.backdropUrl = metadata?.episode?.backdrop;
       gridItem.listPosition = season.seasonNr ?? 0;
+      gridItem.childIds = season.episodeIds;
       gridItem.posterUrl = metadata?.season?.poster;
       gridItem.backdropUrl = showModel.backdropUrl;
 
