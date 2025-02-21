@@ -256,8 +256,6 @@ class _GalleryState extends State<Gallery> {
                                         );
                               
                                         gridItem.fake = true;
-                                        gridItem.posterUrl =
-                                            "${Preferences.prefs?.getString("BaseUrl")}/images/${filteredItems[index].category}/${filteredItems[index].metadataId}/poster";
                                       } else if (snapshot.hasError) {
                                         return Center(
                                             child:
