@@ -5,6 +5,7 @@ import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/inventory/inventory_item.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
+import 'package:open_media_server_app/models/progress/progress.dart';
 
 class InventoryService {
   static Future<List<InventoryItem>> getInventoryItems() async {
@@ -26,15 +27,19 @@ class InventoryService {
 
     var movie = await inventoryApi.getMovie(element.id);
 
-    MetadataModel? metadata;
+    Future<MetadataModel?> metadataFuture = movie.metadataId != null
+        ? metadataApi.getMetadata(movie.metadataId!, "Movie")
+        : Future.value(null);
 
-    if (movie.metadataId != null) {
-      metadata = await metadataApi.getMetadata(movie.metadataId!, "Movie");
-    }
+    Future<bool?> favFuture = favoritesApi.isFavorited("Movie", movie.id);
+    Future<Progress?> progressFuture =
+        progressApi.getProgress("Movie", movie.id);
 
-    var fav = await favoritesApi.isFavorited("Movie", movie.id);
+    var results = await Future.wait([metadataFuture, favFuture, progressFuture]);
 
-    var progress = await progressApi.getProgress("Movie", movie.id);
+    var metadata = results[0] as MetadataModel?;
+    var fav = results[1] as bool?;
+    var progress = results[2] as Progress?;
 
     var gridItem = GridItemModel(
       inventoryItem: movie,
@@ -56,15 +61,18 @@ class InventoryService {
 
     var show = await inventoryApi.getShow(element.id);
 
-    MetadataModel? metadata;
+    Future<MetadataModel?> metadataFuture = show.metadataId != null
+        ? metadataApi.getMetadata(show.metadataId!, "Show")
+        : Future.value(null);
+    Future<bool?> favFuture = favoritesApi.isFavorited("Show", show.id);
+    Future<Progress?> progressFuture = progressApi.getProgress("Show", show.id);
 
-    if (show.metadataId != null) {
-      metadata = await metadataApi.getMetadata(show.metadataId!, "Show");
-    }
+    var results =
+        await Future.wait([metadataFuture, favFuture, progressFuture]);
 
-    var fav = await favoritesApi.isFavorited("Show", show.id);
-
-    var progress = await progressApi.getProgress("Show", show.id);
+    var metadata = results[0] as MetadataModel?;
+    var fav = results[1] as bool?;
+    var progress = results[2] as Progress?;
 
     var gridItem = GridItemModel(
       inventoryItem: show,
