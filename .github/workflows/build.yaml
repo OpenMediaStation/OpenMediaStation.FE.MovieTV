@@ -109,7 +109,7 @@ jobs:
       - name: Create key.properties
         run: |
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyAlias=upload" >> android/key.properties
           echo "storeFile=$RUNNER_TEMP/upload-keystore.jks" >> android/key.properties
 
