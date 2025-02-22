@@ -101,16 +101,25 @@ jobs:
       - name: Install Flutter dependencies
         run: flutter pub get
 
-      - name: Build Flutter APK
-        run: flutter build apk
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/upload-keystore.jks
 
-      - run: ls -R
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=upload" >> android/key.properties
+          echo "storeFile=$RUNNER_TEMP/upload-keystore.jks" >> android/key.properties
+
+      - name: Build Flutter APK
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: my-flutter-app.apk
-          path: "./build/app/outputs/apk/release/app-release.apk"
+          path: build/app/outputs/apk/release/app-release.apk
 
   build-windows:
     runs-on: windows-latest
