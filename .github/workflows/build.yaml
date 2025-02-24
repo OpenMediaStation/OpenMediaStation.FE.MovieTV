@@ -6,10 +6,11 @@ on:
       - main
       - dev
     tags:
-      - 'v*' # Runs only when a version tag (e.g., v1.0.0) is pushed
+      - "v*" # Runs only when a version tag (e.g., v1.0.0) is pushed
   pull_request:
     branches:
       - main
+  workflow_dispatch: # Allows manual execution
 
 jobs:
   build-linux:
@@ -22,7 +23,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: "3.24.3"
 
       - name: Install Linux dependencies
         run: |
@@ -90,27 +91,36 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: "3.24.3"
 
       - name: Install Flutter dependencies
         run: flutter pub get
 
-      - name: Build Flutter APK
-        run: flutter build apk
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/upload-keystore.jks
 
-      - run: ls -R
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=upload" >> android/key.properties
+          echo "storeFile=$RUNNER_TEMP/upload-keystore.jks" >> android/key.properties
+
+      - name: Build Flutter APK
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: my-flutter-app.apk
-          path: "./build/app/outputs/apk/release/app-release.apk"
+          path: build/app/outputs/apk/release/app-release.apk
 
   build-windows:
     runs-on: windows-latest
@@ -136,6 +146,107 @@ jobs:
           name: windows-build
           path: build\windows\x64\runner\Release\
 
+      - name: Zip Windows Build
+        run: |
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath windows-bin.zip
+        shell: pwsh
+
+      - name: Upload Zipped Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-bin.zip
+          path: windows-bin.zip
+
+  build-ios:
+    runs-on: macos-latest  # Nutzt macOS für Xcode & iOS Builds
+
+    steps:
+      - name: 🛠️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: |
+          cd ios
+          pod deintegrate
+          cd ..
+          flutter clean
+          flutter pub get
+
+
+      - name: 📱 Build iOS App
+        run: flutter build ios --no-codesign
+
+      - name: 🔑 Setup Code Signing (if certificate exists)
+        if: env.APPLE_SIGNING_CERT != ''
+        env:
+          APPLE_SIGNING_CERT: ${{ secrets.CERTIFICATE_P12 }}
+          APPLE_PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
+          #CERT_PW: '' #${{ secrets.CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$APPLE_SIGNING_CERT" | base64 --decode > apple_distribution.p12
+          echo "$APPLE_PROVISIONING_PROFILE" | base64 --decode > provisioning.mobileprovision
+          
+          # Keychain einrichten & Zertifikat importieren
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import apple_distribution.p12 -k build.keychain -P "" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "" build.keychain
+
+          # Provisioning Profile an den richtigen Ort kopieren
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+          #check if profile and certificate found by xcode
+          security find-identity -v -p codesigning
+          grep -a1 '<key>application-identifier</key>' ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision
+
+
+      - name: 🔨 Build & Sign iOS App (IPA)
+        if: env.APPLE_SIGNING_CERT != ''
+        env:
+          APPLE_SIGNING_CERT: ${{ secrets.CERTIFICATE_P12 }}
+        run: |
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath build/App.xcarchive archive \
+            -allowProvisioningUpdates
+
+          xcodebuild -exportArchive \
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath build/ios
+
+      - name: 🚀 Upload to TestFlight
+        if: env.APP_STORE_CONNECT_PRIVATE_KEY != ''
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$APP_STORE_CONNECT_PRIVATE_KEY" | base64 --decode > ~/private_keys/AuthKey_$APP_STORE_CONNECT_KEY_ID.p8
+
+          xcrun altool --upload-app -f ios/build/ios/*.ipa -t ios \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID" \
+
+      - name: 🚀 Upload .ipa as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OMS_Movies_and_Shows_IOS.ipa
+          path: ios/build/ios/*.ipa
+
+
   release:
     runs-on: ubuntu-latest
     needs: [build-linux, build-flatpak, build-apk, build-windows]
@@ -156,12 +267,12 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: "Automated release for version ${{ github.ref_name }}"
           draft: false
           prerelease: false
           files: |
-            artifacts/linux-bin.zip
-            artifacts/app.flatpak
-            artifacts/my-flutter-app.apk
-            artifacts/windows-build/*
+            artifacts/app.flatpak/app.flatpak
+            artifacts/linux-bin.zip/linux-bin.zip
+            artifacts/windows-bin.zip/windows-bin.zip
+            artifacts/my-flutter-app.apk/app-release.apk

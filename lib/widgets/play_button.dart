@@ -5,9 +5,10 @@ import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/views/player.dart';
 
 class PlayButton extends StatelessWidget {
-  const PlayButton({super.key, required this.itemModel});
+  const PlayButton({super.key, required this.itemModel, this.versionID});
 
   final GridItemModel itemModel;
+  final String? versionID;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class PlayButton extends StatelessWidget {
                 builder: (context) => PlayerView(
                     gridItem: itemModel,
                     url:
-                        "${Preferences.prefs?.getString("BaseUrl")}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}"),
+                        "${Preferences.prefs?.getString("BaseUrl")}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}${versionID != null ? "?versionId=$versionID" : ""}"),
               ),
             );
           },

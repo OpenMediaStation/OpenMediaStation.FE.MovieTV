@@ -14,10 +14,20 @@ finish-args:
 - --talk-name=org.freedesktop.Notifications
 - --talk-name=org.kde.StatusNotifierWatcher
 - --talk-name=org.freedesktop.secrets
+- --talk-name=org.freedesktop.DBus
+- --talk-name=org.freedesktop.secrets
+- --talk-name=org.freedesktop.Notifications
+- --talk-name=org.freedesktop.portal.Inhibit
+- --talk-name=org.freedesktop.portal.Desktop
+- --talk-name=org.freedesktop.portal.Documents
+- --talk-name=org.freedesktop.portal.IBus
+- --talk-name=org.freedesktop.ScreenSaver
+- --talk-name=org.kde.StatusNotifierWatcher
+- --talk-name=org.mpris.MediaPlayer2.*
 - --filesystem=xdg-documents
 - --filesystem=xdg-run/gvfs #This might be needed
 - --filesystem=xdg-run/pipewire-0:ro #This might be needed
-- --own-name=org.mpris.MediaPlayer2.spotube
+- --own-name=org.mpris.MediaPlayer2.spotube # TODO LNA: Change this to OMS
 - --system-talk-name=org.freedesktop.NetworkManager
 - --env=LD_LIBRARY_PATH=/app/lib # LNA: This is needed
 modules:

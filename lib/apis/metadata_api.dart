@@ -20,4 +20,28 @@ class MetadataApi {
       throw Exception('Failed to load metadata');
     }
   }
+
+  static Future<List<MetadataModel>> getMetadatas(
+      List<String> ids, String category) async {
+    String baseUrl = Preferences.prefs?.getString("BaseUrl") ?? "";
+    String apiUrl = "$baseUrl/api/metadata/batch";
+
+    var headers = await BaseApi.getRefreshedHeaders();
+
+    Uri uri = Uri.parse(apiUrl).replace(
+      queryParameters: {
+        "ids": ids,
+        "category": category,
+      },
+    );
+
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((e) => MetadataModel.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load metadata: ${response.body}');
+    }
+  }
 }

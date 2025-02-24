@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:http/http.dart' as http;
@@ -57,6 +59,30 @@ class FavoritesApi {
       }
     } else {
       return null;
+    }
+  }
+
+  static Future<Map<String, bool>> isFavoritedBatch(
+      List<String> ids, String category) async {
+    String baseUrl = Preferences.prefs?.getString("BaseUrl") ?? "";
+    String apiUrl = "$baseUrl/api/favorite/batch";
+
+    var headers = await BaseApi.getRefreshedHeaders();
+
+    Uri uri = Uri.parse(apiUrl).replace(
+      queryParameters: {
+        "ids": ids, 
+        "category": category,
+      },
+    );
+
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((key, value) => MapEntry(key, value as bool));
+    } else {
+      throw Exception('Failed to fetch favorites: ${response.body}');
     }
   }
 }
