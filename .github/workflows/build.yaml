@@ -171,36 +171,81 @@ jobs:
           cache: true
 
       - name: 📦 Install Dependencies
-        run: flutter pub get
+        run: |
+          cd ios
+          pod deintegrate
+          cd ..
+          flutter clean
+          flutter pub get
+
 
       - name: 📱 Build iOS App
         run: flutter build ios --no-codesign
 
-      # Optional: Signiere das iOS-Build mit einem kostenpflichtigen Apple Developer Account
-      - name: 🔑 Setup Code Signing (Falls Apple-Zertifikat vorhanden)
+      - name: 🔑 Setup Code Signing (if certificate exists)
         if: env.APPLE_SIGNING_CERT != ''
         env:
-          APPLE_SIGNING_CERT: ${{ secrets.APPLE_SIGNING_CERT }}
-          APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+          APPLE_SIGNING_CERT: ${{ secrets.CERTIFICATE_P12 }}
+          APPLE_PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
+          #CERT_PW: '' #${{ secrets.CERTIFICATE_PASSWORD }}
         run: |
           echo "$APPLE_SIGNING_CERT" | base64 --decode > apple_distribution.p12
           echo "$APPLE_PROVISIONING_PROFILE" | base64 --decode > provisioning.mobileprovision
+          
+          # Keychain einrichten & Zertifikat importieren
           security create-keychain -p "" build.keychain
           security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
           security import apple_distribution.p12 -k build.keychain -P "" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -k "" build.keychain
+
+          # Provisioning Profile an den richtigen Ort kopieren
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp provisioning.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
-      # Optional: Hochladen zu TestFlight (Nur mit Apple Developer Account)
-      - name: 🚀 Upload to TestFlight
-        if: env.APPLE_API_KEY != ''
+          #check if profile and certificate found by xcode
+          security find-identity -v -p codesigning
+          grep -a1 '<key>application-identifier</key>' ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision
+
+
+      - name: 🔨 Build & Sign iOS App (IPA)
+        if: env.APPLE_SIGNING_CERT != ''
         env:
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
-          APPLE_APP_ID: ${{ secrets.APPLE_APP_ID }}
+          APPLE_SIGNING_CERT: ${{ secrets.CERTIFICATE_P12 }}
         run: |
-          xcrun altool --upload-app -f build/ios/ipa/*.ipa -t ios --apiKey "$APPLE_API_KEY" --apiIssuer "$APPLE_API_ISSUER_ID"
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath build/App.xcarchive archive \
+            -allowProvisioningUpdates
+
+          xcodebuild -exportArchive \
+            -archivePath build/App.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath build/ios
+
+      - name: 🚀 Upload to TestFlight
+        if: env.APP_STORE_CONNECT_PRIVATE_KEY != ''
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/private_keys
+          echo "$APP_STORE_CONNECT_PRIVATE_KEY" | base64 --decode > ~/private_keys/AuthKey_$APP_STORE_CONNECT_KEY_ID.p8
+
+          xcrun altool --upload-app -f ios/build/ios/*.ipa -t ios \
+            --apiKey "$APP_STORE_CONNECT_KEY_ID" \
+            --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID" \
+
+      - name: 🚀 Upload .ipa as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OMS_Movies_and_Shows_IOS.ipa
+          path: ios/build/ios/*.ipa
+
 
   release:
     runs-on: ubuntu-latest
