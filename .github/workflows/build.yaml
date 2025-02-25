@@ -122,6 +122,46 @@ jobs:
           name: my-flutter-app.apk
           path: build/app/outputs/apk/release/app-release.apk
 
+  build-aab:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.3"
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > $RUNNER_TEMP/upload-keystore.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=upload" >> android/key.properties
+          echo "storeFile=$RUNNER_TEMP/upload-keystore.jks" >> android/key.properties
+
+      - name: Build Flutter APK
+        run: flutter build aab --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-flutter-app.aab
+          path: build/app/outputs/bundle/release/app-release.aab 
+
   build-windows:
     runs-on: windows-latest
 
@@ -276,3 +316,4 @@ jobs:
             artifacts/linux-bin.zip/linux-bin.zip
             artifacts/windows-bin.zip/windows-bin.zip
             artifacts/my-flutter-app.apk/app-release.apk
+            artifacts/my-flutter-app.aab/app-release.aab
