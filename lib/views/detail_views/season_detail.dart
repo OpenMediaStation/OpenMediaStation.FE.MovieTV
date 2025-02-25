@@ -1,16 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/apis/favorites_api.dart';
+import 'package:open_media_server_app/apis/file_info_api.dart';
 import 'package:open_media_server_app/apis/inventory_api.dart';
 import 'package:open_media_server_app/apis/metadata_api.dart';
 import 'package:open_media_server_app/apis/progress_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
+import 'package:open_media_server_app/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/models/metadata/metadata_model.dart';
-import 'package:open_media_server_app/views/detail_views/episode_detail.dart';
+import 'package:open_media_server_app/models/progress/progress.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/favorite_button.dart';
+import 'package:open_media_server_app/widgets/season_item.dart';
 import 'package:open_media_server_app/widgets/title.dart';
 
 class SeasonDetailView extends StatelessWidget {
@@ -70,6 +71,7 @@ class SeasonDetailView extends StatelessWidget {
                         height: 300,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
                       ),
                     ),
                     Padding(
@@ -94,80 +96,7 @@ class SeasonDetailView extends StatelessWidget {
                 // Episode list items
                 var element = items[index - 1]; // Adjust index for episode
 
-                String imageUrl = Globals.PictureNotFoundUrl;
-
-                if (element.backdropUrl != null) {
-                  imageUrl = "${element.backdropUrl}?width=300";
-                }
-
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: InkWell(
-                      splashColor: Colors.black26,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EpisodeDetailView(itemModel: element),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Ink.image(
-                                  height: 125 * (9 / 14),
-                                  width: 125,
-                                  fit: BoxFit.cover,
-                                  image: CachedNetworkImageProvider(
-                                    imageUrl,
-                                    headers: BaseApi.getHeaders(),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 16,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        element.metadataModel?.title != null
-                                            ? "${element.listPosition}. ${element.metadataModel?.title}"
-                                            : "${element.listPosition}. No title",
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        element.metadataModel?.episode?.plot ??
-                                            "No description",
-                                        softWrap: true,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return SeasonItem(itemModel: element);
               }
             },
           );
@@ -178,42 +107,59 @@ class SeasonDetailView extends StatelessWidget {
 
   Future<List<GridItemModel>> getChildren() async {
     InventoryApi inventoryApi = InventoryApi();
-    MetadataApi metadataApi = MetadataApi();
-    ProgressApi progressApi = ProgressApi();
-
-    List<GridItemModel> gridItems = [];
 
     if (itemModel.childIds == null) {
       return [];
     }
 
-    for (var element in itemModel.childIds!) {
-      var episode = await inventoryApi.getEpisode(element);
+    // Fetch episodes first
+    var episodes = await inventoryApi.getEpisodes(itemModel.childIds!);
 
-      MetadataModel? metadata;
+    List<String> metadataIds = [];
+    List<String> episodeIds = [];
+    List<String> fileInfoIds = [];
 
+    for (var episode in episodes) {
       if (episode.metadataId != null) {
-        metadata = await metadataApi.getMetadata(
-          episode.metadataId!,
-          "Episode",
-        );
+        metadataIds.add(episode.metadataId!);
       }
+      if (episode.versions?.firstOrNull?.fileInfoId != null) {
+        fileInfoIds.add(episode.versions!.firstOrNull!.fileInfoId!);
+      }
+      episodeIds.add(episode.id);
+    }
 
-      FavoritesApi favoritesApi = FavoritesApi();
-      var fav = await favoritesApi.isFavorited("Episode", episode.id);
+    // Run the following API calls in parallel
+    var results = await Future.wait([
+      MetadataApi.getMetadatas(metadataIds, "Episode"),
+      FavoritesApi.isFavoritedBatch(itemModel.childIds!, "Episode"),
+      ProgressApi.getProgresses("Episode", episodeIds),
+      FileInfoApi.getFileInfos("Episode", fileInfoIds),
+    ]);
 
-      var progress = await progressApi.getProgress("Episode", episode.id);
+    var metadatas = results[0] as List<MetadataModel>?;
+    var favorites = results[1] as Map<String, bool>?;
+    var progresses = results[2] as List<Progress>?;
+    var fileInfos = results[3] as List<FileInfo>?;
+
+    List<GridItemModel> gridItems = [];
+    for (var episode in episodes) {
+      var metadata =
+          metadatas?.where((i) => i.id == episode.metadataId).firstOrNull;
 
       var gridItem = GridItemModel(
         inventoryItem: episode,
         metadataModel: metadata,
-        isFavorite: fav,
-        progress: progress,
+        isFavorite: favorites?[episode.id.toString()] ?? false,
+        progress:
+            progresses?.where((i) => i.parentId == episode.id).firstOrNull,
+        fileInfo: fileInfos
+            ?.where((i) => i.id == episode.versions?.firstOrNull?.fileInfoId)
+            .firstOrNull,
       );
+
       gridItem.backdropUrl = metadata?.episode?.backdrop;
-
       gridItem.listPosition = episode.episodeNr ?? 0;
-
       gridItems.add(gridItem);
     }
 

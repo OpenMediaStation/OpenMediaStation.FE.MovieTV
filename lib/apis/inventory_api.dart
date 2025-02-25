@@ -10,7 +10,8 @@ import 'package:open_media_server_app/models/inventory/show.dart';
 
 class InventoryApi {
   Future<List<InventoryItem>> listItems(String category) async {
-    String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/items?";
+    String apiUrl =
+        "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/items?";
 
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -26,7 +27,8 @@ class InventoryApi {
   }
 
   Future<Movie> getMovie(String id) async {
-    String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/movie?";
+    String apiUrl =
+        "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/movie?";
 
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -42,7 +44,8 @@ class InventoryApi {
   }
 
   Future<Show> getShow(String id) async {
-    String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/show?";
+    String apiUrl =
+        "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/show?";
 
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -58,7 +61,8 @@ class InventoryApi {
   }
 
   Future<Season> getSeason(String id) async {
-    String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/season?";
+    String apiUrl =
+        "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/season?";
 
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -74,7 +78,8 @@ class InventoryApi {
   }
 
   Future<Episode> getEpisode(String id) async {
-    String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/episode?";
+    String apiUrl =
+        "${Preferences.prefs?.getString("BaseUrl")}/api/inventory/episode?";
 
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -86,6 +91,74 @@ class InventoryApi {
       return Episode.fromJson(jsonResponse);
     } else {
       throw Exception('Failed to load episode');
+    }
+  }
+
+  Future<List<Episode>> getEpisodes(List<String> ids) async {
+    String baseUrl = Preferences.prefs?.getString("BaseUrl") ?? "";
+    String apiUrl = "$baseUrl/api/inventory/episode/batch";
+
+    var headers = await BaseApi.getRefreshedHeaders();
+
+    Uri uri = Uri.parse(apiUrl).replace(
+      queryParameters: {
+        "ids": ids,
+      },
+    );
+
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      var result = jsonResponse.map((e) => Episode.fromJson(e)).toList();
+
+      return result;
+    } else {
+      throw Exception('Failed to load episodes: ${response.body}');
+    }
+  }
+
+  static Future<List<Show>> getShows(List<String> ids) async {
+    String baseUrl = Preferences.prefs?.getString("BaseUrl") ?? "";
+    String apiUrl = "$baseUrl/api/inventory/show/batch";
+
+    var headers = await BaseApi.getRefreshedHeaders();
+
+    Uri uri = Uri.parse(apiUrl).replace(
+      queryParameters: {
+        "ids": ids,
+      },
+    );
+
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((e) => Show.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load shows: ${response.body}');
+    }
+  }
+
+  static Future<List<Season>> getSeasons(List<String> ids) async {
+    String baseUrl = Preferences.prefs?.getString("BaseUrl") ?? "";
+    String apiUrl = "$baseUrl/api/inventory/season/batch";
+
+    var headers = await BaseApi.getRefreshedHeaders();
+
+    Uri uri = Uri.parse(apiUrl).replace(
+      queryParameters: {
+        "ids": ids,
+      },
+    );
+
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((e) => Season.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load seasons: ${response.body}');
     }
   }
 }

@@ -10,14 +10,18 @@ class CustomImage extends StatelessWidget {
     this.fit,
     this.width,
     this.height,
+    this.alignment,
+    this.fake = false,
     this.disableAdaptiveImage = false,
   });
 
-  final String imageUrl;
+  final String? imageUrl;
   final BoxFit? fit;
   final double? width;
   final double? height;
   final bool disableAdaptiveImage;
+  final bool fake;
+  final Alignment? alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +31,29 @@ class CustomImage extends StatelessWidget {
       addon = "?width=${width?.floor()}";
     }
 
+    String? imageUrlFinal = imageUrl;
+
+    if (!fake && imageUrlFinal == null) {
+      imageUrlFinal = Globals.PictureNotFoundUrl;
+    }
+
+    var placeholder = SizedBox(
+      width: width,
+      height: height,
+    );
+
+    if (imageUrlFinal == null) {
+      return placeholder;
+    }
+
     return CachedNetworkImage(
-      imageUrl: "$imageUrl$addon",
+      imageUrl: "$imageUrlFinal$addon",
       fit: fit,
       width: width,
       height: height,
+      alignment: alignment ?? Alignment.center,
       httpHeaders: BaseApi.getHeaders(),
+      placeholder: (context, url) => placeholder,
       errorWidget: (context, url, error) {
         return CustomImage(
           imageUrl: Globals.PictureNotFoundUrl,

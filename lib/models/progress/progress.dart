@@ -21,7 +21,7 @@ class Progress {
       category: json['category'] as String?,
       parentId: json['parentId'] as String?,
       progressPercentage: json['progressPercentage'] != null
-          ? (json['progressPercentage'] as num).toDouble()
+          ? (json['progressPercentage'] is String && json['progressPercentage'].toLowerCase() == "nan") ? double.nan : (json['progressPercentage'] as num).toDouble()
           : null, 
       progressSeconds: json['progressSeconds'] as int?,
       completions: json['completions'] as int?,

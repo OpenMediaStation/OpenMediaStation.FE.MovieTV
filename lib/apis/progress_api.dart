@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:open_media_server_app/models/progress/progress.dart';
 
 class ProgressApi {
-  Future<Progress?> getProgress(String? category, String? inventoryItemId) async {
+  Future<Progress?> getProgress(
+      String? category, String? inventoryItemId) async {
     String apiUrl = "${Preferences.prefs?.getString("BaseUrl")}/api/progress?";
     var headers = await BaseApi.getRefreshedHeaders();
 
@@ -19,6 +20,34 @@ class ProgressApi {
       var progress = Progress.fromJson(jsonResponse);
 
       return progress;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<Progress>?> getProgresses(
+      String? category, List<String?> inventoryItemIds) async {
+    String apiUrl =
+        "${Preferences.prefs?.getString("BaseUrl")}/api/progress/batch?";
+    var headers = await BaseApi.getRefreshedHeaders();
+
+    Uri uri = Uri.parse(apiUrl).replace(
+      queryParameters: {
+        "ids": inventoryItemIds,
+        "category": category,
+      },
+    );
+
+    var response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+
+      var result = jsonResponse
+          .map((progressJson) => Progress.fromJson(progressJson))
+          .toList();
+
+      return result;
     } else {
       return null;
     }
