@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:open_media_server_app/apis/base_api.dart';
-import 'package:http/http.dart' as http;
+import 'package:open_media_server_app/helpers/http_wrapper.dart' as http;
 import 'package:open_media_server_app/helpers/preferences.dart';
 import 'package:open_media_server_app/models/auth/auth_info.dart';
 
@@ -10,7 +10,7 @@ class AuthInfoApi {
 
     var headers = await BaseApi.getRefreshedHeaders();
 
-    var response = await http.get(
+    var response = await http .get(
       Uri.parse(apiUrl),
       headers: headers,
     );

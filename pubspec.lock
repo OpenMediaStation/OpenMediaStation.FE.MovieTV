@@ -97,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.6"
+  cupertino_http:
+    dependency: "direct main"
+    description:
+      name: cupertino_http
+      sha256: "6fcf79586ad872ddcd6004d55c8c2aab3cdf0337436e8f99837b1b6c30665d0c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -280,6 +288,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  http_profile:
+    dependency: transitive
+    description:
+      name: http_profile
+      sha256: "7e679e355b09aaee2ab5010915c932cce3f2d1c11c3b2dc177891687014ffa78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   icons_plus:
     dependency: "direct main"
     description:
@@ -448,6 +464,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
+  objective_c:
+    dependency: transitive
+    description:
+      name: objective_c
+      sha256: "62e79ab8c3ed6f6a340ea50dd48d65898f5d70425d404f0d99411f6e56e04584"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   octo_image:
     dependency: transitive
     description:
@@ -708,7 +732,7 @@ packages:
     dependency: transitive
     description: flutter
     source: sdk
-    version: "0.0.0"
+    version: "0.0.99"
   source_span:
     dependency: transitive
     description:
@@ -981,6 +1005,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  web_socket:
+    dependency: transitive
+    description:
+      name: web_socket
+      sha256: "3c12d96c0c9a4eec095246debcea7b86c0324f22df69893d538fcc6f1b8cce83"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.6"
   win32:
     dependency: transitive
     description:
