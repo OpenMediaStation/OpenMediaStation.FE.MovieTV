@@ -24,6 +24,7 @@ dependencies:
   qr_flutter: ^4.1.0
   icons_plus: ^5.0.0
   alphabet_scrollbar: ^0.1.0
+  cupertino_http: ^2.0.2
 
 dev_dependencies:
   flutter_test:

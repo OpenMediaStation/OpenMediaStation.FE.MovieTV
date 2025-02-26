@@ -1,7 +1,7 @@
 import 'package:media_kit/media_kit.dart';
 import 'package:open_media_server_app/apis/base_api.dart';
 import 'package:open_media_server_app/helpers/preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:open_media_server_app/helpers/http_wrapper.dart'as http;
 import 'package:open_media_server_app/models/inventory/inventory_item_addon.dart';
 
 class SubtitleApi {
