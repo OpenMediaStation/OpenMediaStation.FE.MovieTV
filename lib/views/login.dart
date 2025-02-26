@@ -201,6 +201,7 @@ class LoginView extends StatelessWidget {
   }
 
   Future validateAndAuthenticate(BuildContext context, FocusNode focusNode)async {
+    focusNode.nextFocus();
     if(_formKey.currentState!.validate()){
       await Preferences.prefs!.setString("BaseUrl", domainController.text);
       await authenticate(context);
