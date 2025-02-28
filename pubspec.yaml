@@ -40,7 +40,8 @@ flutter:
 
 msix_config:
   display_name: Open Media Station - Movie & TV
-  publisher_display_name: OpenMediaStation
+  publisher_display_name: LNA-DEV
+  publisher: CN=7B47E609-6C44-44B4-9DFA-CF58A4704989
   identity_name: org.openmediastation
   msix_version: 1.0.0.0
   store: true
