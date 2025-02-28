@@ -238,27 +238,34 @@ jobs:
 
   windows-msix-build:
     runs-on: windows-latest
-    needs: build-windows
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download Windows Build Artifact
-        uses: actions/download-artifact@v4
+      - name: Get App version
+        id: get_flutter_version
+        uses: its404/get-flutter-version@v1.0.0
+      
+      - name: Setze Build-Nummer in pubspec.yaml
+        uses: Dbono-dev/yaml-action@v1.0.3
         with:
-          name: windows-bin.zip
-          path: ./windows-build
+          changes: |
+            {
+              "version": "${{ steps.get_flutter_version.outputs.version_number }}+${{ github.run_number }}"
+            }
+          commentOutDevDependencies: false
 
-      - name: Extract Build
-        run: |
-          Expand-Archive -Path .\windows-build\windows-bin.zip -DestinationPath .\windows-build\extracted
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
 
-      - name: Install MSIX Packager via Chocolatey
-        run: choco install msix-packaging-tool -y
+      - name: Install Dependencies
+        run: flutter pub get
 
-      - name: Package as MSIX
-        run: |
-          msix-packager create --source .\windows-build\extracted --output .\windows-build\app.msix
+      - name: Build Windows App
+        run: dart run msix:create
 
       - name: Upload Zipped Windows Artifact
         uses: actions/upload-artifact@v4

@@ -31,8 +31,18 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  msix: ^3.16.8
 
 flutter:
   uses-material-design: true
   assets:
     - assets/AppImage/myapp.png
+
+msix_config:
+  display_name: Open Media Station - Movie & TV
+  publisher_display_name: OpenMediaStation
+  identity_name: org.openmediastation
+  msix_version: 1.0.0.0
+  store: true
+  # logo_path: C:\path\to\logo.png
+  # capabilities: internetClient, location, microphone, webcam
