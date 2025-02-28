@@ -270,8 +270,8 @@ jobs:
       - name: Upload Zipped Windows Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: .\windows-build\app.msix
-          path: .\windows-build\app.msix
+          name: build\windows\x64\runner\Release\open_media_server_app.msix
+          path: build\windows\x64\runner\Release\open_media_server_app.msix
 
   build-ios:
     runs-on: macos-latest  # Nutzt macOS für Xcode & iOS Builds
