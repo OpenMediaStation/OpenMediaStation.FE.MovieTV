@@ -253,6 +253,9 @@ jobs:
         run: |
           Expand-Archive -Path .\windows-build\windows-bin.zip -DestinationPath .\windows-build\extracted
 
+      - name: Install MSIX Packager via Chocolatey
+        run: choco install msix-packaging-tool -y
+
       - name: Package as MSIX
         run: |
           msix-packager create --source .\windows-build\extracted --output .\windows-build\app.msix
