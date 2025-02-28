@@ -270,7 +270,7 @@ jobs:
       - name: Upload Zipped Windows Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build\windows\x64\runner\Release\open_media_server_app.msix
+          name: open_media_server_app.msix
           path: build\windows\x64\runner\Release\open_media_server_app.msix
 
   build-ios:
