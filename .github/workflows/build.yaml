@@ -236,6 +236,33 @@ jobs:
           name: windows-bin.zip
           path: windows-bin.zip
 
+  windows-msix-build:
+    runs-on: windows-latest
+    needs: build-windows
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download Windows Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-bin.zip
+          path: ./windows-build
+
+      - name: Extract Build
+        run: |
+          Expand-Archive -Path .\windows-build\windows-bin.zip -DestinationPath .\windows-build\extracted
+
+      - name: Package as MSIX
+        run: |
+          msix-packager create --source .\windows-build\extracted --output .\windows-build\app.msix
+
+      - name: Upload Zipped Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: .\windows-build\app.msix
+          path: .\windows-build\app.msix
+
   build-ios:
     runs-on: macos-latest  # Nutzt macOS für Xcode & iOS Builds
 
