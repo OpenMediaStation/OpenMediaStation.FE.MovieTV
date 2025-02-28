@@ -378,7 +378,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: [build-linux, build-flatpak, build-apk, build-windows, build-aab]
+    needs: [build-linux, build-flatpak, build-apk, build-windows, build-aab, windows-msix-build]
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
@@ -406,3 +406,4 @@ jobs:
             artifacts/windows-bin.zip/windows-bin.zip
             artifacts/my-flutter-app.apk/app-release.apk
             artifacts/my-flutter-app.aab/app-release.aab
+            artifacts/open_media_server_app.msix/open_media_server_app.msix
