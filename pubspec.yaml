@@ -43,7 +43,7 @@ msix_config:
   publisher_display_name: LNA-DEV
   publisher: CN=7B47E609-6C44-44B4-9DFA-CF58A4704989
   identity_name: 54515LNA-DEV.OpenMediaStation-MovieTV
-  msix_version: 0.2.0.1
+  msix_version: 0.2.1.0
   store: true
   logo_path: ./AppIcon.png
   # capabilities: internetClient, location, microphone, webcam
