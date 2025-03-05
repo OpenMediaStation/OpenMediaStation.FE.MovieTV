@@ -6,7 +6,7 @@
 <br>
 <br>
 
-OpenMediaStation is a collection of server and client software to manage and stream your media libary.
+OpenMediaStation is a collection of server and client software to manage and stream your media library.
 
 <p align="center">
 
