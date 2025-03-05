@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_station_base/helpers/preferences.dart';
 import 'package:open_media_server_app/views/gallery.dart';
-import 'package:open_media_server_app/views/login.dart';
+import 'package:open_media_station_base/views/login.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -47,7 +48,10 @@ class Settings extends StatelessWidget {
       await Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => LoginView(widget: const Gallery()),
+          builder: (context) => LoginView(
+            widget: const Gallery(),
+            title: Globals.Title,
+          ),
         ),
         (route) => false, // This removes all previous routes
       );

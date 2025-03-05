@@ -516,10 +516,10 @@ packages:
     dependency: "direct main"
     description:
       name: open_media_station_base
-      sha256: e1564a0eaba5d511862ecd84f6564876929a4fd579c488a38d569be112413e4b
+      sha256: ef829b8ba6f5232c750510785baf76d42d19f120beab4bd13533f861d075bd25
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   package_config:
     dependency: transitive
     description:
@@ -729,7 +729,7 @@ packages:
     source: hosted
     version: "0.1.3"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       sha256: "846849e3e9b68f3ef4b60c60cf4b3e02e9321bc7f4d8c4692cf87ffa82fc8a3a"

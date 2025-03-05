@@ -18,8 +18,7 @@ dependencies:
   cached_network_image: ^3.4.1
   icons_plus: ^5.0.0
   alphabet_scrollbar: ^0.1.0
-  open_media_station_base: ^0.0.2
-  shared_preferences: ^2.5.2
+  open_media_station_base: ^0.0.3
 
 dev_dependencies:
   flutter_test:
