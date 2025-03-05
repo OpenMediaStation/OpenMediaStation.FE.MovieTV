@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/apis/auth_info_api.dart';
-import 'package:open_media_server_app/auth/login_manager.dart';
-import 'package:open_media_server_app/globals/auth_globals.dart';
+import 'package:open_media_station_base/apis/auth_info_api.dart';
+import 'package:open_media_station_base/auth/login_manager.dart';
+import 'package:open_media_station_base/globals/auth_globals.dart';
 import 'package:open_media_server_app/globals/globals.dart';
-import 'package:open_media_server_app/helpers/preferences.dart';
+import 'package:open_media_station_base/helpers/preferences.dart';
 import 'package:open_media_server_app/views/gallery.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({super.key, required this.widget});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key, required this.widget});
 
   final Widget widget;
 
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final domainController = TextEditingController();
+
   var displayMessage = false;
 
   @override
@@ -103,7 +110,7 @@ class LoginView extends StatelessWidget {
             ));
           }
 
-          return widget;
+          return widget.widget;
         },
       );
     }
@@ -228,14 +235,14 @@ class LoginView extends StatelessWidget {
         token = await loginManager.login(info, context);
       }
     } else {
-      var token = await loginManager.login(info, context);
+      await loginManager.login(info, context);
     }
 
     if (context.mounted){
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => widget
+          builder: (context) => widget.widget
         ),
       );
     }else

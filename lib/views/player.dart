@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_tv/material_tv.dart';
 import 'package:media_kit_video/media_kit_video.dart';
-import 'package:open_media_server_app/apis/base_api.dart';
-import 'package:open_media_server_app/apis/progress_api.dart';
-import 'package:open_media_server_app/globals/platform_globals.dart';
+import 'package:open_media_station_base/apis/base_api.dart';
+import 'package:open_media_station_base/apis/progress_api.dart';
+import 'package:open_media_station_base/globals/platform_globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/models/progress/progress.dart';
+import 'package:open_media_station_base/models/progress/progress.dart';
 import 'package:open_media_server_app/widgets/audio_button.dart';
 import 'package:open_media_server_app/widgets/subtitle_button.dart';
 
@@ -256,16 +256,11 @@ class _PlayerState extends State<PlayerView> {
         ),
       );
     } else {
-      var videoSize = controller.rect.value?.size;
       return MaterialDesktopVideoControlsTheme(
         normal: desktopThemeData,
         fullscreen: desktopThemeData,
         child: Scaffold(
           body: Video(
-            //fit: BoxFit.fitHeight,
-            //width: videoWidth != null ? (videoWidth / 2) : null,
-            // aspectRatio: videoSize != null ? videoSize.aspectRatio * 2 : null,
-            //width: MediaQuery.of(context).size.width /2,
             alignment: Alignment.center,
             controller: controller,
             controls: (state) {

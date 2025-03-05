@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/helpers/duration_extension_methods.dart';
-import 'package:open_media_server_app/models/file_info/file_info.dart';
+import 'package:open_media_station_base/models/file_info/file_info.dart';
 import 'package:open_media_server_app/widgets/file_info_box.dart';
 
 extension FileInfoBoxCreator on FileInfo {

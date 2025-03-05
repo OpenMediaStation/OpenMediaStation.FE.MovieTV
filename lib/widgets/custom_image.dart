@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/apis/base_api.dart';
+import 'package:open_media_station_base/apis/base_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 
 class CustomImage extends StatelessWidget {

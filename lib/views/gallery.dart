@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/globals/platform_globals.dart';
-import 'package:open_media_server_app/helpers/preferences.dart';
+import 'package:open_media_station_base/globals/platform_globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/models/inventory/inventory_item.dart';
+import 'package:open_media_station_base/models/inventory/inventory_item.dart';
 import 'package:open_media_server_app/services/inventory_service.dart';
 import 'package:open_media_server_app/views/settings.dart';
 import 'package:open_media_server_app/widgets/alphabet_bar.dart';

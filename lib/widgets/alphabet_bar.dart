@@ -1,7 +1,7 @@
 import 'package:alphabet_scrollbar/alphabet_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:open_media_server_app/models/inventory/inventory_item.dart';
+import 'package:open_media_station_base/models/inventory/inventory_item.dart';
 
 class AlphabetBar extends StatelessWidget {
   const AlphabetBar({

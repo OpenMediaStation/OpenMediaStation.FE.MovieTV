@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_media_server_app/apis/file_info_api.dart';
+import 'package:open_media_station_base/apis/file_info_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
-import 'package:open_media_server_app/models/file_info/file_info.dart';
+import 'package:open_media_station_base/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/file_info_row.dart';

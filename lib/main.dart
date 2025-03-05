@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:open_media_server_app/globals/auth_globals.dart';
-import 'package:open_media_server_app/globals/platform_globals.dart';
+import 'package:open_media_station_base/globals/auth_globals.dart';
+import 'package:open_media_station_base/globals/platform_globals.dart';
 import 'package:open_media_server_app/views/gallery.dart';
 import 'package:open_media_server_app/globals/globals.dart';
-import 'package:open_media_server_app/helpers/preferences.dart';
+import 'package:open_media_station_base/helpers/preferences.dart';
 import 'package:open_media_server_app/views/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

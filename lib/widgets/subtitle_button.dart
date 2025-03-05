@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:open_media_server_app/apis/subtitle_api.dart';
+import 'package:open_media_station_base/apis/subtitle_api.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 
@@ -68,13 +68,13 @@ class _SubtitleButtonState extends State<SubtitleButton> {
 
     if (inventoryItem?.addons != null && subTracks.where((i) => i.title == "OMSRemoteSubtitle").isEmpty) {
       for (var addon in inventoryItem!.addons!) {
-        var track = await subtitleApi.getSubtitle(
+        var data = await subtitleApi.getSubtitle(
           addon,
           inventoryItem.category,
           inventoryItem.id,
         );
 
-        subTracks.add(track);
+        subTracks.add(SubtitleTrack.data(data, language: addon.subtitle?.language, title: "OMSRemoteSubtitle"));
       }
     }
 

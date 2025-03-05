@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:open_media_server_app/apis/favorites_api.dart';
+import 'package:open_media_station_base/apis/favorites_api.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 
 class FavoriteButton extends StatefulWidget {
