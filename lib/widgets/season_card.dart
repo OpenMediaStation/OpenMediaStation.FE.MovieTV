@@ -5,7 +5,7 @@ import 'package:open_media_station_base/apis/base_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_server_app/views/detail_views/season_detail.dart';
-import 'package:open_media_server_app/widgets/view_counter.dart';
+import 'package:open_media_station_base/widgets/view_counter.dart';
 
 class SeasonCard extends StatelessWidget {
   const SeasonCard({super.key, required this.element});

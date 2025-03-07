@@ -1,15 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_station_base/globals/platform_globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_station_base/models/inventory/inventory_item.dart';
 import 'package:open_media_server_app/services/inventory_service.dart';
 import 'package:open_media_server_app/views/settings.dart';
 import 'package:open_media_server_app/widgets/alphabet_bar.dart';
-import 'package:open_media_server_app/widgets/app_bar_title.dart';
 import 'package:open_media_server_app/widgets/grid_item.dart';
 import 'package:open_media_server_app/views/detail_views/movie/movie_detail.dart';
 import 'package:open_media_server_app/views/detail_views/show/show_detail.dart';
+import 'package:open_media_station_base/widgets/app_bar_title.dart';
 
 class Gallery extends StatefulWidget {
   const Gallery({Key? key}) : super(key: key);
@@ -49,7 +50,10 @@ class _GalleryState extends State<Gallery> {
     double gridMainAxisSpacing = 8.0;
     double gridCrossAxisSpacing = 8.0;
     double scrollableWidth = screenWidth - 50;
-    double gridItemHeight = (((scrollableWidth - gridCrossAxisSpacing * (crossAxisCount-1)) / crossAxisCount)/ gridItemAspectRatio);
+    double gridItemHeight =
+        (((scrollableWidth - gridCrossAxisSpacing * (crossAxisCount - 1)) /
+                crossAxisCount) /
+            gridItemAspectRatio);
 
     var searchBar = Flexible(
       fit: FlexFit.tight,
@@ -78,10 +82,18 @@ class _GalleryState extends State<Gallery> {
     if ((PlatformGlobals.isMobile || !largeScreen) && searchBarVisible) {
       appBarTitleSpace.add(searchBar);
     } else if (searchBarVisible) {
-      appBarTitleSpace
-          .addAll([AppBarTitle(screenWidth: screenWidth), searchBar]);
+      appBarTitleSpace.addAll([
+        AppBarTitle(
+          screenWidth: screenWidth,
+          title: Globals.Title,
+        ),
+        searchBar
+      ]);
     } else {
-      appBarTitleSpace.add(AppBarTitle(screenWidth: screenWidth));
+      appBarTitleSpace.add(AppBarTitle(
+        screenWidth: screenWidth,
+        title: Globals.Title,
+      ));
     }
 
     return Scaffold(
@@ -179,15 +191,16 @@ class _GalleryState extends State<Gallery> {
                       }),
                   icon: const Icon(Icons.refresh)),
           IconButton(
-              onPressed: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Settings(),
-                      ),
-                    )
-                  },
-              icon: const Icon(Icons.settings)),
+            onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Settings(),
+                ),
+              )
+            },
+            icon: const Icon(Icons.settings),
+          ),
         ],
       ),
       body: Padding(
@@ -222,7 +235,8 @@ class _GalleryState extends State<Gallery> {
                               });
                             },
                             child: ScrollConfiguration(
-                              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                              behavior: ScrollConfiguration.of(context)
+                                  .copyWith(scrollbars: false),
                               child: GridView.builder(
                                 controller: _scrollController,
                                 itemCount: filteredItems.length,
@@ -244,7 +258,7 @@ class _GalleryState extends State<Gallery> {
                                                 filteredItems[index]),
                                     builder: (context, snapshot) {
                                       GridItemModel gridItem;
-                              
+
                                       if (snapshot.connectionState ==
                                           ConnectionState.waiting) {
                                         gridItem = GridItemModel(
@@ -253,12 +267,12 @@ class _GalleryState extends State<Gallery> {
                                           isFavorite: null,
                                           progress: null,
                                         );
-                              
+
                                         gridItem.fake = true;
                                       } else if (snapshot.hasError) {
                                         return Center(
-                                            child:
-                                                Text('Error: ${snapshot.error}'));
+                                            child: Text(
+                                                'Error: ${snapshot.error}'));
                                       } else if (!snapshot.hasData) {
                                         return const Center(
                                             child: Text(
@@ -266,7 +280,7 @@ class _GalleryState extends State<Gallery> {
                                       } else {
                                         gridItem = snapshot.data!;
                                       }
-                              
+
                                       return InkWell(
                                         child: GridItem(
                                           item: gridItem,
@@ -275,20 +289,23 @@ class _GalleryState extends State<Gallery> {
                                         onTap: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) {
-                                              if (filteredItems[index].category ==
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                              if (filteredItems[index]
+                                                      .category ==
                                                   "Movie") {
                                                 return MovieDetailView(
                                                   itemModel: gridItem,
                                                 );
                                               }
-                                              if (filteredItems[index].category ==
+                                              if (filteredItems[index]
+                                                      .category ==
                                                   "Show") {
                                                 return ShowDetailView(
                                                   itemModel: gridItem,
                                                 );
                                               }
-                              
+
                                               throw ArgumentError(
                                                   "Server models not correct");
                                             }),

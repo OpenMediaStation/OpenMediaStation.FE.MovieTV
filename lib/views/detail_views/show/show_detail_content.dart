@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/season_card.dart';
 import 'package:open_media_server_app/widgets/title.dart';
+import 'package:open_media_station_base/widgets/custom_image.dart';
 
 class ShowDetailContent extends StatelessWidget {
   const ShowDetailContent({
@@ -49,6 +49,7 @@ class ShowDetailContent extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
+              pictureNotFoundUrl: Globals.PictureNotFoundUrl,
             ),
           ),
           Padding(

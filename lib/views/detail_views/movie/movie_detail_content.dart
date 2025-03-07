@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:open_media_server_app/views/player.dart';
 import 'package:open_media_station_base/apis/file_info_api.dart';
 import 'package:open_media_server_app/globals/globals.dart';
+import 'package:open_media_station_base/helpers/preferences.dart';
 import 'package:open_media_station_base/models/file_info/file_info.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/widgets/custom_image.dart';
 import 'package:open_media_server_app/widgets/file_info_row.dart';
-import 'package:open_media_server_app/widgets/play_button.dart';
+import 'package:open_media_station_base/widgets/custom_image.dart';
+import 'package:open_media_station_base/widgets/play_button.dart';
 
 class MovieDetailContent extends StatelessWidget {
   const MovieDetailContent({
@@ -80,6 +82,7 @@ class MovieDetailContent extends StatelessWidget {
               width: double.infinity,
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
+              pictureNotFoundUrl: Globals.PictureNotFoundUrl,
             ),
           ),
           Padding(
@@ -128,7 +131,11 @@ class MovieDetailContent extends StatelessWidget {
                     valueListenable: selectedVersionID,
                     builder: (context, versionID, __) {
                       return PlayButton(
-                          itemModel: itemModel, versionID: versionID);
+                        child: PlayerView(
+                            gridItem: itemModel,
+                            url:
+                                "${Preferences.prefs?.getString("BaseUrl")}/stream/${itemModel.inventoryItem?.category}/${itemModel.inventoryItem?.id}${versionID != null ? "?versionId=$versionID" : ""}"),
+                      );
                     }),
                 const SizedBox(height: 8),
                 Text(

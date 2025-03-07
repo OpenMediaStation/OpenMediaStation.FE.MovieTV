@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:open_media_server_app/globals/globals.dart';
 import 'package:open_media_server_app/models/internal/grid_item_model.dart';
-import 'package:open_media_server_app/widgets/custom_image.dart';
-import 'package:open_media_server_app/widgets/view_counter.dart';
+import 'package:open_media_station_base/widgets/custom_image.dart';
+import 'package:open_media_station_base/widgets/view_counter.dart';
 
 class GridItem extends StatelessWidget {
   final GridItemModel item;
@@ -34,6 +35,7 @@ class GridItem extends StatelessWidget {
                           width: desiredItemWidth + 150,
                           height: double.infinity,
                           fake: item.fake,
+                          pictureNotFoundUrl: Globals.PictureNotFoundUrl,
                         ),
                         Positioned(
                           bottom: 0,

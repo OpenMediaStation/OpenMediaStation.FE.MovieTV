@@ -8,7 +8,7 @@ import 'package:open_media_station_base/models/metadata/metadata_model.dart';
 import 'package:open_media_station_base/models/progress/progress.dart';
 import 'package:open_media_server_app/services/inventory_service.dart';
 import 'package:open_media_server_app/views/detail_views/show/show_detail_content.dart';
-import 'package:open_media_server_app/widgets/favorite_button.dart';
+import 'package:open_media_station_base/widgets/favorite_button.dart';
 
 class ShowDetailView extends StatelessWidget {
   const ShowDetailView({
@@ -25,7 +25,10 @@ class ShowDetailView extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         surfaceTintColor: Colors.transparent,
         actions: [
-          FavoriteButton(itemModel: itemModel),
+          FavoriteButton(
+            inventoryItem: itemModel.inventoryItem,
+            isFavorite: itemModel.isFavorite,
+          ),
         ],
       ),
       body: FutureBuilder<(List<GridItemModel>, GridItemModel)>(

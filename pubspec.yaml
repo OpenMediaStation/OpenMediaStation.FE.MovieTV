@@ -15,10 +15,10 @@ dependencies:
   media_kit_video: ^1.2.5 # For video rendering.
   media_kit_libs_video: ^1.0.5 # Native video dependencies.
   media_kit_tv: ^0.0.1
-  cached_network_image: ^3.4.1
-  icons_plus: ^5.0.0
   alphabet_scrollbar: ^0.1.0
-  open_media_station_base: ^0.0.3
+  open_media_station_base: ^0.0.5
+  icons_plus: ^5.0.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +31,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/AppImage/myapp.png
+    - assets/myapp.png
 
 msix_config:
   display_name: Open Media Station - Movie & TV
