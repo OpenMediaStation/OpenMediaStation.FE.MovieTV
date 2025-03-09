@@ -6,10 +6,10 @@ import 'package:open_media_server_app/models/internal/grid_item_model.dart';
 import 'package:open_media_station_base/models/inventory/inventory_item.dart';
 import 'package:open_media_server_app/services/inventory_service.dart';
 import 'package:open_media_server_app/views/settings.dart';
-import 'package:open_media_server_app/widgets/alphabet_bar.dart';
 import 'package:open_media_server_app/widgets/grid_item.dart';
 import 'package:open_media_server_app/views/detail_views/movie/movie_detail.dart';
 import 'package:open_media_server_app/views/detail_views/show/show_detail.dart';
+import 'package:open_media_station_base/widgets/alphabet_bar.dart';
 import 'package:open_media_station_base/widgets/app_bar_title.dart';
 
 class Gallery extends StatefulWidget {
