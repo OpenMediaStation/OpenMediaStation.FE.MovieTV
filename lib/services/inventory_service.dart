@@ -2,7 +2,7 @@ import 'package:open_media_station_base/apis/favorites_api.dart';
 import 'package:open_media_station_base/apis/inventory_api.dart';
 import 'package:open_media_station_base/apis/metadata_api.dart';
 import 'package:open_media_station_base/apis/progress_api.dart';
-import 'package:open_media_server_app/models/internal/grid_item_model.dart';
+import 'package:open_media_station_base/models/internal/grid_item_model.dart';
 import 'package:open_media_station_base/models/inventory/inventory_item.dart';
 import 'package:open_media_station_base/models/metadata/metadata_model.dart';
 import 'package:open_media_station_base/models/progress/progress.dart';
@@ -17,6 +17,14 @@ class InventoryService {
     items.addAll(shows);
     items.sort((a, b) => a.title?.compareTo(b.title ?? '') ?? 0);
     return items;
+  }
+
+  static Future<GridItemModel> getInventoryItem(InventoryItem element) async {
+    if (element.category == "Movie") {
+      return await getMovie(element);
+    } else {
+      return await getShow(element);
+    }
   }
 
   static Future<GridItemModel> getMovie(InventoryItem element) async {
@@ -35,7 +43,8 @@ class InventoryService {
     Future<Progress?> progressFuture =
         progressApi.getProgress("Movie", movie.id);
 
-    var results = await Future.wait([metadataFuture, favFuture, progressFuture]);
+    var results =
+        await Future.wait([metadataFuture, favFuture, progressFuture]);
 
     var metadata = results[0] as MetadataModel?;
     var fav = results[1] as bool?;

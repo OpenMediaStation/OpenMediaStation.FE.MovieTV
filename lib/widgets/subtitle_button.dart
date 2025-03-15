@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:open_media_station_base/apis/subtitle_api.dart';
 import 'package:open_media_server_app/helpers/wrapper.dart';
-import 'package:open_media_server_app/models/internal/grid_item_model.dart';
+import 'package:open_media_station_base/models/internal/grid_item_model.dart';
 
 class SubtitleButton extends StatefulWidget {
   final Player player;

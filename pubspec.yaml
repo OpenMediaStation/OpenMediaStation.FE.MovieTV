@@ -1,11 +1,11 @@
 name: open_media_server_app
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 
 version: 0.2.0+2
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: ">=3.1.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -15,7 +15,8 @@ dependencies:
   media_kit_video: ^1.2.5 # For video rendering.
   media_kit_libs_video: ^1.0.5 # Native video dependencies.
   media_kit_tv: ^0.0.1
-  open_media_station_base: ^0.0.7
+  open_media_station_base: ^0.1.1
+    # path: ../open_media_station_base
   icons_plus: ^5.0.0
   cached_network_image: ^3.4.1
 

@@ -9,39 +9,39 @@ extension FileInfoBoxCreator on FileInfo {
 
     var mediaData = this.mediaData;
 
-    var duration = mediaData.duration ?? mediaData.format.duration;
+    var duration = mediaData.duration ?? mediaData.format?.duration;
     if (duration != null) {
       boxes.add(FileInfoBox(duration.toformattedString(), key: GlobalKey(),));
     }
     // if(mediaData.videoStreams.isNotEmpty){
     // for (var vStr in mediaData.videoStreams) {
     var vStr = mediaData.primaryVideoStream;
-    var resolution = "${vStr.width}x${vStr.height}";
-    boxes.add(FileInfoBox(vStr.width >= 3840
+    var resolution = "${vStr?.width}x${vStr?.height}";
+    boxes.add(FileInfoBox((vStr?.width ?? 0) >= 3840
         ? "Ultra HD"
-        : vStr.width >= 2560
+        : (vStr?.width ?? 0) >= 2560
             ? "WQHD"
-            : vStr.width >= 1920
+            : (vStr?.width ?? 0) >= 1920
                 ? "Full HD"
-                : vStr.width >= 720
+                : (vStr?.width ?? 0) >= 720
                     ? "SD"
                     : resolution, key: GlobalKey(),));
-    if (vStr.codecName != null || vStr.profile != null) {
-      boxes.add(FileInfoBox(vStr.codecName?.toUpperCase() ?? vStr.profile!, key: GlobalKey(),));
+    if (vStr?.codecName != null || vStr?.profile != null) {
+      boxes.add(FileInfoBox(vStr?.codecName?.toUpperCase() ?? vStr!.profile!, key: GlobalKey(),));
     }
     //   }
     // }
     // boxes.add(FileInfoBox(mediaData.primaryAudioStream.channelLayout));
     // boxes.add(FileInfoBox(mediaData.primaryAudioStream.profile));
-    if (mediaData.audioStreams.isNotEmpty) {
-      for (var aStr in mediaData.audioStreams) {
+    if (mediaData.audioStreams?.isNotEmpty ?? false) {
+      for (var aStr in mediaData.audioStreams!) {
         boxes.add(FileInfoBox(
             "${aStr.profile ?? aStr.codecName?.toUpperCase() ?? ""} ${aStr.channelLayout}${" ${aStr.language ?? ""}"}", key: GlobalKey(),));
       }
     }
 
-    if (mediaData.format.formatLongName != null) {
-      boxes.add(FileInfoBox(mediaData.format.formatLongName!, key: GlobalKey(),));
+    if (mediaData.format?.formatLongName != null) {
+      boxes.add(FileInfoBox(mediaData.format!.formatLongName!, key: GlobalKey(),));
     }
     // boxes.addAll(mediaData.format.tags?.entries.map((t) => FileInfoBox("${t.key}:${t.value}")) ?? []);
 

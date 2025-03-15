@@ -6,7 +6,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:open_media_station_base/apis/base_api.dart';
 import 'package:open_media_station_base/apis/progress_api.dart';
 import 'package:open_media_station_base/globals/platform_globals.dart';
-import 'package:open_media_server_app/models/internal/grid_item_model.dart';
+import 'package:open_media_station_base/models/internal/grid_item_model.dart';
 import 'package:open_media_station_base/models/progress/progress.dart';
 import 'package:open_media_server_app/widgets/audio_button.dart';
 import 'package:open_media_server_app/widgets/subtitle_button.dart';
