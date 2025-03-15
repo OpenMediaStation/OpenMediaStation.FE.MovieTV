@@ -516,10 +516,10 @@ packages:
     dependency: "direct main"
     description:
       name: open_media_station_base
-      sha256: "7c903aed58073ff2fcd6f1d9fcd49f25cd2eb8bd51711b8c79ba975ca02e5a69"
+      sha256: "8a59e33fa50d884064671e1314bbd67b4275e515e810d0c707cde54a6722cc40"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   package_config:
     dependency: transitive
     description:

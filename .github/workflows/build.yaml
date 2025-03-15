@@ -15,6 +15,10 @@ on:
 jobs:
   build:
     uses: OpenMediaStation/Pipelines/.github/workflows/build-flutter.yaml@main
+    with:
+      # flutter-version: "3.29.0"
+      flatpak-name: "org.openmediastation.open_media_server_app"
+      app-name: "open_media_server_app"
     secrets:
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
