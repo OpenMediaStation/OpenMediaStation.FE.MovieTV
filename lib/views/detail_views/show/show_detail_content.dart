@@ -45,6 +45,7 @@ class ShowDetailContent extends StatelessWidget {
             blendMode: BlendMode.dstIn,
             child: CustomImage(
               imageUrl: showModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+              blurHash: showModel.metadataModel?.show?.backdropBlurHash,
               height: 300,
               width: double.infinity,
               fit: BoxFit.cover,

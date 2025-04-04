@@ -71,6 +71,7 @@ class SeasonDetailView extends StatelessWidget {
                       child: CustomImage(
                         imageUrl:
                             itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+                        blurHash: itemModel.metadataModel?.season?.posterBlurHash,
                         height: 300,
                         width: double.infinity,
                         fit: BoxFit.cover,

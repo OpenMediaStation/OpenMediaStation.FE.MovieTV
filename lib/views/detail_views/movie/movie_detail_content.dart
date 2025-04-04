@@ -79,6 +79,7 @@ class MovieDetailContent extends StatelessWidget {
             blendMode: BlendMode.dstIn,
             child: CustomImage(
               imageUrl: itemModel.backdropUrl ?? Globals.PictureNotFoundUrl,
+              blurHash: itemModel.metadataModel?.movie?.backdropBlurHash,
               height: 300,
               width: double.infinity,
               fit: BoxFit.cover,
