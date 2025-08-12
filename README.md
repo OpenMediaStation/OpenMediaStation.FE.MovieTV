@@ -17,3 +17,4 @@ OpenMediaStation is a collection of server and client software to manage and str
 ## About this repo
 
 This repo contains the tv show and movie frontend application for our project.
+
