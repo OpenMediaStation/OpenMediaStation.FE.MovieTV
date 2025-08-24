@@ -41,6 +41,7 @@ class SeasonDetailView extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
+            print("Error: ${snapshot.error}\nStackTrace: ${snapshot.stackTrace}");
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
