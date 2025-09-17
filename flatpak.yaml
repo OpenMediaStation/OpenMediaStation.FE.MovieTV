@@ -128,7 +128,7 @@ modules:
     - type: git
       url: https://git.ffmpeg.org/ffmpeg.git
       branch: release/6.0
-      commit: 5911b7e9f5d3600274d9cc77b0f5364ab4f7aae3
+      commit: 7334356a3e9768eb519206151eec0ffac377f110
 # -----------------------------------------------------------------------------------
 
 - name: open_media_server_app
