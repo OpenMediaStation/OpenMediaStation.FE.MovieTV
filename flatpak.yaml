@@ -110,27 +110,30 @@ modules:
       commit: 855f8263d97bbdcaeabaaaa2997e1ccad7c52dc3
   - name: ffmpeg
     build-options:
-      cflags: "-DHAVE_POSIX_IOCTL=1"
+      env:
+        CFLAGS: ""
+        CPPFLAGS: ""
+        CXXFLAGS: ""
     cleanup:
-    - /include
-    - /lib/pkgconfig
-    - /share/ffmpeg/examples
+      - /include
+      - /lib/pkgconfig
+      - /share/ffmpeg/examples
     config-opts:
-    - --enable-shared
-    - --disable-static
-    - --enable-gnutls
-    - --disable-doc
-    - --disable-programs
-    - --disable-encoders
-    - --disable-muxers
-    - --enable-encoder=png
-    - --enable-libv4l2
-    - --enable-libdav1d
+      - --enable-shared
+      - --disable-static
+      - --enable-gnutls
+      - --disable-doc
+      - --disable-programs
+      - --disable-encoders
+      - --disable-muxers
+      - --enable-encoder=png
+      - --enable-libdav1d
+      - --extra-cflags=-DHAVE_POSIX_IOCTL=0
     sources:
-    - type: git
-      url: https://git.ffmpeg.org/ffmpeg.git
-      branch: release/6.0
-      commit: 7334356a3e9768eb519206151eec0ffac377f110
+      - type: git
+        url: https://git.ffmpeg.org/ffmpeg.git
+        branch: release/6.0
+
 # -----------------------------------------------------------------------------------
 
 - name: open_media_server_app
