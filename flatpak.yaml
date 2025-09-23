@@ -109,6 +109,8 @@ modules:
       url: https://github.com/FFmpeg/nv-codec-headers.git
       commit: 855f8263d97bbdcaeabaaaa2997e1ccad7c52dc3
   - name: ffmpeg
+    build-options:
+      cflags: "-DHAVE_POSIX_IOCTL=1"
     cleanup:
     - /include
     - /lib/pkgconfig
